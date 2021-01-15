@@ -1,0 +1,472 @@
+<script>
+    var rows = 4;
+    var list_table = [
+        { // [0] 第一列開始
+            title: "網路購物",
+            items: [
+                { div: "", title: "PCHome", url: "https://shopping.pchome.com.tw" },
+                { div: "", title: "MOMO", url: "https://www.momoshop.com.tw" },
+                { div: "", title: "蝦皮拍賣", url: "https://shopee.tw" },
+                { div: "", title: "露天拍賣", url: "https://www.ruten.com.tw" },
+                { div: "", title: "天瓏書局", url: "https://www.tenlong.com.tw" },
+                { div: "", title: "博客來書店", url: "https://www.books.com.tw" },
+                { div: "", title: "", url: "" }
+            ]
+        },
+        { // [1]
+            title: "生活資訊",
+            items: [
+                { div: "", title: "2020記帳表", url: "https://docs.google.com/spreadsheets/d/1131-zNMLuNWhoynaNbpqbY3pMx4u11030vhiycccBjA" },
+                { div: "", title: "帳戶清單", url: "https://docs.google.com/document/d/1HelciAITnbP-pqn82F1nzGnVughprQKhoJe74DDLLt4" },
+                { div: "", title: "Evernote", url: "https://www.evernote.com" },
+                { div: "", title: "即時天氣", url: "https://www.cwb.gov.tw/V8/C/W/OBS_Station.html?ID=C0ACA" },
+                { div: "weather", title: "新莊：00.0°C, 00%", url: ""},
+                { div: "", title: "一週氣象", url: "https://www.cwb.gov.tw/V8/C/W/County/County.html?C=63" },
+                { div: "", title: "PM2.5", url: "https://taqm.epa.gov.tw/pm25" }
+            ]
+        },
+        { // [2]
+            title: "其他",
+            items: [
+                { div: "", title: "Google Keep", url: "https://keep.google.com" },
+                { div: "", title: "HackMD筆記", url: "https://hackmd.io/s/SJUOsEo8g" },
+                { div: "", title: "Trello - ToDo", url: "https://trello.com/b/8Y9Z4fzu/todo" },
+                { div: "", title: "My Urls", url: "https://hackmd.io/s/B19p-moUg" },
+                { div: "", title: "Jserv - C語言", url: "https://hackmd.io/s/HJpiYaZfl" },
+                { div: "", title: "羅習五-2018 OS", url: "https://www.dropbox.com/sh/4q6d2roxc8x650b/AADqV9NVVqHr5R9CIPwqYR8Ia?dl=0" },
+                { div: "", title: "Modify This Page", url: "https://github.com/a80506/a80506.github.io/blob/master/index.html" }
+            ]
+        },
+        { // [3]
+            title: "新聞資訊",
+            items: [
+                { div: "", title: "Google News", url: "https://news.google.com.tw" },
+                { div: "", title: "Yahoo!奇摩新聞", url: ""}, // https://tw.news.yahoo.com" },
+                { div: "", title: "UDN聯合新聞網", url: ""}, // "https://udn.com" },
+                { div: "", title: "台視新聞", url: "https://www.youtube.com/watch?v=NbjI0cARzjQ" },
+                { div: "", title: "華視新聞", url: "https://www.youtube.com/watch?v=Q96tcBXE5kU" },
+                { div: "", title: "民視新聞", url: "https://www.youtube.com/watch?v=XxJKnDLYZz4" },
+                { div: "", title: "", url: "" }
+            ]
+        },
+        { // [4] 第二列開始
+            title: "其他資訊",
+            items: [
+                { div: "", title: "台鐵訂票系統", url: "https://tip.railway.gov.tw/" },
+                { div: "", title: "高鐵訂票系統", url: "https://irs.thsrc.com.tw/IMINT/?locale=tw" },
+                { div: "", title: "Google Map", url: "https://www.google.com.tw/maps" },
+                { div: "", title: "Draw.io", url: "https://www.draw.io" },
+                { div: "", title: "安納金-演繹", url: "https://hackmd.io/f-wr0D2WR0y-eWgoqo9tGg" },
+                { div: "", title: "安納金-Total", url: "https://hackmd.io/yefD2UDFRqCi13fU3ZFD4A" },
+                { div: "", title: "大大讀書", url: "https://www.dada-master.com/book" }
+            ]
+        },
+        { // [5]
+            title: "股市資訊",
+            items: [
+                { div: "", title: "國際重要指數", url: "https://www.wantgoo.com/global" },
+                { div: "", title: "Yahoo 大盤線圖", url: "https://tw.stock.yahoo.com/t/idx.php" },
+                { div: "", title: "HiStock 大盤指標", url: "https://histock.tw/stock/tchart.aspx?no=0000&m=b" },
+                { div: "", title: "HiStock 大盤籌碼", url: "https://histock.tw/stock/three.aspx" },
+                { div: "", title: "Yahoo 道瓊", url: "https://finance.yahoo.com/quote/%5EDJI/news?p=%5EDJI" },
+                { div: "", title: "Investing 期貨", url: "https://www.investing.com/indices/indices-futures" },
+                { div: "", title: "HiStock-大盤", url: "https://histock.tw/stock/three.aspx" }
+            ]
+        },
+        { // [6]
+            title: "股市資訊",
+            items: [
+                { div: "", title: "上市日報表", url: "http://bsr.twse.com.tw/bshtm" },
+                { div: "", title: "上櫃日報表", url: "http://www.gretai.org.tw/ch/stock/aftertrading/broker_trading/brokerBS.php" },
+                { div: "", title: "三大法人-期貨", url: "http://www.taifex.com.tw/cht/3/futContractsDateExcel" },
+                { div: "", title: "三大法人-選擇權", url: "http://www.taifex.com.tw/cht/3/optContractsDateExcel" },
+                { div: "", title: "三大法人-現貨", url: "http://www.twse.com.tw/zh/page/trading/fund/BFI82U.html" },
+                { div: "", title: "外資買賣超", url: "https://fubon-ebrokerdj.fbs.com.tw/Z/ZG/ZGK_D.djhtm" },
+                { div: "", title: "八大行庫", url: "http://www.capitalfutures.com.tw/Research/SectionJ/default_page.aspx?type=14" }
+            ]
+        },
+        { // [7]
+            title: "股市資訊",
+            items: [
+                { div: "", title: "奇摩股市", url: "https://tw.stock.yahoo.com" },
+                { div: "", title: "安納金", url: "https://moneynmall.moneybar.com.tw/expertsDetail.php?expert_id=14" },
+                { div: "", title: "飯大叔", url: "https://www.facebook.com/naribuchi.natsu" },
+                { div: "", title: "交易者的E甸園", url: "http://ebigmoney.pixnet.net/blog" },
+                { div: "", title: "IFRS 財務報表", url: "http://mops.twse.com.tw/server-java/t164sb01" },
+                { div: "", title: "T50反1-外資持股", url: "https://www.cnyes.com/twstock/QFII/00632R.htm" },
+                { div: "", title: "ETF淨值", url: "https://mis.twse.com.tw/stock/etf_nav.jsp?ex=tse" }
+            ]
+        },
+        { // [8] 第三列開始
+            title: "加密貨幣",
+            items: [
+                { div: "", title: "QAS/USDT", url: "https://www.proex.io/zh_CN/trade/QAS_USDT" },
+                { div: "", title: "QQQ/TWD", url: "https://www.ace.io/webtrade/TWD_QQQ" },
+                { div: "", title: "幣安交易所", url: "https://www.binance.com/tw/trade/BTC_USDT" },
+                { div: "", title: "巴比特", url: "https://www.8btc.com/" },
+                { div: "", title: "金色財經", url: "https://www.jinse.com/" },
+                { div: "", title: "支點社區", url: "https://www.zdpvt.com/" },
+                { div: "", title: "TradingView", url: "https://tw.tradingview.com/chart/?symbol=BITFINEX%3ABTCUSD" },
+            ]
+        },
+        { // [9]
+            title: "加密貨幣",
+            items: [
+                { div: "", title: "CoinMarketCap", url: "https://coinmarketcap.com" },
+                { div: "", title: "TOP20", url: "" },
+                { div: "BTC", title: "BTC: 000 (+0%)", url: "" },
+                { div: "ETH", title: "ETH: 000 (+0%)", url: "" },
+                { div: "BCH", title: "BCH: 0.00 (+0%)", url: "" },
+                { div: "LTC", title: "LTC: 0.00 (+0%)", url: "" },
+                { div: "XRP", title: "XRP: 0.00 (+0%)", url: "" },
+            ]
+        },
+        { // [10]
+            title: "加密貨幣",
+            items: [
+                { div: "", title: "ahr999指標", url: "https://ahr999.com/" },
+                { div: "", title: "日線D&T指標", url: "https://www.tradingview.com/script/Qrft62wi-BTC-D-T-Index-by-Benson/" },
+                { div: "", title: "貪婪&恐慌指數", url: "https://alternative.me/crypto/fear-and-greed-index/" },
+                { div: "", title: "Fuly.ai", url: "https://fuly.ai/dashboard" },
+                { div: "", title: "", url: "" },
+                { div: "miner1", title: "", url: "" },
+                { div: "miner2", title: "", url: "" }
+            ]
+        },
+        { // [11]
+            title: "即時資訊",
+            items: [
+                { div: "", title: "全部圖表", url: "sensor2.html" },
+                { div: "living_room", title: "客廳：00°C, 00%", url: "" },
+                { div: "room1", title: "主臥：00°C, 00%", url: "" },
+                { div: "room2", title: "客房：00°C, 00%", url: "" },
+                { div: "room3", title: "書房：00°C, 00%", url: "" },
+                { div: "balcony", title: "亮度：", url: "" },
+                { div: "pm25", title: "PM 2.5：16 ug/m3", url: "" }
+            ]
+        }
+    ];
+</script>
+
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>My index</title>
+    <style type="text/css">
+        body {
+            font-size: 9pt;
+            background-color: #000000;
+        }
+
+        table {
+            border-collapse: collapse;
+            border-color: #707070;
+        }
+
+        td {
+            empty-cells: show;
+            color: #FFFF00;
+            text-align: center;
+            border-color: #707070;
+        }
+
+        td.title {
+            font-weight: bolder;
+            color: #000000;
+            background-color: #FF9933;
+        }
+
+        a {
+            color: #FFFF00;
+        }
+
+        a {
+            text-decoration: none
+        }
+
+        a:hover {
+            color: #707070;
+        }
+
+        div {
+            color: #80FF00;
+        }
+    </style>
+    <style type="text/css"></style>
+</head>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+    crossorigin="anonymous"></script>
+
+<body>
+    <script>
+        var item_title = "";
+        var item_url = "";
+        var i, j;
+        document.write("<table border=\"0\" width=\"100%\" height=\"100%\" align=\"center\" valign=\"center\"><tbody><tr><td>");
+        document.write("<table border=\"0\" width=\"75%\" height=\"80%\" align=\"center\"><tbody>");
+        document.write("<tr valign=\"top\">");
+        for (i = 0; i < list_table.length; i++) {
+            document.write("<td>");
+            document.write("<table border=\"1\" width=\"160\" align=\"center\"><tbody>");
+            document.write("<tr><td class=\"title\">" + list_table[i].title + "</td></tr>");
+
+            for (j = 0; j < 7; j++) {
+                item_title = list_table[i].items[j].title;
+                item_url = list_table[i].items[j].url;
+                item_div = list_table[i].items[j].div;
+                if (item_title == "")
+                    item_title = "　";
+
+                document.write("<tr><td><div class=\"" + item_div + "\"><a href=\"" + item_url + "\">" + item_title + "</a></div></td></tr>");
+            }
+
+            document.write("</tbody></table>");
+            document.write("</td>");
+
+            if (i % rows == rows-1) {
+                document.write("</tr>");
+                document.write("<tr valign=\"top\">");
+            }
+        }
+        document.write("</tr>");
+        document.write("</tbody></table>");
+        document.write("</td></tr></tbody></table>");
+    </script>
+</body>
+</html>
+
+<script>
+    var max = 8;
+    var living_room_t = 0, living_room_h = 0;
+    var room1_t = 0, room1_h = 0;
+    var room2_t = 0, room2_h = 0;
+    var room3_t = 0, room3_h = 0;
+    var timestamp = 0;
+    var light = 0;
+    var pm25 = -1
+    var plant_level = -1, plant_water_times = -1;
+
+    $.getJSON("https://opendata.cwb.gov.tw/fileapi/v1/opendataapi/O-A0001-001?Authorization=CWB-12B94A22-65C1-430B-8703-8CB21070F397&downloadType=WEB&format=JSON",
+    function (data) {
+        var cwb_t = "";
+        var cwb_h = "";
+        var found = 0;
+
+        for (var x in data.cwbopendata.location) {
+            if (found)
+                break;
+            if (data.cwbopendata.location[x].locationName == "新莊") {
+                if (data.cwbopendata.location[x].time.obsTime != "") {
+                    timestamp = Date.parse(data.cwbopendata.location[x].time.obsTime);
+                    if (Date.now() - timestamp > 5400000)
+                        break;
+                }
+                for (var y in data.cwbopendata.location[x].weatherElement) {
+                    if (data.cwbopendata.location[x].weatherElement[y].elementName == "TEMP")
+                        cwb_t = data.cwbopendata.location[x].weatherElement[y].elementValue.value;
+                    else if (data.cwbopendata.location[x].weatherElement[y].elementName == "HUMD")
+                        cwb_h = data.cwbopendata.location[x].weatherElement[y].elementValue.value;
+
+                    if (cwb_t != "" && cwb_h != "" && parseFloat(cwb_t) > -10 && parseFloat(cwb_h) > 0) {
+                        $("div.weather").html("新莊：" + cwb_t + "°C, " + String(parseInt(cwb_h*100)) + "%");
+                        if (parseInt(cwb_h*100) >= 80) {
+                            $("div.weather").css("color", "#46a3ff");
+                            $("div.weather").css("font-weight", "bold");
+                        }
+                        if (parseInt(cwb_t) >= 32) {
+                            $("div.weather").css("color", "red");
+                            $("div.weather").css("font-weight", "bold");
+                        }
+                        found = 1;
+                        break;
+                    }
+                }
+            }
+        }
+        if (found == 0) {
+            for (var x in data.cwbopendata.location) {
+                if (found)
+                    break;
+                if (data.cwbopendata.location[x].locationName == "三重") {
+                    if (data.cwbopendata.location[x].time.obsTime != "") {
+                        timestamp = Date.parse(data.cwbopendata.location[x].time.obsTime);
+                        if (Date.now() - timestamp > 5400000)
+                            break;
+                    }
+                    for (var y in data.cwbopendata.location[x].weatherElement) {
+                        if (data.cwbopendata.location[x].weatherElement[y].elementName == "TEMP")
+                            cwb_t = data.cwbopendata.location[x].weatherElement[y].elementValue.value;
+                        else if (data.cwbopendata.location[x].weatherElement[y].elementName == "HUMD")
+                            cwb_h = data.cwbopendata.location[x].weatherElement[y].elementValue.value;
+
+                        if (cwb_t != "" && cwb_h != "" && parseFloat(cwb_t) > -10 && parseFloat(cwb_h) > 0) {
+                            $("div.weather").html("三重：" + cwb_t + "°C, " + String(parseInt(cwb_h*100)) + "%");
+                            if (parseInt(cwb_h*100) >= 80) {
+                                $("div.weather").css("color", "#46a3ff");
+                                $("div.weather").css("font-weight", "bold");
+                            }
+                            if (parseInt(cwb_t) >= 32) {
+                                $("div.weather").css("color", "red");
+                                $("div.weather").css("font-weight", "bold");
+                            }
+                            found = 1;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    /* DHT22 Sensor */
+    $.getJSON("https://api.thingspeak.com/channels/72313/feeds.json?results=" + String(max),
+        function (data) {
+            $.each(data, function (key, val) {
+                if (key == "feeds") {
+                    for (var i = 0; i < max; i++) {
+                        if (Date.now() - Date.parse(val[i].created_at) > 1800000)
+                            continue;
+                        if (val[i].field1 && val[i].field2) {
+                            living_room_t = parseInt(val[i].field1);
+                            living_room_h = parseInt(val[i].field2);
+                        } else if (val[i].field3 && val[i].field4) {
+                            room1_t = parseInt(val[i].field3);
+                            room1_h = parseInt(val[i].field4);
+                        } else if (val[i].field5 && val[i].field6) {
+                            room2_t = parseInt(val[i].field5);
+                            room2_h = parseInt(val[i].field6);
+                        } else if (val[i].field7 && val[i].field8) {
+                            room3_t = parseInt(val[i].field7);
+                            room3_h = parseInt(val[i].field8);
+                        }
+                    }
+
+                    if (living_room_h == 0)
+                        $("div.living_room").css("color", "pink");
+                    else if (living_room_h >= 80)
+                        $("div.living_room").css("color", "red");
+                    else if (living_room_h >= 70)
+                        $("div.living_room").css("color", "orange");
+
+                    if (room1_h == 0)
+                        $("div.room1").css("color", "pink");
+                    else if (room1_h >= 80)
+                        $("div.room1").css("color", "red");
+                    else if (room1_h >= 70)
+                        $("div.room1").css("color", "orange");
+
+                    if (room2_h == 0)
+                        $("div.room2").css("color", "pink");
+                    else if (room2_h >= 80)
+                        $("div.room2").css("color", "red");
+                    else if (room2_h >= 70)
+                        $("div.room2").css("color", "orange");
+
+                    if (room3_h == 0)
+                        $("div.room3").css("color", "pink");
+                    else if (room3_h >= 80)
+                        $("div.room3").css("color", "red");
+                    else if (room3_h >= 70)
+                        $("div.room3").css("color", "orange");
+
+                    $("div.living_room").html("客廳：" + living_room_t + "°C, " + living_room_h + "%");
+                    $("div.room1").html("主臥：" + room1_t + "°C, " + room1_h + "%");
+                    $("div.room2").html("客房：" + room2_t + "°C, " + room2_h + "%");
+                    $("div.room3").html("書房：" + room3_t + "°C, " + room3_h + "%");
+                }
+            });
+        });
+
+    $.getJSON("https://api.thingspeak.com/channels/565880/feeds.json?results=" + String(max),
+        function (data) {
+            $.each(data, function (key, val) {
+                if (key == "feeds") {
+                    for (var i = 0; i < max; i++) {
+                        if (Date.now() - Date.parse(val[i].created_at) > 1800000)
+                            continue;
+                        if (val[i].field1)
+                            light = parseInt(val[i].field1);
+                    }
+                    $("div.balcony").html("亮度：" + light);
+                }
+            });
+        });
+
+    /* Air Sensor */
+    $.getJSON("https://api.thingspeak.com/channels/72839/feeds.json?results=" + String(max),
+        function (data) {
+            $.each(data, function (key, val) {
+                if (key == "feeds") {
+                    for (var i = 0; i < max; i++) {
+                        if (Date.now() - Date.parse(val[i].created_at) > 1800000)
+                            continue;
+                        if (val[i].field2) {
+                            pm25 = parseInt(val[i].field2);
+                            break;
+                        }
+                    }
+
+                    if (pm25 == -1)
+                        return;
+                    else if (pm25 >= 40)
+                        $("div.pm25").css("color", "red");
+                    else if (pm25 >= 20)
+                        $("div.pm25").css("color", "orange");
+
+                    $("div.pm25").html("PM 2.5：" + pm25 + " ug/m3");
+                }
+            });
+        });
+
+    /* Miner */
+    $.getJSON("https://gpumine.org/api/miner/0x9D96B087A6279f5B5967804B1c2c3d6952e6f531?coin=ETH",
+    function (data) {
+        var miner1 = (100 * parseInt(data.workers[0].hashrate24h) / parseInt(data.workers[0].submitHashrate24h)).toFixed(1);
+        var miner2 = (100 * parseInt(data.workers[1].hashrate24h) / parseInt(data.workers[1].submitHashrate24h)).toFixed(1);
+
+        $("div.miner1").html("Miner1: " + miner1 + "%");
+        $("div.miner2").html("Miner2: " + miner2 + "%");
+        if (miner1 < 85) {
+            $("div.miner1").css("color", "red");
+            $("div.miner1").css("font-weight", "bold");
+        } else if (miner1 < 92) {
+            $("div.miner1").css("color", "orange");
+            $("div.miner1").css("font-weight", "bold");
+        } else {
+            $("div.miner1").css("color", green);
+        }
+        if (miner2 < 85) {
+            $("div.miner2").css("color", "red");
+            $("div.miner2").css("font-weight", "bold");
+        } else if (miner2 < 92) {
+            $("div.miner2").css("color", "orange");
+            $("div.miner2").css("font-weight", "bold");
+        } else {
+            $("div.miner2").css("color", green);
+        }
+    });
+
+    function get_bitstamp(item) {
+        $.getJSON("https://www.bitstamp.net/api/v2/ticker/" + String(item).toLowerCase() + "usd",
+            function (data) {
+                $("div." + item.toUpperCase()).html(item.toUpperCase()+ ": " + String(data.last));
+            })
+            .fail(function() {
+                $.getJSON("https://www.bitstamp.net/api/v2/ticker/" + String(item).toLowerCase() + "usd",
+                    function (data) {
+                        $("div." + item.toUpperCase()).html(item.toUpperCase()+ ": " + String(data.last));
+                })
+            }
+        );
+    }
+
+    get_bitstamp("ETH");
+    get_bitstamp("BCH");
+    get_bitstamp("LTC");
+    get_bitstamp("XRP");
+    get_bitstamp("BTC");
+
+    /* Auto Reload */
+    setTimeout(function () { window.location = window.location; }, 300000);
+</script>
