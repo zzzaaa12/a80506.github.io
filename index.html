@@ -429,19 +429,19 @@
 
         $("div.miner1").html("Miner1: " + hashrate1 + ", " + miner1 + "%");
         $("div.miner2").html("Miner2: " + hashrate2 + ", " + miner2 + "%");
-        if (miner1 < 85) {
+        if (miner1 < 90) {
             $("div.miner1").css("color", "red");
             $("div.miner1").css("font-weight", "bold");
-        } else if (miner1 < 92) {
+        } else if (miner1 < 95) {
             $("div.miner1").css("color", "orange");
             $("div.miner1").css("font-weight", "bold");
         } else {
             $("div.miner1").css("color", green);
         }
-        if (miner2 < 85) {
+        if (miner2 < 90) {
             $("div.miner2").css("color", "red");
             $("div.miner2").css("font-weight", "bold");
-        } else if (miner2 < 92) {
+        } else if (miner2 < 95) {
             $("div.miner2").css("color", "orange");
             $("div.miner2").css("font-weight", "bold");
         } else {
