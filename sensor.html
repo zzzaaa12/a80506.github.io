@@ -1,0 +1,444 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>DHT sendors</title>
+    <style type="text/css">
+        body {
+            font-size: 60pt;
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #000000;
+        }
+
+        div {
+            color: #80FF00;
+            margin: 30px;
+        }
+
+        div.time {
+            color: #FFFF00;
+            font-size: 135pt;
+            font-weight: bold;
+        }
+
+        div.coin {
+            font-size: 95pt;
+            color: #FFFFFF;
+            font-weight: bold;
+        }
+
+        div.weather {
+            font-size: 60pt;
+            font-weight: bold;
+            color: #FFFFFF;
+        }
+    </style>
+    <style type="text/css"></style>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <br />
+    <div class="living_room" align="center">客廳：00°C, 0%</div>
+    <!--<div class="room1" align="center">臥室：00°C, 00%</div>-->
+    <div class="room2" align="center">客房：00°C, 0%</div>
+    <div class="room3" align="center">書房：00°C, 0%</div>
+    <!--<div class="balcony" align="center">陽台：00°C, 00%</div>-->
+    <div class="weather" align="center">戶外：00°C, 0%</div>
+    <div class="pm25" align="center">PM2.5：0 ug/m3</div>
+    <div class="miner" align="center">Miner：0% / 0%</div>
+    <!-- <div class="pm10" align="center">PM10：00 ug/m3</div> -->
+    <div class="time" align="center">00:00:00</div>
+    <div class="coin" align="center">　</div>
+
+    <script>
+        var max = 20;
+        var living_room_t = 0, living_room_h = 0;
+        var room1_t = 0, room1_h = 0;
+        var room2_t = 0, room2_h = 0;
+        var room3_t = 0, room3_h = 0;
+        var balcony_t = 0, balcony_h = 0;
+        var plant_level = -1, plant_water_times = -1;
+        var pm25 = 0, pm10 = 0;
+        var green = "#80FF00";
+        var gray = "#444444";
+
+        $("div.living_room").css("color", gray);
+        $("div.room1").css("color", gray);
+        $("div.room2").css("color", gray);
+        $("div.room3").css("color", gray);
+        $("div.balcony").css("color", gray);
+        $("div.pm25").css("color", gray);
+        $("div.miner").css("color", gray);
+        //$("div.pm10").css("color", gray);
+
+        $.getJSON("https://api.thingspeak.com/channels/72313/feeds.json?results=" + String(max),
+            function (data) {
+                $.each(data, function (key, val) {
+                    if (key == "feeds") {
+                        for (var i = 0; i < max; i++) {
+                            if (Date.now() - Date.parse(val[i].created_at) > 1800000)
+                                continue;
+
+                            if (val[i].field1 && val[i].field2) {
+                                living_room_t = parseInt(val[i].field1);
+                                living_room_h = parseInt(val[i].field2);
+                            } else if (val[i].field3 && val[i].field4) {
+                                room1_t = parseInt(val[i].field3);
+                                room1_h = parseInt(val[i].field4);
+                            } else if (val[i].field5 && val[i].field6) {
+                                room2_t = parseInt(val[i].field5);
+                                room2_h = parseInt(val[i].field6);
+                            } else if (val[i].field7 && val[i].field8) {
+                                room3_t = parseInt(val[i].field7);
+                                room3_h = parseInt(val[i].field8);
+                            }
+                        }
+
+                        if (living_room_h == 0) {
+                            $("div.living_room").css("color", gray);
+                        } else if (living_room_h >= 80) {
+                            $("div.living_room").css("color", "red");
+                            $("div.living_room").css("font-weight", "bold");
+                        } else if (living_room_h >= 70) {
+                            $("div.living_room").css("color", "orange");
+                        } else {
+                            $("div.living_room").css("color", green);
+                        }
+
+                        if (room1_h == 0) {
+                            $("div.room1").css("color", gray);
+                        } else if (room1_h >= 80) {
+                            $("div.room1").css("color", "red");
+                            $("div.room1").css("font-weight", "bold");
+                        } else if (room1_h >= 70) {
+                            $("div.room1").css("color", "orange");
+                        } else {
+                            $("div.room1").css("color", green);
+                        }
+
+                        if (room2_h == 0) {
+                            $("div.room2").css("color", gray);
+                        } else if (room2_h >= 80) {
+                            $("div.room2").css("color", "red");
+                            $("div.room2").css("font-weight", "bold");
+                        } else if (room2_h >= 70) {
+                            $("div.room2").css("color", "orange");
+                        } else {
+                            $("div.room2").css("color", green);
+                        }
+
+                        if (room3_h == 0) {
+                            $("div.room3").css("color", gray);
+                        } else if (room3_h >= 80) {
+                            $("div.room3").css("color", "red");
+                            $("div.room3").css("font-weight", "bold");
+                        } else if (room3_h >= 70) {
+                            $("div.room3").css("color", "orange");
+                        } else {
+                            $("div.room3").css("color", green);
+                        }
+
+                        $("div.living_room").html("客廳：" + living_room_t + "°C, " + living_room_h + "%");
+                        $("div.room1").html("臥室：" + room1_t + "°C, " + room1_h + "%");
+                        $("div.room2").html("客房：" + room2_t + "°C, " + room2_h + "%");
+                        $("div.room3").html("書房：" + room3_t + "°C, " + room3_h + "%");
+                    }
+                });
+            });
+
+        $.getJSON("https://api.thingspeak.com/channels/565880/feeds.json?results=" + String(max),
+        function (data) {
+            var timestamp = 0;
+            $.each(data, function (key, val) {
+                if (key == "feeds") {
+                    for (var i = 0; i < max; i++) {
+                        if (val[i].field1 && val[i].field2) {
+                            balcony_t = parseInt(val[i].field1);
+                            balcony_h = parseInt(val[i].field2);
+                            timestamp = Date.parse(val[i].created_at);
+                        }
+                    }
+
+                    if (balcony_h == 0 || Date.now() - timestamp > 1800000) { // 1800000 = 0.5 hour
+                        return;
+                    } else if (balcony_h >= 80) {
+                        $("div.balcony").css("color", "red");
+                        $("div.balcony").css("font-weight", "bold");
+                    } else if (balcony_h >= 70) {
+                        $("div.balcony").css("color", "orange");
+                    } else {
+                        $("div.balcony").css("color", green);
+                    }
+
+                    $("div.balcony").html("陽台：" + balcony_t + "°C, " + balcony_h + "%");
+                }
+            });
+        });
+
+        $.getJSON("https://api.thingspeak.com/channels/72839/feeds.json?results=" + String(max),
+            function (data) {
+                $.each(data, function (key, val) {
+                    var timestamp = 0;
+
+                    if (key == "feeds") {
+                        for (var i = 0; i < max; i++) {
+                            if (val[i].field2)
+                                pm25 = parseInt(val[i].field2);
+
+                            if (val[i].field3)
+                                pm10 = parseInt(val[i].field3);
+
+                            timestamp = Date.parse(val[i].created_at);
+                        }
+
+                        if (Date.now() - timestamp > 1800000) // 1800000 = 0.5 hour
+                            return;
+
+                        if (pm25 >= 40) {
+                            $("div.pm25").css("color", "red");
+                            $("div.pm25").css("font-weight", "bold");
+                        } else if (pm25 >= 20) {
+                            $("div.pm25").css("color", "orange");
+                        } else {
+                            $("div.pm25").css("color", green);
+                        }
+/*
+                        if (pm10 >= 40)
+                            $("div.pm10").css("color", "red");
+                        else if (pm10 >= 20)
+                            $("div.pm10").css("color", "orange");
+                        else
+                            $("div.pm10").css("color", green);
+*/
+                        $("div.pm25").html("PM2.5：" + pm25 + " ug/m3");
+          //              $("div.pm10").html("PM10：" + pm10 + " ug/m3");
+                    }
+                });
+            });
+
+        /* Cryptocurrency */
+        function get_coin_coinmarketcap() {
+            var price_btc = 0;
+
+            $.getJSON("https://api.coinmarketcap.com/v2/ticker/?convert=TWD&limit=20",
+            function (data) {
+                var percentage_btc = 0, percentage_eth = 0;
+
+                for (var key in data.data) {
+                    var coin = data.data[key];
+                    var percentage = coin.quotes.USD.percent_change_24h;
+                    var percentage_1h = coin.quotes.USD.percent_change_1h;
+                    var price = parseInt(coin.quotes.USD.price);
+                    var color = "red";
+
+                    if (coin.name == "Bitcoin") {
+                        price_btc = price;
+                        percentage_btc = percentage;
+                        break;
+                    }
+                }
+
+                if (percentage_btc > 3)
+                    $("div.coin").css("color", "red");
+                else if (percentage_btc > 0)
+                    $("div.coin").css("color", "#FF6666");
+                else if (percentage_btc < -3)
+                    $("div.coin").css("color", green);
+                else if (percentage_btc < 0)
+                    $("div.coin").css("color", "#CCFF99");
+
+                if (price_btc >= 10000 && percentage_btc >= 10)
+                    percent_str = "+" + parseInt(percentage_btc).toString() + "%";
+                else if (percentage_btc > 0)
+                    percent_str = "+" + percentage_btc.toFixed(1).toString() + "%";
+                else if (percentage_btc <= -10)
+                    percent_str = parseInt(percentage_btc).toString() + "%";
+                else
+                    percent_str = percentage_btc.toFixed(1).toString() + "%";
+
+                $('div.coin').html(price_btc.toString() + " (" + percent_str + ")");
+
+                if (percentage_1h >= 3 || percentage >= 10) {
+                    $("div.coin").css("color", "red");
+                    blink();
+                }  else if (percentage_1h <= -3 || percentage <= -10) {
+                    $("div.coin").css("color", green);
+                    blink();
+                }
+            });
+        }
+
+        function get_coin_bitstamp() {
+            var price = 0, open = 0;
+            var percentage;
+            var eth_price = 0;
+
+            $.getJSON("https://www.bitstamp.net/api/v2/ticker/ethusd",
+            function (data) {
+                eth_price = parseInt(data.last);
+            });
+
+            if (eth_price == 0) {
+                $.getJSON("https://www.bitstamp.net/api/v2/ticker/ethusd",
+                function (data) {
+                    eth_price = parseInt(data.last);
+                });
+            }
+
+            $.getJSON("https://www.bitstamp.net/api/ticker",
+            function (data) {
+                price = parseInt(data.last);
+                open = parseInt(data.open);
+                percentage = (price - open)/open * 100;
+
+                if (percentage.toFixed(1) == 0)
+                    percentage = 0;
+
+                if (percentage == 0)
+                    $("div.coin").css("color", "orange");
+                else if (percentage >= 0)
+                    $("div.coin").css("color", "red");
+                else
+                    $("div.coin").css("color", green);
+
+                if (price >= 10000 && percentage >= 10)
+                    percent_str = "+" + parseInt(percentage).toString() + "%";
+                else if (percentage > 0)
+                    percent_str = "+" + percentage.toFixed(1).toString() + "%";
+                else if (percentage <= -10)
+                    percent_str = parseInt(percentage).toString() + "%";
+                else
+                    percent_str = percentage.toFixed(1).toString() + "%";
+
+                if (eth_price > 0)
+                    $('div.coin').html(price.toString() + ' / ' + eth_price.toString());
+                else if (percentage == 0)
+                    $('div.coin').html(price.toString());
+                else
+                    $('div.coin').html(price.toString() + " (" + percent_str + ")");
+            });
+
+            setTimeout(function () { get_coin_bitstamp(); }, 60000);
+        }
+
+        function get_coin() {
+            get_coin_bitstamp()
+            //get_coin_coinmarketcap();
+        }
+
+        function blink() {
+            var times = 1000;
+            while(times--)
+                $('div.coin').fadeOut(1300).fadeIn(600);
+        }
+
+        function set_time() {
+            var d = new Date();
+            $("div.time").html(d.toLocaleTimeString("en-US", { hour12: false , hour: "2-digit", minute: "2-digit"}));
+            setTimeout(function () { set_time(); }, 1000);
+        }
+
+        /* Miner */
+        $.getJSON("https://gpumine.org/api/miner/0x9D96B087A6279f5B5967804B1c2c3d6952e6f531?coin=ETH",
+        function (data) {
+            var miner1 = (100 * parseInt(data.workers[0].hashrate24h) / parseInt(data.workers[0].submitHashrate24h)).toFixed(1);
+            var miner2 = (100 * parseInt(data.workers[1].hashrate24h) / parseInt(data.workers[1].submitHashrate24h)).toFixed(1);
+
+            $("div.miner").html("Miner: " + miner1 + "% / " + miner2 + "%");
+            if (miner1 > 100)
+                miner1 = 100;
+            if (miner2 > 100)
+                miner2 = 100;
+            if (miner1 < 85 || miner2 < 85) {
+                $("div.miner").css("color", "red");
+                $("div.miner").css("font-weight", "bold");
+            } else if (miner1 < 92 || miner2 < 92) {
+                $("div.miner").css("color", "orange");
+                $("div.miner").css("font-weight", "bold");
+            } else {
+                $("div.miner").css("color", green);
+            }
+        });
+
+        $.getJSON("https://opendata.cwb.gov.tw/fileapi/v1/opendataapi/O-A0001-001?Authorization=CWB-12B94A22-65C1-430B-8703-8CB21070F397&downloadType=WEB&format=JSON",
+        function (data) {
+            var cwb_t = "";
+            var cwb_h = "";
+            var found = 0;
+            var timestamp = 0;
+
+            for (var x in data.cwbopendata.location) {
+                if (found)
+                    break;
+                if (data.cwbopendata.location[x].locationName == "新莊") {
+                    if (data.cwbopendata.location[x].time.obsTime != "") {
+                        timestamp = Date.parse(data.cwbopendata.location[x].time.obsTime);
+                        if (Date.now() - timestamp > 5400000)
+                            break;
+                    }
+                    for (var y in data.cwbopendata.location[x].weatherElement) {
+                        if (data.cwbopendata.location[x].weatherElement[y].elementName == "TEMP")
+                            cwb_t = data.cwbopendata.location[x].weatherElement[y].elementValue.value;
+                        else if (data.cwbopendata.location[x].weatherElement[y].elementName == "HUMD")
+                            cwb_h = data.cwbopendata.location[x].weatherElement[y].elementValue.value;
+
+                        if (cwb_t != "" && cwb_h != "" && parseFloat(cwb_t) > -10 && parseFloat(cwb_h) > 0) {
+                            $("div.weather").html("新莊：" + cwb_t + "°C, " + String(parseInt(cwb_h*100)) + "%");
+                            if (parseInt(cwb_h*100) >= 80) {
+                                $("div.weather").css("color", "#46a3ff");
+                                $("div.weather").css("font-weight", "bold");
+                            }
+                            if (parseInt(cwb_t) >= 32) {
+                                $("div.weather").css("color", "red");
+                                $("div.weather").css("font-weight", "bold");
+                            }
+                            found = 1;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (found == 0) {
+                for (var x in data.cwbopendata.location) {
+                    if (found)
+                        break;
+                    if (data.cwbopendata.location[x].locationName == "三重") {
+                        if (data.cwbopendata.location[x].time.obsTime != "") {
+                            timestamp = Date.parse(data.cwbopendata.location[x].time.obsTime);
+                            if (Date.now() - timestamp > 5400000)
+                                break;
+                        }
+                        for (var y in data.cwbopendata.location[x].weatherElement) {
+                            if (data.cwbopendata.location[x].weatherElement[y].elementName == "TEMP")
+                                cwb_t = data.cwbopendata.location[x].weatherElement[y].elementValue.value;
+                            else if (data.cwbopendata.location[x].weatherElement[y].elementName == "HUMD")
+                                cwb_h = data.cwbopendata.location[x].weatherElement[y].elementValue.value;
+
+                            if (cwb_t != "" && cwb_h != "" && parseFloat(cwb_t) > -10 && parseFloat(cwb_h) > 0) {
+                                $("div.weather").html("三重：" + cwb_t + "°C, " + String(parseInt(cwb_h*100)) + "%");
+                                if (parseInt(cwb_h*100) >= 80) {
+                                    $("div.weather").css("color", "#46a3ff");
+                                    $("div.weather").css("font-weight", "bold");
+                                }
+                                if (parseInt(cwb_t) >= 32) {
+                                    $("div.weather").css("color", "red");
+                                    $("div.weather").css("font-weight", "bold");
+                                }
+                                found = 1;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        get_coin();
+        set_time();
+        setTimeout(function () { window.location = window.location; }, 300000);
+
+    </script>
+</body>
+</html>
