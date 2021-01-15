@@ -128,7 +128,7 @@
                 { div: "", title: "日線D&T指標", url: "https://www.tradingview.com/script/Qrft62wi-BTC-D-T-Index-by-Benson/" },
                 { div: "", title: "貪婪&恐慌指數", url: "https://alternative.me/crypto/fear-and-greed-index/" },
                 { div: "", title: "Fuly.ai", url: "https://fuly.ai/dashboard" },
-                { div: "", title: "", url: "" },
+                { div: "", title: "GPUMine", url: "https://gpumine.org/worker/eth/0x9D96B087A6279f5B5967804B1c2c3d6952e6f531" },
                 { div: "miner1", title: "", url: "" },
                 { div: "miner2", title: "", url: "" }
             ]
@@ -422,11 +422,13 @@
     /* Miner */
     $.getJSON("https://gpumine.org/api/miner/0x9D96B087A6279f5B5967804B1c2c3d6952e6f531?coin=ETH",
     function (data) {
-        var miner1 = (100 * parseInt(data.workers[0].hashrate24h) / parseInt(data.workers[0].submitHashrate24h)).toFixed(1);
-        var miner2 = (100 * parseInt(data.workers[1].hashrate24h) / parseInt(data.workers[1].submitHashrate24h)).toFixed(1);
+        var hashrate1 = (parseFloat(data.workers[0].submitHashrate24h)/1000000).toFixed(2);
+        var hashrate2 = (parseFloat(data.workers[1].submitHashrate24h)/1000000).toFixed(2);
+        var miner1 = (100 * parseInt(data.workers[0].hashrate24h) / parseInt(data.workers[0].submitHashrate24h)).toFixed(0);
+        var miner2 = (100 * parseInt(data.workers[1].hashrate24h) / parseInt(data.workers[1].submitHashrate24h)).toFixed(0);
 
-        $("div.miner1").html("Miner1: " + miner1 + "%");
-        $("div.miner2").html("Miner2: " + miner2 + "%");
+        $("div.miner1").html("Miner1: " + hashrate1 + ", " + miner1 + "%");
+        $("div.miner2").html("Miner2: " + hashrate2 + ", " + miner2 + "%");
         if (miner1 < 85) {
             $("div.miner1").css("color", "red");
             $("div.miner1").css("font-weight", "bold");
