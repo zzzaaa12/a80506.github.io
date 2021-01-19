@@ -426,10 +426,10 @@
         var hashrate2 = (parseFloat(data.workers[1].submitHashrate24h)/1000000).toFixed(2);
         var miner1 = (100 * parseInt(data.workers[0].hashrate24h) / parseInt(data.workers[0].submitHashrate24h)).toFixed(0);
         var miner2 = (100 * parseInt(data.workers[1].hashrate24h) / parseInt(data.workers[1].submitHashrate24h)).toFixed(0);
+        var exist1 = parseInt(data.workers[0].s);
+        var exist2 = parseInt(data.workers[1].s);
 
-        $("div.miner1").html("Miner1: " + hashrate1 + ", " + miner1 + "%");
-        $("div.miner2").html("Miner2: " + hashrate2 + ", " + miner2 + "%");
-        if (miner1 < 90) {
+        if (exist1 == 0 || miner1 < 90) {
             $("div.miner1").css("color", "red");
             $("div.miner1").css("font-weight", "bold");
         } else if (miner1 < 95) {
@@ -438,7 +438,7 @@
         } else {
             $("div.miner1").css("color", green);
         }
-        if (miner2 < 90) {
+        if (exist2 == 0 || miner2 < 90) {
             $("div.miner2").css("color", "red");
             $("div.miner2").css("font-weight", "bold");
         } else if (miner2 < 95) {
@@ -447,6 +447,15 @@
         } else {
             $("div.miner2").css("color", green);
         }
+
+        if (exist1)
+            $("div.miner1").html("Miner1: " + hashrate1 + ", " + miner1 + "%");
+        else
+            $("div.miner1").html("Miner1: Leaved....");
+        if (exist2)
+            $("div.miner2").html("Miner2: " + hashrate2 + ", " + miner2 + "%");
+        else
+            $("div.miner2").html("Miner2: Leaved....");
     });
 
     function get_bitstamp(item) {
