@@ -340,7 +340,7 @@
             setTimeout(function () { set_time(); }, 1000);
         }
 
-        function miner_data() {
+        function miner_data(option) {
             /* Miner */
             $.getJSON("https://gpumine.org/api/miner/0x9D96B087A6279f5B5967804B1c2c3d6952e6f531?coin=ETH",
             function (data) {
@@ -348,6 +348,8 @@
                 var miner2_s = parseInt(data.workers[1].s);
                 var miner1 = (100 * parseInt(data.workers[0].hashrate24h) / parseInt(data.workers[0].submitHashrate24h)).toFixed(1);
                 var miner2 = (100 * parseInt(data.workers[1].hashrate24h) / parseInt(data.workers[1].submitHashrate24h)).toFixed(1);
+                var hashrate1 = (parseFloat(data.workers[0].hashrate24h) / 1000000).toFixed(1);
+                var hashrate2 = (parseFloat(data.workers[1].hashrate24h) / 1000000).toFixed(1);
 
                 if (miner1 > 100)
                     miner1 = 100;
@@ -363,16 +365,30 @@
                     $("div.miner").css("color", green);
                 }
 
-                if (miner1_s && miner2_s) {
-                    $("div.miner").html("Miner: " + miner1 + "% / " + miner2 + "%");
-                } else if (miner1_s == 0) {
-                    $("div.miner").html("Miner: [Leaved] / " + miner2 + "%");
-                    $("div.miner").css("color", "red");
-                    $("div.miner").css("font-weight", "bold");
-                } else if (miner2_s == 0) {
-                    $("div.miner").html("Miner: " + miner1 + "% / [Leaved]");
-                    $("div.miner").css("color", "red");
-                    $("div.miner").css("font-weight", "bold");
+                if (option == 1) {
+                    if (miner1_s && miner2_s) {
+                        $("div.miner").html("Miner: " + hashrate1 + "M / " + hashrate2 + "M");
+                    } else if (miner1_s) {
+                        $("div.miner").html("Miner: " + hashrate1 + "M / Leaved");
+                        $("div.miner").css("color", "red");
+                        $("div.miner").css("font-weight", "bold");
+                    } else if (miner2_s == 0) {
+                        $("div.miner").html("Miner: Leaved / " + hashrate2 + "M");
+                        $("div.miner").css("color", "red");
+                        $("div.miner").css("font-weight", "bold");
+                    }
+                } else {
+                    if (miner1_s && miner2_s) {
+                        $("div.miner").html("Miner: " + miner1 + "% / " + miner2 + "%");
+                    } else if (miner1_s) {
+                        $("div.miner").html("Miner: " + miner1 + "% / Leaved");
+                        $("div.miner").css("color", "red");
+                        $("div.miner").css("font-weight", "bold");
+                    } else if (miner2_s == 0) {
+                        $("div.miner").html("Miner: Leaved / " + miner2 + "%");
+                        $("div.miner").css("color", "red");
+                        $("div.miner").css("font-weight", "bold");
+                    }
                 }
             });
         }
@@ -452,9 +468,9 @@
 
         get_coin();
         set_time();
+        miner_data(0);
         setTimeout(function () { window.location = window.location; }, 300000);
-
-        miner_data();
+        setTimeout(function () { miner_data(1) }, 150000);
     </script>
 </body>
 </html>
