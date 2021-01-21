@@ -422,8 +422,8 @@
     /* Miner */
     $.getJSON("https://gpumine.org/api/miner/0x9D96B087A6279f5B5967804B1c2c3d6952e6f531?coin=ETH",
     function (data) {
-        var hashrate1 = (parseFloat(data.workers[0].submitHashrate24h)/1000000).toFixed(2);
-        var hashrate2 = (parseFloat(data.workers[1].submitHashrate24h)/1000000).toFixed(2);
+        var hashrate1 = (parseFloat(data.workers[0].submitHashrate24h)/1000000).toFixed(0);
+        var hashrate2 = (parseFloat(data.workers[1].submitHashrate24h)/1000000).toFixed(0);
         var miner1 = (100 * parseInt(data.workers[0].hashrate24h) / parseInt(data.workers[0].submitHashrate24h)).toFixed(0);
         var miner2 = (100 * parseInt(data.workers[1].hashrate24h) / parseInt(data.workers[1].submitHashrate24h)).toFixed(0);
         var exist1 = parseInt(data.workers[0].s);
@@ -446,11 +446,11 @@
         }
 
         if (exist1)
-            $("div.miner1").html("Miner1: " + hashrate1 + ", " + miner1 + "%");
+            $("div.miner1").html("Miner1: " + hashrate1 + "M, " + miner1 + "%");
         else
             $("div.miner1").html("Miner1: Leaved....");
         if (exist2)
-            $("div.miner2").html("Miner2: " + hashrate2 + ", " + miner2 + "%");
+            $("div.miner2").html("Miner2: " + hashrate2 + "M, " + miner2 + "%");
         else
             $("div.miner2").html("Miner2: Leaved....");
     });
