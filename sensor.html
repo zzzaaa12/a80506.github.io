@@ -344,6 +344,8 @@
             /* Miner */
             $.getJSON("https://gpumine.org/api/miner/0x9D96B087A6279f5B5967804B1c2c3d6952e6f531?coin=ETH",
             function (data) {
+                var reward24h = parseFloat(data.reward24h2).toFixed(4);
+                var reward1m = (30 * parseFloat(data.reward24h2)).toFixed(4);
                 var miner1_s = parseInt(data.workers[0].s);
                 var miner2_s = parseInt(data.workers[1].s);
                 var miner1 = (100 * parseInt(data.workers[0].hashrate24h) / parseInt(data.workers[0].submitHashrate24h)).toFixed(1);
@@ -365,7 +367,9 @@
                     $("div.miner").css("color", green);
                 }
 
-                if (option == 1) {
+                if (option == 2) {
+                    $("div.miner").html(reward24h + " / " + reward1m);
+                } else if (option == 1) {
                     if (miner1_s && miner2_s) {
                         $("div.miner").html("Miner: " + hashrate1 + "M / " + hashrate2 + "M");
                     } else if (miner1_s) {
@@ -470,7 +474,8 @@
         set_time();
         miner_data(0);
         setTimeout(function () { window.location = window.location; }, 300000);
-        setTimeout(function () { miner_data(1) }, 150000);
+        setTimeout(function () { miner_data(1) }, 100000);
+        setTimeout(function () { miner_data(2) }, 200000);
     </script>
 </body>
 </html>
