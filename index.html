@@ -126,7 +126,7 @@
             items: [
                 { div: "", title: "Fuly.ai", url: "https://fuly.ai/dashboard" },
                 { div: "", title: "GPUMine", url: "https://gpumine.org/worker/eth/0x9D96B087A6279f5B5967804B1c2c3d6952e6f531" },
-                { div: "", title: "", url: "" },
+                { div: "balance", title: "", url: "" },
                 { div: "miner_1d", title: "", url: "" },
                 { div: "miner_1m", title: "", url: "" },
                 { div: "miner1", title: "", url: "" },
@@ -430,6 +430,7 @@
         var reward1m = (30 * parseFloat(data.reward24h2)).toFixed(5)
         var exist1 = parseInt(data.workers[0].s);
         var exist2 = parseInt(data.workers[1].s);
+        var balance = parseFloat(data.balance);
 
         if (exist1 == 0 || miner1 < 90) {
             $("div.miner1").css("color", "red");
@@ -457,17 +458,23 @@
             $("div.miner2").html("Miner2: Leaved....");
 
         if (reward1d > 0) {
-            $("div.miner_1d").html(reward1d + " ETH");
+            $("div.miner_1d").html(reward1d + " ETH/D");
         } else {
             $("div.miner_1d").css("color", "red")
             $("div.miner_1d").html("no data");
         }
 
         if (reward1m > 0) {
-            $("div.miner_1m").html(reward1m + " ETH");
+            $("div.miner_1m").html(reward1m + " ETH/M");
         } else {
             $("div.miner_1m").css("color", "red")
             $("div.miner_1m").html("no data");
+        }
+
+        if (balance > 0) {
+            if (balance > 0.9)
+                $("div.balance").css("color", "orange");
+            $("div.balance").html(balance.toFixed(5));
         }
     });
     
