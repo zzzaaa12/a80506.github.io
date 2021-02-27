@@ -280,7 +280,7 @@
                     if (data[key].symbol == "FILUSDT")
                         fil = parseFloat(data[key].lastPrice).toFixed(1);
                         
-                    $("div.coin").html(btc + " / " + eth + " / " + fil);
+                    $("div.coin").html(btc + " / " + eth + "<br />" + fil);
                 });
             });
             setTimeout(function () { get_coin(); }, 60000);
