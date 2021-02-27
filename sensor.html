@@ -269,6 +269,10 @@
                 $.each( data, function( key, val ) {
                     if (data[key].symbol == "BTCUSDT") {
                         btc_percent = parseFloat(data[key].priceChangePercent).toFixed(1);
+                        if (btc_percent > 0)
+                            btc_percent = "+" + btc_percent.toString();
+                        else
+                            btc_percent = btc_percent.toString();
                         if (parseFloat(data[key].priceChange) < 0)
                             $("div.coin").css("color", "red");
                         else
