@@ -288,7 +288,7 @@
                     if (data[key].symbol == "FILUSDT")
                         fil = parseFloat(data[key].lastPrice).toFixed(2);
                         
-                    $("div.coin").html(btc + btc_percent + "<br />" + eth + " / " + fil);
+                    $("div.coin").html(btc + "<br />" + eth + " / " + fil);
                 });
             })
             .fail(function(){
