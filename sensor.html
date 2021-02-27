@@ -218,74 +218,10 @@
                 });
             });
 
-        /* Cryptocurrency */
-        function get_coin_coinmarketcap() {
-            var price_btc = 0;
-
-            $.getJSON("https://api.coinmarketcap.com/v2/ticker/?convert=TWD&limit=20",
-            function (data) {
-                var percentage_btc = 0, percentage_eth = 0;
-
-                for (var key in data.data) {
-                    var coin = data.data[key];
-                    var percentage = coin.quotes.USD.percent_change_24h;
-                    var percentage_1h = coin.quotes.USD.percent_change_1h;
-                    var price = parseInt(coin.quotes.USD.price);
-                    var color = "red";
-
-                    if (coin.name == "Bitcoin") {
-                        price_btc = price;
-                        percentage_btc = percentage;
-                        break;
-                    }
-                }
-
-                if (percentage_btc > 3)
-                    $("div.coin").css("color", "red");
-                else if (percentage_btc > 0)
-                    $("div.coin").css("color", "#FF6666");
-                else if (percentage_btc < -3)
-                    $("div.coin").css("color", green);
-                else if (percentage_btc < 0)
-                    $("div.coin").css("color", "#CCFF99");
-
-                if (price_btc >= 10000 && percentage_btc >= 10)
-                    percent_str = "+" + parseInt(percentage_btc).toString() + "%";
-                else if (percentage_btc > 0)
-                    percent_str = "+" + percentage_btc.toFixed(1).toString() + "%";
-                else if (percentage_btc <= -10)
-                    percent_str = parseInt(percentage_btc).toString() + "%";
-                else
-                    percent_str = percentage_btc.toFixed(1).toString() + "%";
-
-                $('div.coin').html(price_btc.toString() + " (" + percent_str + ")");
-
-                if (percentage_1h >= 3 || percentage >= 10) {
-                    $("div.coin").css("color", "red");
-                    blink();
-                }  else if (percentage_1h <= -3 || percentage <= -10) {
-                    $("div.coin").css("color", green);
-                    blink();
-                }
-            });
-        }
-
         function get_coin_bitstamp() {
             var price = 0, open = 0;
             var percentage;
             var eth_price = 0;
-
-            $.getJSON("https://www.bitstamp.net/api/v2/ticker/ethusd",
-            function (data) {
-                eth_price = parseInt(data.last);
-            });
-
-            if (eth_price == 0) {
-                $.getJSON("https://www.bitstamp.net/api/v2/ticker/ethusd",
-                function (data) {
-                    eth_price = parseInt(data.last);
-                });
-            }
 
             $.getJSON("https://www.bitstamp.net/api/ticker",
             function (data) {
@@ -323,9 +259,36 @@
             setTimeout(function () { get_coin_bitstamp(); }, 60000);
         }
 
+        function get_coin_binance() {
+            $.getJSON("https://api.binance.com/api/v3/ticker/24hr",
+            function (data) {
+                var btc = 0;
+                var eth = 0;
+                var fil = 0;
+                $.each( data, function( key, val ) {
+                    if (data[key].symbol == "BTCUSDT") {
+                        if (parseFloat(data[key].priceChange) < 0)
+                            $("div.coin").css("color", "red");
+                        else
+                            $("div.coin").css("color", green);
+                            
+                        btc = parseInt(data[key].lastPrice);
+                    }
+                    if (data[key].symbol == "ETHUSDT")
+                        eth = parseInt(data[key].lastPrice);
+                        
+                    if (data[key].symbol == "FILUSDT")
+                        fil = parseFloat(data[key].lastPrice).toFixed(1);
+                        
+                    $("div.coin").html(btc + " / " + eth + " / " + fil);
+                });
+            });
+            setTimeout(function () { get_coin(); }, 60000);
+        }
+
         function get_coin() {
-            get_coin_bitstamp()
-            //get_coin_coinmarketcap();
+            get_coin_binance();
+            //get_coin_bitstamp()
         }
 
         function blink() {
