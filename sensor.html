@@ -270,9 +270,11 @@
                     if (data[key].symbol == "BTCUSDT") {
                         btc_percent = parseFloat(data[key].priceChangePercent).toFixed(1);
                         if (btc_percent > 0)
-                            btc_percent = "+" + btc_percent.toString();
+                            btc_percent = "(+" + btc_percent.toString() + "%)";
+                        else if (btc_percent == 0)
+                            btc_percent = "";
                         else
-                            btc_percent = btc_percent.toString();
+                            btc_percent = "(" + btc_percent.toString() + "%)";
                         if (parseFloat(data[key].priceChange) < 0)
                             $("div.coin").css("color", "red");
                         else
@@ -286,9 +288,13 @@
                     if (data[key].symbol == "FILUSDT")
                         fil = parseFloat(data[key].lastPrice).toFixed(2);
                         
-                    $("div.coin").html(btc + " (" + btc_percent + "%)<br />" + eth + " / " + fil);
+                    $("div.coin").html(btc + btc_percent + "<br />" + eth + " / " + fil);
                 });
+            })
+            .fail(function(){
+                get_coin_bitstamp();
             });
+            
             setTimeout(function () { get_coin(); }, 60000);
         }
 
