@@ -125,7 +125,7 @@
             title: "加密貨幣",
             items: [
                 { div: "", title: "Fuly.ai", url: "https://fuly.ai/dashboard" },
-                { div: "", title: "GPUMine", url: "https://gpumine.org/worker/eth/0x9D96B087A6279f5B5967804B1c2c3d6952e6f531" },
+                { div: "", title: "GPUMine", url: "https://gpumine.org/tw/workers/eth/0x9D96B087A6279f5B5967804B1c2c3d6952e6f531" },
                 { div: "balance", title: "", url: "" },
                 { div: "miner_1d", title: "", url: "" },
                 { div: "miner_1m", title: "", url: "" },
@@ -420,17 +420,14 @@
         });
 
     /* Miner */
-    $.getJSON("https://gpumine.org/api/miner/0x9D96B087A6279f5B5967804B1c2c3d6952e6f531?coin=ETH",
+    $.getJSON("https://gpumine.org/api/miner?currency=ETH&address=0x9D96B087A6279f5B5967804B1c2c3d6952e6f531",
     function (data) {
-        var hashrate1 = (parseFloat(data.workers[0].submitHashrate24h)/1000000).toFixed(0);
-        var hashrate2 = (parseFloat(data.workers[1].submitHashrate24h)/1000000).toFixed(0);
-        var miner1 = (100 * parseInt(data.workers[0].hashrate24h) / parseInt(data.workers[0].submitHashrate24h)).toFixed(0);
-        var miner2 = (100 * parseInt(data.workers[1].hashrate24h) / parseInt(data.workers[1].submitHashrate24h)).toFixed(0);
-        var reward1d = parseFloat(data.reward24h2).toFixed(5)
-        var reward1m = (30 * parseFloat(data.reward24h2)).toFixed(5)
-        var exist1 = parseInt(data.workers[0].s);
-        var exist2 = parseInt(data.workers[1].s);
-        var balance = parseFloat(data.balance);
+        var exist1 = data['data']['workers']['list'][0].online;
+        var exist2 = data['data']['workers']['list'][1].online;
+        var miner1 = (100 * data['data']['workers']['list'][0].hashrate24h / data['data']['workers']['list'][0].submitHashrate24h).toFixed(1);
+        var miner2 = (100 * data['data']['workers']['list'][1].hashrate24h / data['data']['workers']['list'][1].submitHashrate24h).toFixed(1);
+        var hashrate1 = (parseFloat(data['data']['workers']['list'][0].hashrate24h) / 1000000).toFixed(1);
+        var hashrate2 = (parseFloat(data['data']['workers']['list'][1].hashrate24h) / 1000000).toFixed(1);
 
         if (exist1 == 0 || miner1 < 90) {
             $("div.miner1").css("color", "red");
@@ -457,15 +454,29 @@
         else
             $("div.miner2").html("Miner2: Leaved....");
 
+
+    });
+    
+    $.getJSON("https://gpumine.org/api/bill?currency=ETH&address=0x9D96B087A6279f5B5967804B1c2c3d6952e6f531",
+    function (data) {
+        var reward1d = parseFloat(data['data']['calcReward24h'].coin).toFixed(4);
+        var reward1d_usd = parseInt(data['data']['calcReward24h'].usd);
+        var reward1d_twd = parseInt(data['data']['calcReward24h'].ntd);
+        var reward1m = (reward1d * 30).toFixed(3);
+        var reward1m_usd = parseInt(reward1d_usd * 30);
+        var reward1m_twd = reward1d_twd * 30;
+        var balance = parseFloat(data['data'].balance);
+
+
         if (reward1d > 0) {
-            $("div.miner_1d").html(reward1d + " ETH/D");
+            $("div.miner_1d").html(reward1d + " / " + reward1d_usd + "U / " + reward1d_twd);
         } else {
             $("div.miner_1d").css("color", "red")
             $("div.miner_1d").html("no data");
         }
 
         if (reward1m > 0) {
-            $("div.miner_1m").html(reward1m + " ETH/M");
+            $("div.miner_1m").html(reward1m + " / " + reward1m_usd + "U / " + reward1m_twd + "");
         } else {
             $("div.miner_1m").css("color", "red")
             $("div.miner_1m").html("no data");
