@@ -279,22 +279,22 @@
                             $("div.coin").css("color", "red");
                         else
                             $("div.coin").css("color", green);
-                            
+
                         btc = parseInt(data[key].lastPrice);
                     }
                     if (data[key].symbol == "ETHUSDT")
                         eth = parseInt(data[key].lastPrice);
-                        
+
                     if (data[key].symbol == "FILUSDT")
                         fil = parseFloat(data[key].lastPrice).toFixed(2);
-                        
+
                     $("div.coin").html(btc + "<br />" + eth + " / " + fil);
                 });
             })
             .fail(function(){
                 get_coin_bitstamp();
             });
-            
+
             setTimeout(function () { get_coin(); }, 60000);
         }
 
@@ -371,6 +371,21 @@
                 }
             });
         }
+
+        function miner_balance() {
+            $.getJSON("https://gpumine.org/api/bill?currency=ETH&address=0x9D96B087A6279f5B5967804B1c2c3d6952e6f531",
+            function (data) {
+                var reward1d = parseFloat(data['data']['calcReward24h'].coin).toFixed(4);
+                var reward1d_usd = parseInt(data['data']['calcReward24h'].usd);
+                var reward1d_twd = parseInt(data['data']['calcReward24h'].ntd);
+                var reward1m = (reward1d * 30).toFixed(3);
+                var reward1m_usd = parseInt(reward1d_usd * 30);
+                var reward1m_twd = reward1d_twd * 30;
+                var balance = parseFloat(data['data'].balance);
+                $("div.miner").html(reward1d + " / " + reward1m + " / " + reward1m_usd);
+            });
+        }
+
 
         $.getJSON("https://opendata.cwb.gov.tw/fileapi/v1/opendataapi/O-A0001-001?Authorization=CWB-12B94A22-65C1-430B-8703-8CB21070F397&downloadType=WEB&format=JSON",
         function (data) {
@@ -449,8 +464,8 @@
         set_time();
         miner_data(0);
         setTimeout(function () { window.location = window.location; }, 300000);
-        setTimeout(function () { miner_data(1) }, 150000);
-        //setTimeout(function () { miner_data(2) }, 200000);
+        setTimeout(function () { miner_data(1) }, 100000);
+        setTimeout(function () { miner_balance() }, 200000);
     </script>
 </body>
 </html>
