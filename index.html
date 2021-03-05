@@ -445,6 +445,11 @@
             $("div.miner2").css("font-weight", "bold");
         }
 
+        if (miner1 > 100)
+            miner1 = parseInt(miner1);
+        if (miner2 > 100)
+            miner2 = parseInt(miner2);
+
         if (exist1)
             $("div.miner1").html("Miner1: " + hashrate1 + "M, " + miner1 + "%");
         else
