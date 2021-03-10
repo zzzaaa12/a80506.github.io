@@ -424,10 +424,10 @@
     function (data) {
         var exist1 = data['data']['workers']['list'][0].online;
         var exist2 = data['data']['workers']['list'][1].online;
-        var miner1 = (100 * data['data']['workers']['list'][0].hashrate24h / data['data']['workers']['list'][0].submitHashrate24h).toFixed(1);
-        var miner2 = (100 * data['data']['workers']['list'][1].hashrate24h / data['data']['workers']['list'][1].submitHashrate24h).toFixed(1);
+        var miner1 = parseInt(100 * data['data']['workers']['list'][0].hashrate24h / data['data']['workers']['list'][0].submitHashrate24h);
+        var miner2 = parseInt(100 * data['data']['workers']['list'][1].hashrate24h / data['data']['workers']['list'][1].submitHashrate24h);
         var hashrate1 = (parseFloat(data['data']['workers']['list'][0].hashrate24h) / 1000000).toFixed(1);
-        var hashrate2 = (parseFloat(data['data']['workers']['list'][1].hashrate24h) / 1000000).toFixed(1);
+        var hashrate2 = parseInt(data['data']['workers']['list'][1].hashrate24h / 1000000);
 
         if (exist1 == 0 || miner1 < 90) {
             $("div.miner1").css("color", "red");
@@ -444,11 +444,6 @@
             $("div.miner2").css("color", "orange");
             $("div.miner2").css("font-weight", "bold");
         }
-
-        if (miner1 >= 100)
-            miner1 = parseInt(miner1);
-        if (miner2 >= 100)
-            miner2 = parseInt(miner2);
 
         if (exist1)
             $("div.miner1").html("Miner1: " + hashrate1 + "M, " + miner1 + "%");
