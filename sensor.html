@@ -317,7 +317,7 @@
 
         function miner_data(option) {
             /* Miner */
-            $.getJSON("https://gpumine.org/api/miner?currency=ETH&address=0x9d96b087a6279f5b5967804b1c2c3d6952e6f531",
+            $.getJSON("https://gpumine.org/api/miner?currency=ETH&address=0x27C7A1E6Ddb8EBD56b62C7390a73799fC03dF734",
             function (data) {
                 var reward24h = parseFloat(data.reward24h2).toFixed(4);
                 var reward1m = (30 * parseFloat(data.reward24h2)).toFixed(4);
@@ -373,7 +373,7 @@
         }
 
         function miner_balance() {
-            $.getJSON("https://gpumine.org/api/bill?currency=ETH&address=0x9D96B087A6279f5B5967804B1c2c3d6952e6f531",
+            $.getJSON("https://gpumine.org/api/bill?currency=ETH&address=0x27C7A1E6Ddb8EBD56b62C7390a73799fC03dF734",
             function (data) {
                 var reward1d = parseFloat(data['data']['calcReward24h'].coin).toFixed(4);
                 var reward1d_usd = parseInt(data['data']['calcReward24h'].usd);
