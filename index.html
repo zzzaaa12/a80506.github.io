@@ -138,11 +138,11 @@
             items: [
                 { div: "", title: "全部圖表", url: "sensor2.html" },
                 { div: "living_room", title: "客廳：00°C, 00%", url: "" },
-                { div: "room1", title: "主臥：00°C, 00%", url: "" },
                 { div: "room2", title: "客房：00°C, 00%", url: "" },
                 { div: "room3", title: "書房：00°C, 00%", url: "" },
                 { div: "balcony", title: "亮度：", url: "" },
-                { div: "pm25", title: "PM 2.5：16 ug/m3", url: "" }
+                { div: "pm25", title: "PM 2.5：16 ug/m3", url: "" },
+                { div: "gas", title: "ETH Gas: ", url: "" }
             ]
         }
     ];
@@ -509,6 +509,14 @@
             }
         );
     }
+
+    $.getJSON("https://data-api.defipulse.com/api/v1/egs/api/ethgasAPI.json",
+        function (data) {
+            gas = parseInt(data.fastest)/10;
+            if (gas > 0)
+                $("div.gas").html("ETH Gas: " + gas.toString());
+        }
+    );
 
     get_binance("FIL");
     get_bitstamp("BTC");
