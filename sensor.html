@@ -348,11 +348,11 @@
                 } else if (option == 1) {
                     if (miner1_online && miner2_online) {
                         $("div.miner").html("Miner: " + hashrate1 + "M / " + hashrate2 + "M");
-                    } else if (miner1_online) {
+                    } else if (miner1_online || hashrate1 < 52) {
                         $("div.miner").html("Miner: " + hashrate1 + "M / Leaved");
                         $("div.miner").css("color", "red");
                         $("div.miner").css("font-weight", "bold");
-                    } else if (miner2_online == 0) {
+                    } else if (miner2_online == 0 || hashrate2 < 165) {
                         $("div.miner").html("Miner: Leaved / " + hashrate2 + "M");
                         $("div.miner").css("color", "red");
                         $("div.miner").css("font-weight", "bold");
