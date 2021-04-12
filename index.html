@@ -21,8 +21,8 @@
                 { div: "", title: "Evernote", url: "https://www.evernote.com" },
                 { div: "", title: "即時天氣", url: "https://www.cwb.gov.tw/V8/C/W/OBS_Station.html?ID=C0ACA" },
                 { div: "weather", title: "新莊：00.0°C, 00%", url: ""},
-                { div: "", title: "一週氣象", url: "https://www.cwb.gov.tw/V8/C/W/County/County.html?C=63" },
-                { div: "", title: "PM2.5", url: "https://taqm.epa.gov.tw/pm25" }
+                { div: "pm25", title: "PM 2.5：0 ug/m3", url: "" },
+                { div: "", title: "一週氣象", url: "https://www.cwb.gov.tw/V8/C/W/County/County.html?C=63" }
             ]
         },
         { // [2]
@@ -141,7 +141,7 @@
                 { div: "room3", title: "書房：00°C, 00%", url: "" },
                 //{ div: "balcony", title: "亮度：", url: "" },
                 { div: "room2", title: "礦機：00°C, 00%", url: "" },
-                { div: "pm25", title: "PM 2.5：16 ug/m3", url: "" },
+                { div: "", title: "", url: "" },
                 { div: "gas", title: "ETH Gas: ", url: "" }
             ]
         }
@@ -246,6 +246,70 @@
     var light = 0;
     var pm25 = -1
     var plant_level = -1, plant_water_times = -1;
+
+    $.getJSON("https://opendata.epa.gov.tw/api/v1/AQI?$skip=0&$top=1000&$format=json",
+    function (data) {
+        var found = 0;
+        var site = "";
+        var pm25_str = "";
+
+        for (var x in data) {
+            if (data[x].SiteName == "新莊") {
+                for (var y in data[x]) {
+                    if (y == "PM2.5") {
+                        pm25_str = data[x][y];
+                        if (parseInt(pm25_str) > 0) {
+                            found = 1;
+                            site = data[x].SiteName;
+                        }
+                    }
+                }
+            }
+        }
+
+        for (var x in data) {
+            if (found)
+                break;
+            if (data[x].SiteName == "三重") {
+                for (var y in data[x]) {
+                    if (y == "PM2.5") {
+                        pm25_str = data[x][y];
+                        if (parseInt(pm25_str) > 0) {
+                            found = 1;
+                            site = data[x].SiteName;
+                        }
+                    }
+                }
+            }
+        }
+
+        for (var x in data) {
+            if (found)
+                break;
+            if (data[x].SiteName == "板橋") {
+                for (var y in data[x]) {
+                    if (y == "PM2.5") {
+                        pm25_str = data[x][y];
+                        if (parseInt(pm25_str) > 0) {
+                            found = 1;
+                            site = data[x].SiteName;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (found) {
+            if (parseInt(pm25_str) > 60) {
+                $("div.pm25").css("font-weight", "bold");
+                $("div.pm25").css("color", "red");
+            } else if (parseInt(pm25_str) > 40) {
+                $("div.pm25").css("font-weight", "bold");
+                $("div.pm25").css("color", "orange");
+            }
+            $("div.pm25").html(site + " PM2.5：" + pm25_str);
+        }
+    });
 
     $.getJSON("https://opendata.cwb.gov.tw/fileapi/v1/opendataapi/O-A0001-001?Authorization=CWB-12B94A22-65C1-430B-8703-8CB21070F397&downloadType=WEB&format=JSON",
     function (data) {
