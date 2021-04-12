@@ -45,10 +45,10 @@
     <!--<div class="room2" align="center">客房：00°C, 0%</div>-->
     <div class="room3" align="center">書房：00°C, 0%</div>
     <!--<div class="balcony" align="center">陽台：00°C, 00%</div>-->
-    <!--<div class="pm25" align="center">PM2.5：0 ug/m3</div>-->
+    <div class="pm25" align="center">PM2.5：0 ug/m3</div>
     <div class="weather" align="center">戶外：00°C, 0%</div>
     <div class="miner" align="center">Miner：0% / 0%</div>
-    <div class="miner2" align="center">Miner：0% / 0%</div>
+    <!--<div class="miner2" align="center">Miner：0% / 0%</div>-->
     <!-- <div class="pm10" align="center">PM10：00 ug/m3</div> -->
     <div class="time" align="center">00:00:00</div>
     <div class="coin" align="center">　</div>
@@ -383,11 +383,76 @@
                 var reward1m_usd = parseInt(reward1d_usd * 30);
                 var reward1m_twd = reward1d_twd * 30;
                 var balance = parseFloat(data['data'].balance);
-                $("div.miner2").html(reward1d + " / " + reward1m + " / " + reward1m_usd);
+                //$("div.miner2").html(reward1d + " / " + reward1m + " / " + reward1m_usd);
             });
         }
 
+        $.getJSON("https://opendata.epa.gov.tw/api/v1/AQI?$skip=0&$top=1000&$format=json",
+        function (data) {
+            var found = 0;
+            var site = "";
+            var pm25_str = "";
 
+            for (var x in data) {
+                if (data[x].SiteName == "新莊") {
+                    for (var y in data[x]) {
+                        if (y == "PM2.5") {
+                            pm25_str = data[x][y];
+                            if (parseInt(pm25_str) > 0) {
+                                found = 1;
+                                site = data[x].SiteName;
+                            }
+                        }
+                    }
+                }
+            }
+
+            for (var x in data) {
+                if (found)
+                    break;
+                if (data[x].SiteName == "三重") {
+                    for (var y in data[x]) {
+                        if (y == "PM2.5") {
+                            pm25_str = data[x][y];
+                            if (parseInt(pm25_str) > 0) {
+                                found = 1;
+                                site = data[x].SiteName;
+                            }
+                        }
+                    }
+                }
+            }
+
+            for (var x in data) {
+                if (found)
+                    break;
+                if (data[x].SiteName == "板橋") {
+                    for (var y in data[x]) {
+                        if (y == "PM2.5") {
+                            pm25_str = data[x][y];
+                            if (parseInt(pm25_str) > 0) {
+                                found = 1;
+                                site = data[x].SiteName;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (found) {
+                if (parseInt(pm25_str) > 60) {
+                    $("div.pm25").css("font-weight", "bold");
+                    $("div.pm25").css("color", "red");
+                } else if (parseInt(pm25_str) > 40) {
+                    $("div.pm25").css("font-weight", "bold");
+                    $("div.pm25").css("color", "orange");
+                } else {
+                    $("div.pm25").css("color", green);
+                }
+                $("div.pm25").html(site + " PM2.5：" + pm25_str);
+            }
+        });
+    
         $.getJSON("https://opendata.cwb.gov.tw/fileapi/v1/opendataapi/O-A0001-001?Authorization=CWB-12B94A22-65C1-430B-8703-8CB21070F397&downloadType=WEB&format=JSON",
         function (data) {
             var cwb_t = "";
