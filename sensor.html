@@ -323,20 +323,16 @@
                 var reward24h = parseFloat(data.reward24h2).toFixed(4);
                 var reward1m = (30 * parseFloat(data.reward24h2)).toFixed(4);
                 var miner1_online = data['data']['workers']['list'][0].online;
-                var miner2_online = data['data']['workers']['list'][1].online;
                 var miner1 = (100 * data['data']['workers']['list'][0].hashrate24h / data['data']['workers']['list'][0].submitHashrate24h).toFixed(1);
-                var miner2 = (100 * data['data']['workers']['list'][1].hashrate24h / data['data']['workers']['list'][1].submitHashrate24h).toFixed(1);
                 var hashrate1 = (parseFloat(data['data']['workers']['list'][0].hashrate24h) / 1000000).toFixed(1);
-                var hashrate2 = (parseFloat(data['data']['workers']['list'][1].hashrate24h) / 1000000).toFixed(1);
 
                 if (miner1 > 100)
                     miner1 = 100;
-                if (miner2 > 100)
-                    miner2 = 100;
-                if (miner1 < 85 || miner2 < 90) {
+
+                if (miner1 < 85) {
                     $("div.miner").css("color", "red");
                     $("div.miner").css("font-weight", "bold");
-                } else if (miner1 < 92 || miner2 < 95) {
+                } else if (miner1 < 92) {
                     $("div.miner").css("color", "orange");
                     $("div.miner").css("font-weight", "bold");
                 } else {
@@ -346,28 +342,26 @@
                 if (option == 2) {
                     $("div.miner").html(reward24h + " / " + reward1m);
                 } else if (option == 1) {
-                    if (miner1_online && miner2_online) {
-                        $("div.miner").html("Miner: " + hashrate1 + "M / " + hashrate2 + "M");
-                    } else if (miner1_online || hashrate1 < 52) {
-                        $("div.miner").html("Miner: " + hashrate1 + "M / Leaved");
+                    if (miner1_online && hashrate1 > 150) {
+                        $("div.miner").html("Miner: " + hashrate1 + "M");
+                    } else {
                         $("div.miner").css("color", "red");
                         $("div.miner").css("font-weight", "bold");
-                    } else if (miner2_online == 0 || hashrate2 < 165) {
-                        $("div.miner").html("Miner: Leaved / " + hashrate2 + "M");
-                        $("div.miner").css("color", "red");
-                        $("div.miner").css("font-weight", "bold");
+                        if (miner1_online)
+                            $("div.miner").html("Miner: " + hashrate1 + "M");
+                        else
+                            $("div.miner").html("Miner: Leaved");
                     }
                 } else {
-                    if (miner1_online && miner2_online) {
-                        $("div.miner").html("Miner: " + miner1 + "% / " + miner2 + "%");
-                    } else if (miner1_online) {
-                        $("div.miner").html("Miner: " + miner1 + "% / Leaved");
+                    if (miner1_online && hashrate1 > 150) {
+                        $("div.miner").html("Miner: " + miner1 + "%");
+                    } else {
                         $("div.miner").css("color", "red");
                         $("div.miner").css("font-weight", "bold");
-                    } else if (miner2_online == 0) {
-                        $("div.miner").html("Miner: Leaved / " + miner2 + "%");
-                        $("div.miner").css("color", "red");
-                        $("div.miner").css("font-weight", "bold");
+                        if (miner1_online)
+                            $("div.miner").html("Miner: " + miner1 + "%");
+                        else
+                            $("div.miner").html("Miner: Leaved");
                     }
                 }
             });
