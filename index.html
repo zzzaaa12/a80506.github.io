@@ -487,11 +487,8 @@
     $.getJSON("https://gpumine.org/api/miner?currency=ETH&address=0x9d96b087a6279f5b5967804b1c2c3d6952e6f531",
     function (data) {
         var exist1 = data['data']['workers']['list'][0].online;
-        var exist2 = data['data']['workers']['list'][1].online;
         var miner1 = parseInt(100 * data['data']['workers']['list'][0].hashrate24h / data['data']['workers']['list'][0].submitHashrate24h);
-        var miner2 = parseInt(100 * data['data']['workers']['list'][1].hashrate24h / data['data']['workers']['list'][1].submitHashrate24h);
         var hashrate1 = (parseFloat(data['data']['workers']['list'][0].hashrate24h) / 1000000).toFixed(1);
-        var hashrate2 = parseInt(data['data']['workers']['list'][1].hashrate24h / 1000000);
 
         if (exist1 == 0 || miner1 < 90) {
             $("div.miner1").css("color", "red");
@@ -501,24 +498,10 @@
             $("div.miner1").css("font-weight", "bold");
         }
 
-        if (exist2 == 0 || miner2 < 90) {
-            $("div.miner2").css("color", "red");
-            $("div.miner2").css("font-weight", "bold");
-        } else if (miner2 < 95) {
-            $("div.miner2").css("color", "orange");
-            $("div.miner2").css("font-weight", "bold");
-        }
-
         if (exist1)
-            $("div.miner1").html("Miner1: " + hashrate1 + "M, " + miner1 + "%");
+            $("div.miner1").html("Miner: " + hashrate1 + "M, " + miner1 + "%");
         else
-            $("div.miner1").html("Miner1: Leaved....");
-        if (exist2)
-            $("div.miner2").html("Miner2: " + hashrate2 + "M, " + miner2 + "%");
-        else
-            $("div.miner2").html("Miner2: Leaved....");
-
-
+            $("div.miner1").html("Miner: Leaved....");
     });
     
     $.getJSON("https://gpumine.org/api/bill?currency=ETH&address=0x9d96b087a6279f5b5967804b1c2c3d6952e6f531",
