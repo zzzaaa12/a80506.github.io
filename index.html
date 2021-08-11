@@ -130,7 +130,7 @@
                 { div: "miner_1d", title: "", url: "" },
                 { div: "miner_1m", title: "", url: "" },
                 { div: "miner1", title: "", url: "" },
-                { div: "miner2", title: "", url: "" }
+                { div: "miner2", title: "", url: "https://os.flintos.cn/farms/14011" }
             ]
         },
         { // [11]
@@ -500,7 +500,7 @@
             $("div.miner1").css("color", "orange");
             //$("div.miner1").css("font-weight", "bold");
         }
-        
+
         if (exist2 == 0 || miner2 < 90) {
             $("div.miner2").css("color", "red");
             $("div.miner2").css("font-weight", "bold");
@@ -508,18 +508,20 @@
             $("div.miner2").css("color", "orange");
             //$("div.miner2").css("font-weight", "bold");
         }
-        
+
         if (exist1)
             $("div.miner1").html("Miner1: " + hashrate1 + "M, " + miner1 + "%");
         else
             $("div.miner1").html("Miner1: Leaved....");
-            
-        if (exist2)
+
+        if (exist2 && miner2 >= 90)
+            $("div.miner2").html("<a href=\"https://os.flintos.cn/farms/14011\">Miner2: " + hashrate2 + "M, " + miner2 + "%</a>");
+        else if (exist2)
             $("div.miner2").html("Miner2: " + hashrate2 + "M, " + miner2 + "%");
         else
             $("div.miner2").html("Miner2: Leaved....");
     });
-    
+
     $.getJSON("https://gpumine.org/api/bill?currency=ETH&address=0x9d96b087a6279f5b5967804b1c2c3d6952e6f531",
     function (data) {
         var reward1d = parseFloat(data['data']['calcReward24h'].coin).toFixed(4);
