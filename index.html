@@ -115,10 +115,10 @@
                 { div: "", title: "ahr999指標", url: "https://ahr999.com/" },
                 { div: "", title: "日線D&T指標", url: "https://www.tradingview.com/script/Qrft62wi-BTC-D-T-Index-by-Benson/" },
                 { div: "", title: "貪婪&恐慌指數", url: "https://alternative.me/crypto/fear-and-greed-index/" },
+                { div: "time", title: "", url: "" },
                 { div: "FIL", title: "", url: "" },
                 { div: "BTC", title: "BTC: 000 (+0%)", url: "" },
-                { div: "ETH", title: "ETH: 000 (+0%)", url: "" },
-                { div: "LINK", title: "LINK: 0.00 (+0%)", url: "" }
+                { div: "ETH", title: "ETH: 000 (+0%)", url: "" }
             ]
         },
         { // [10]
@@ -553,7 +553,7 @@
             $("div.balance").html(balance.toFixed(5));
         }
     });
-    
+
     function get_binance(item) {
         $.getJSON("https://api.binance.com/api/v3/ticker/24hr?symbol=" + String(item).toUpperCase() + "USDT",
             function (data) {
@@ -583,6 +583,14 @@
         }
     );
 
+    function set_time() {
+        var d = new Date();
+        $("div.time").css("color", "orange");
+        $("div.time").html((d.getMonth()+1) + "/" + d.getDate() + " "+ d.toLocaleTimeString("en-US", { hour12: false , hour: "2-digit", minute: "2-digit"}));
+        setTimeout(function () { set_time(); }, 1000);
+    }
+
+    set_time();
     get_binance("FIL");
     get_bitstamp("BTC");
     get_bitstamp("ETH");
