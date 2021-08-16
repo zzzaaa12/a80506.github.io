@@ -550,7 +550,7 @@
         if (balance > 0) {
             if (balance > 0.9)
                 $("div.balance").css("color", "orange");
-            $("div.balance").html(balance.toFixed(5));
+            $("div.balance").html(balance.toFixed(5) + " / " + parseInt((1-balance)/reward1d)+ "H");
         }
     });
 
