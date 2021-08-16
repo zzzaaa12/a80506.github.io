@@ -40,15 +40,15 @@
 
 <body>
     <br />
-    <div class="living_room" align="center">客廳：00°C, 0%</div>
+    <!--<div class="living_room" align="center">客廳：00°C, 0%</div>-->
     <!--<div class="room1" align="center">臥室：00°C, 00%</div>-->
     <!--<div class="room2" align="center">客房：00°C, 0%</div>-->
     <div class="room3" align="center">書房：00°C, 0%</div>
     <!--<div class="balcony" align="center">陽台：00°C, 00%</div>-->
     <div class="pm25" align="center">PM2.5：0 ug/m3</div>
     <div class="weather" align="center">戶外：00°C, 0%</div>
-    <div class="miner" align="center">Miner：0% / 0%</div>
-    <!--<div class="miner2" align="center">Miner：0% / 0%</div>-->
+    <div class="miner0" align="center">Miner：0% / 0%</div>
+    <div class="miner1" align="center">Miner：0% / 0%</div>
     <!-- <div class="pm10" align="center">PM10：00 ug/m3</div> -->
     <div class="time" align="center">00:00:00</div>
     <div class="coin" align="center">　</div>
@@ -65,13 +65,14 @@
         var green = "#80FF00";
         var gray = "#444444";
 
-        $("div.living_room").css("color", gray);
+        //$("div.living_room").css("color", gray);
         $("div.room1").css("color", gray);
         $("div.room2").css("color", gray);
         $("div.room3").css("color", gray);
         $("div.balcony").css("color", gray);
         $("div.pm25").css("color", gray);
         $("div.miner").css("color", gray);
+        $("div.miner2").css("color", gray);
         //$("div.pm10").css("color", gray);
 
         $.getJSON("https://api.thingspeak.com/channels/72313/feeds.json?results=" + String(max),
@@ -141,10 +142,10 @@
                             $("div.room3").css("color", green);
                         }
 
-                        $("div.living_room").html("客廳：" + living_room_t + "°C, " + living_room_h + "%");
+                        //$("div.living_room").html("客廳：" + living_room_t + "°C, " + living_room_h + "%");
                         $("div.room1").html("臥室：" + room1_t + "°C, " + room1_h + "%");
                         $("div.room2").html("客房：" + room2_t + "°C, " + room2_h + "%");
-                        $("div.room3").html("書房：" + room3_t + "°C, " + room3_h + "%");
+                        $("div.room3").html("客廳 " + living_room_h + "% / 書房 " + room3_h + "%");
                     }
                 });
             });
@@ -316,38 +317,39 @@
             setTimeout(function () { set_time(); }, 1000);
         }
 
-        function miner_data() {
+        function miner_data(idx) {
             /* Miner */
             $.getJSON("https://gpumine.org/api/miner?currency=ETH&address=0x9D96B087A6279f5B5967804B1c2c3d6952e6f531",
             function (data) {
-                var reward24h = parseFloat(data.reward24h2).toFixed(4);
-                var reward1m = (30 * parseFloat(data.reward24h2)).toFixed(4);
-                var miner1_online = data['data']['workers']['list'][0].online;
-                var miner1 = parseInt(100 * data['data']['workers']['list'][0].hashrate24h / data['data']['workers']['list'][0].submitHashrate24h);
-                var hashrate1 = (parseFloat(data['data']['workers']['list'][0].hashrate24h) / 1000000).toFixed(1);
+                var miner_online = data['data']['workers']['list'][idx].online;
+                var miner = parseInt(100 * data['data']['workers']['list'][idx].hashrate24h / data['data']['workers']['list'][idx].submitHashrate24h);
+                var hashrate = (parseFloat(data['data']['workers']['list'][idx].hashrate24h) / 1000000).toFixed(1);
 
-                if (miner1 > 100)
-                    miner1 = 100;
+                var div_target = "div.miner" + idx.toString();
 
-                if (miner1 < 85) {
-                    $("div.miner").css("color", "red");
-                    $("div.miner").css("font-weight", "bold");
-                } else if (miner1 < 92) {
-                    $("div.miner").css("color", "orange");
-                    $("div.miner").css("font-weight", "bold");
+                if (miner > 100)
+                    miner = 100;
+
+                if (miner < 85) {
+                    $(div_target).css("color", "red");
+                    $(div_target).css("font-weight", "bold");
+                } else if (miner < 92) {
+                    $(div_target).css("color", "orange");
+                    $(div_target).css("font-weight", "bold");
                 } else {
-                    $("div.miner").css("color", green);
+                    $(div_target).css("color", green);
                 }
 
-                if (miner1_online && hashrate1 > 150) {
-                    $("div.miner").html("Miner: " + hashrate1 + "M / " + miner1 + "%");
+                idx += 1;
+                if (miner_online && hashrate > 150) {
+                    $(div_target).html("Miner" + idx.toString() + ": " + hashrate + "M / " + miner + "%");
                 } else {
-                    $("div.miner").css("color", "red");
-                    $("div.miner").css("font-weight", "bold");
-                    if (miner1_online)
-                        $("div.miner").html("Miner: " + hashrate1 + "M / " + miner1 + "%");
+                    $(div_target).css("color", "red");
+                    $(div_target).css("font-weight", "bold");
+                    if (miner_online)
+                        $(div_target).html("Miner" + idx.toString() + ": " + hashrate + "M / " + miner + "%");
                     else
-                        $("div.miner").html("Miner: Leaved");
+                        $(div_target).html("Miner" + idx.toString() + ": " + "Leaved");
                 }
             });
         }
@@ -362,7 +364,8 @@
                 var reward1m_usd = parseInt(reward1d_usd * 30);
                 var reward1m_twd = reward1d_twd * 30;
                 var balance = parseFloat(data['data'].balance);
-                $("div.miner").html(reward1d + " / " + reward1m + " / " + reward1m_usd);
+                $("div.miner0").html(reward1d + " / " + reward1m + " / " + reward1m_usd);
+                $("div.miner1").html(balance.toFixed(4) + " / " + parseInt((0.1-balance)/reward1d*24).toString() + "H");
             });
         }
 
@@ -507,7 +510,8 @@
 
         get_coin();
         set_time();
-        miner_data();
+        miner_data(0);
+        miner_data(1);
         setTimeout(function () { window.location = window.location; }, 300000);
         setTimeout(function () { miner_balance(); }, 150000);
     </script>
