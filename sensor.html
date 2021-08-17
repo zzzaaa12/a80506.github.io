@@ -364,8 +364,13 @@
                 var reward1m_usd = parseInt(reward1d_usd * 30);
                 var reward1m_twd = reward1d_twd * 30;
                 var balance = parseFloat(data['data'].balance);
+                var hour = parseInt((0.1-balance)/reward1d*24);
                 $("div.miner0").html(reward1d + " / " + reward1m + " / " + reward1m_usd);
-                $("div.miner1").html(balance.toFixed(4) + " / " + parseInt((0.1-balance)/reward1d*24).toString() + "H");
+                
+                if (hour > 0)
+                    $("div.miner1").html(balance.toFixed(4) + " / " + hour.toString() + "H");
+                else
+                    $("div.miner1").html(balance.toFixed(4) + " / Today");
             });
         }
 
