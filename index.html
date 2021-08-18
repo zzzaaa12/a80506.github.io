@@ -548,9 +548,19 @@
         }
 
         if (balance > 0) {
+            var d = new Date();
+
             if (balance > 0.9)
                 $("div.balance").css("color", "orange");
-            $("div.balance").html(balance.toFixed(5) + " / " + parseInt((0.1-balance)/reward1d*24).toString() + "H");
+            
+            if (parseInt((0.1-balance)/reward1d*24) > 0) {
+                $("div.balance").html(balance.toFixed(5) + " / " + last_hour.toString() + "H");
+            } else {
+                if (d.getHours() <= 14)
+                    $("div.balance").html(balance.toFixed(5) + " / Today");
+                else
+                    $("div.balance").html(balance.toFixed(5) + " / Tomorrow");
+            }
         }
     });
 
