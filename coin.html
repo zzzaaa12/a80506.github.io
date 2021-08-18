@@ -1,0 +1,146 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Cryptocurrency Information</title>
+    <style type="text/css">
+        body {
+            font-size: 9pt;
+            background-color: #000000;
+        }
+
+        table {
+            border-collapse: collapse;
+            border-color: #707070;
+        }
+
+        td {
+            empty-cells: show;
+            color: #FFFF00;
+            text-align: center;
+            border-color: #707070;
+        }
+
+        td.title {
+            font-weight: bolder;
+            color: #000000;
+            background-color: #FF9933;
+        }
+
+        a {
+            text-decoration: none
+        }
+
+        div {
+            color: #80FF00;
+        }
+
+        div.time {
+            color: #FFFF00;
+            font-size: 15pt;
+        }
+    </style>
+    <style type="text/css"></style>
+</head>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+    crossorigin="anonymous"></script>
+
+<body>
+    <script>
+        var items = [
+            [ "BTCUSDT", "1" ],
+            [ "ETHUSDT", "1027" ],
+            [ "FILUSDT", "2280" ],
+            [ "FTTUSDT", "4195" ],
+            [ "BNBUSDT", "1839" ],
+            [ "SOLUSDT", "5426" ],
+            [ "SRMUSDT", "6187" ],
+            [ "LINKUSDT", "1975" ],
+            [ "AXSUSDT", "6783" ],
+            [ "FLOWUSDT", "4558" ],
+            [ "UNIUSDT", "7083" ],
+            [ "AAVEUSDT", "7278" ],
+            [ "COMPUSDT", "5692" ],
+            [ "DOTUSDT", "6636" ],
+            [ "DOGEUSDT", "74" ],
+            [ "ETHBTC", "" ],
+            [ "FILBTC", "" ],
+            [ "SOLBTC", "" ],
+            [ "FTTBTC", "" ],
+            [ "FLOWBTC", "" ]
+        ];
+
+        var item_title = "";
+        var item_url = "";
+        var i, j;
+        document.write("<table border=\"0\" width=\"100%\" height=\"100%\" align=\"center\" valign=\"center\"><tbody><tr><td>");
+        document.write("<table border=\"0\" width=\"75%\" height=\"70%\" align=\"center\"><tbody>");
+        document.write("<tr valign=\"top\">");
+        for (i = 0; i < 5; i++) {
+            document.write("<td>");
+            document.write("<table border=\"1\" width=\"200\" height=\"500\" align=\"center\"><tbody>");
+            for (j = 0; j < 4; j++) {
+                 document.write("<tr><td><div class=\"" + items[(j*5+i)][0] + "\">" + "</div></td></tr>");
+            }
+            document.write("</tbody></table>");
+            document.write("</td>");
+        }
+        document.write("</tr>");
+        document.write("</tbody></table>");
+		document.write("<div class=\"time\">0000.00.00 00:00:00</div>");
+        document.write("</td></tr></tbody></table>");
+    </script>
+</body>
+</html>
+<script>
+
+    /* Cryptocurrency */
+    $.getJSON("https://api.binance.com/api/v3/ticker/24hr",
+        function (data) {
+            var count = 0;
+            var found;
+
+            for (var key in data) {
+                var coin = data[key].symbol;
+                var price = parseFloat(data[key].lastPrice);
+                var price_change = parseFloat(data[key].priceChange);
+                var percentage = parseFloat(data[key].priceChangePercent);
+                var graph_url = "";
+                var div = "";
+                var sign = "";
+                var green = "#80FF00";
+                var color = "#ff0000";
+
+                found = 0;
+                for (var i in items) {
+                    if (items[i][0] == coin) {
+                        div = "div." + items[i][0];
+                        found = 1;
+                        break;
+                    }
+                }
+
+                if (!found)
+                    continue;
+
+                if (i < 15)
+                    graph_url = "<img src=\"" + "https://s3.coinmarketcap.com/generated/sparklines/web/7d/usd/"+ items[i][1] + ".png\">";
+
+                if (price_change > 0) {
+                    color = green;
+                    sign = "+";
+                }
+
+                $(div).html("<font color=" + "ffff00" + ">"+ coin.replace("USDT","") + "</font> <font color="+ color +">" + price + "<br />" + sign + price_change + " (" + sign + percentage.toString() + "%)</font><br />" + graph_url);
+            }
+        });
+
+    function set_time() {
+        var d = new Date();
+        $("div.time").html(d.getFullYear() + "." + ("0" + (d.getMonth() + 1)).slice(-2) + "." + ("0" + (d.getDate() + 1)).slice(-2) + " " + d.toLocaleTimeString("en-US", { hour12: false , hour: "2-digit", minute: "2-digit"}));
+    }
+
+        set_time();
+    /* Auto Reload */
+    setTimeout(function () { window.location = window.location; }, 300000);
+</script>
