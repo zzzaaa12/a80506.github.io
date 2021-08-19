@@ -101,12 +101,12 @@
             title: "加密貨幣",
             items: [
                 { div: "", title: "E大專欄", url: "https://www.pressplay.cc/project/vipp/%E8%81%8A%E5%95%86E%E5%AD%B8%E9%99%A2%E5%B8%B6%E4%BD%A0%E7%A9%BF%E8%B6%8A~/0AEBC1635F2967C8D2944BBEB77512CD" },
-                { div: "", title: "QQQ/TWD", url: "https://www.ace.io/webtrade/TWD_QQQ" },
-                { div: "", title: "幣安交易所", url: "https://www.binance.com/tw/trade/BTC_USDT" },
-                { div: "", title: "巴比特", url: "https://www.8btc.com/" },
-                { div: "", title: "金色財經", url: "https://www.jinse.com/" },
-                { div: "", title: "支點社區", url: "https://www.zdpvt.com/" },
-                { div: "", title: "TradingView", url: "https://tw.tradingview.com/chart/?symbol=BITFINEX%3ABTCUSD" },
+                { div: "SOL", title: "", url: "" },
+                { div: "SRM", title: "", url: "" },
+                { div: "AXS", title: "", url: "" },
+                { div: "LUNA", title: "", url: "" },
+                { div: "FLOW", title: "", url: "" },
+                { div: "FTT", title: "", url: "" }
             ]
         },
         { // [9]
@@ -606,6 +606,12 @@
     get_bitstamp("BTC");
     get_bitstamp("ETH");
     get_bitstamp("LINK");
+    get_binance("SOL");
+    get_binance("SRM");
+    get_binance("LUNA");
+    get_binance("FTT");
+    get_binance("AXS");
+    get_binance("FLOW");
 
     /* Auto Reload */
     setTimeout(function () { window.location = window.location; }, 300000);
