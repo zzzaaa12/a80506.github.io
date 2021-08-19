@@ -4,41 +4,12 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Cryptocurrency Information</title>
     <style type="text/css">
-        body {
-            font-size: 9pt;
-            background-color: #000000;
-        }
-
-        table {
-            border-collapse: collapse;
-            border-color: #707070;
-        }
-
-        td {
-            empty-cells: show;
-            color: #FFFF00;
-            text-align: center;
-            border-color: #707070;
-        }
-
-        td.title {
-            font-weight: bolder;
-            color: #000000;
-            background-color: #FF9933;
-        }
-
-        a {
-            text-decoration: none
-        }
-
-        div {
-            color: #80FF00;
-        }
-
-        div.time {
-            color: #FFFF00;
-            font-size: 15pt;
-        }
+        body { font-size: 9pt; background-color: #000000; }
+        table { border-collapse: collapse; border-color: #707070; }
+        td { empty-cells: show; color: #FFFF00; text-align: center; border-color: #707070; }
+        td.title { font-weight: bolder; color: #000000; background-color: #FF9933; }
+        a { text-decoration: none }
+        div { color: #80FF00; }
     </style>
     <style type="text/css"></style>
 </head>
@@ -53,10 +24,10 @@
             [ "FILUSDT", "2280" ],
             [ "FTTUSDT", "4195" ],
             [ "BNBUSDT", "1839" ],
+            [ "AXSUSDT", "6783" ],
             [ "SOLUSDT", "5426" ],
             [ "SRMUSDT", "6187" ],
             [ "LUNAUSDT", "4172"],
-            [ "AXSUSDT", "6783" ],
             [ "FLOWUSDT", "4558" ],
             [ "LINKUSDT", "1975" ],
             [ "UNIUSDT", "7083" ],
@@ -64,29 +35,30 @@
             //[ "COMPUSDT", "5692" ],
             [ "DOTUSDT", "6636" ],
             [ "DOGEUSDT", "74" ],
+            [ "AXSBTC", "" ],
+            [ "SOLBTC", "" ],
+            [ "SRMBTC", "" ],
+            [ "LUNABTC", "" ],
+            [ "FLOWBTC", "" ],
             [ "ETHBTC", "" ],
             [ "FILBTC", "" ],
-            [ "SOLBTC", "" ],
+            [ "BNBBTC", "" ],
             [ "FTTBTC", "" ],
-            [ "FLOWBTC", "" ]
+            [ "LINKBTC", "" ]
         ];
 
         var item_title = "";
         var item_url = "";
         var i, j;
         document.write("<table border=\"0\" width=\"100%\" height=\"100%\" align=\"center\" valign=\"center\"><tbody><tr><td>");
-        document.write("<table border=\"0\" width=\"75%\" height=\"70%\" align=\"center\"><tbody>");
-        document.write("<tr valign=\"top\">");
+        document.write("<table border=\"1\" width=\"75%\" height=\"70%\" align=\"center\"><tbody>");
         for (i = 0; i < 5; i++) {
-            document.write("<td>");
-            document.write("<table border=\"1\" width=\"200\" height=\"500\" align=\"center\"><tbody>");
-            for (j = 0; j < 4; j++) {
-                 document.write("<tr><td><div class=\"" + items[(j*5+i)][0] + "\">" + "</div></td></tr>");
+            document.write("<tr>");
+            for (j = 0; j < 5; j++) {
+                 document.write("<td><div class=\"" + items[(i*5+j)][0] + "\">" + "</div></td>");
             }
-            document.write("</tbody></table>");
-            document.write("</td>");
+            document.write("</tr>");
         }
-        document.write("</tr>");
         document.write("</tbody></table>");
         document.write("</td></tr></tbody></table>");
     </script>
@@ -123,18 +95,22 @@
                 if (!found)
                     continue;
 
-                if (i < 15)
+                if (i < 15) {
                     graph_url = "<img src=\"" + "https://s3.coinmarketcap.com/generated/sparklines/web/7d/usd/"+ items[i][1] + ".png\">";
+                    coin = coin.replace("USDT",": ");
+                } else {
+                    coin = coin.replace("BTC", "/BTC: ");
+                }
 
                 if (price_change > 0) {
                     color = green;
                     sign = "+";
                 }
 
-                $(div).html("<font color=" + "ffff00" + ">"+ coin.replace("USDT","") + "</font> <font color="+ color +">" + price + "<br />" + sign + price_change + " (" + sign + percentage.toString() + "%)</font><br />" + graph_url);
+                $(div).html("<font color=" + "ffff00" + ">"+ coin + "</font> <font color="+ color +">" + price + "<br />" + sign + price_change + " (" + sign + percentage.toString() + "%)</font><br />" + graph_url);
             }
         });
 
     /* Auto Reload */
-    setTimeout(function () { window.location = window.location; }, 300000);
+    setTimeout(function () { window.location = window.location; }, 120000);
 </script>
