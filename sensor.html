@@ -268,6 +268,7 @@
                 var btc_percent;
                 var eth = 0;
                 var fil = 0;
+                var flow = 0；
                 $.each( data, function( key, val ) {
                     if (data[key].symbol == "BTCUSDT") {
                         btc_percent = parseFloat(data[key].priceChangePercent).toFixed(1);
@@ -290,7 +291,10 @@
                     if (data[key].symbol == "FILUSDT")
                         fil = parseFloat(data[key].lastPrice).toFixed(1);
 
-                    $("div.coin").html(btc + "<br />" + eth + " / " + fil);
+                    if (data[key].symbol == "FLOWUSDT")
+                        flow = parseFloat(data[key].lastPrice).toFixed(2);
+
+                    $("div.coin").html(btc + " / " + flow + "<br />" + eth + " / " + fil);
                 });
             })
             .fail(function(){
