@@ -345,7 +345,7 @@
                 }
 
                 idx += 1;
-                if (miner_online && hashrate > 150) {
+                if (miner_online && hashrate > 80) {
                     $(div_target).html("Miner" + idx.toString() + ": " + hashrate + "M / " + miner + "%");
                 } else {
                     $(div_target).css("color", "red");
