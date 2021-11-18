@@ -492,6 +492,7 @@
         var exist2 = data['data']['workers']['list'][1].online;
         var miner2 = parseInt(100 * data['data']['workers']['list'][1].hashrate24h / data['data']['workers']['list'][1].submitHashrate24h);
         var hashrate2 = (parseFloat(data['data']['workers']['list'][1].hashrate24h) / 1000000).toFixed(1);
+        var color2 = "#80FF00";
 
         if (exist1 == 0 || miner1 < 90) {
             $("div.miner1").css("color", "red");
@@ -504,9 +505,9 @@
         if (exist2 == 0 || miner2 < 90) {
             $("div.miner2").css("color", "red");
             $("div.miner2").css("font-weight", "bold");
+            color2 = "red";
         } else if (miner2 < 95) {
             $("div.miner2").css("color", "orange");
-            //$("div.miner2").css("font-weight", "bold");
         }
 
         if (exist1)
@@ -515,7 +516,7 @@
             $("div.miner1").html("Miner1: Leaved....");
 
         if (exist2 && miner2 >= 90)
-            $("div.miner2").html("<a href=\"https://os.flintos.cn/farms/14011\">Miner2: " + hashrate2 + "M, " + miner2 + "%</a>");
+            $("div.miner2").html("<a style=\"color:" + color2 + ";\" href=\"http://hks.hiveos.farm/\">Miner2: " + hashrate2 + "M, " + miner2 + "%</a>");
         else if (exist2)
             $("div.miner2").html("Miner2: " + hashrate2 + "M, " + miner2 + "%");
         else
@@ -570,7 +571,11 @@
     function get_binance(item) {
         $.getJSON("https://api.binance.com/api/v3/ticker/24hr?symbol=" + String(item).toUpperCase() + "USDT",
             function (data) {
-                $("div." + item.toUpperCase()).html(item.toUpperCase()+ ": " + String(parseFloat(data.lastPrice).toFixed(2)));
+                var color = "#80FF00";
+
+                if (parseInt(data.priceChangePercent) <= -5)
+                    color = "red";
+                $("div." + item.toUpperCase()).html("<a style=\"color:" + color + ";\" href=\"https://www.binance.com/zh-TW/trade/" + item + "_USDT\">" + item.toUpperCase()+ ": " + String(parseFloat(data.lastPrice).toFixed(2)) + "</a>");
             }
         );
     }
