@@ -556,7 +556,7 @@
             
             var last_hour = parseInt((0.1-balance)/reward1d*24);
             if (last_hour > 24) {
-                $("div.balance").html(balance.toFixed(5) + " / " + parseInt(last_hour/24).toString() + "D" + parseInt(last_hour%24).toString() + "H");
+                $("div.balance").html(balance.toFixed(5) + " / " + parseInt(last_hour/24).toString() + "D," + parseInt(last_hour%24).toString() + "H");
             } else if (last_hour > 0) {
                 $("div.balance").html(balance.toFixed(5) + " / " + last_hour.toString() + "H");
             } else {
