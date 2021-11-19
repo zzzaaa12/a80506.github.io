@@ -372,7 +372,7 @@
                 $("div.miner0").html(reward1d + " / " + reward1m + " / " + reward1m_usd);
 
                 if (hour > 24)
-                    $("div.miner1").html(balance.toFixed(4) + " / " + parseInt(hour/24).toString() + "D" + parseInt(hour%24).toString() + "H");
+                    $("div.miner1").html(balance.toFixed(4) + " / " + parseInt(hour/24).toString() + "D," + parseInt(hour%24).toString() + "H");
                 else if (hour > 0)
                     $("div.miner1").html(balance.toFixed(4) + " / " + hour.toString() + "H");
                 else
