@@ -346,14 +346,14 @@
 
                 idx += 1;
                 if (miner_online && hashrate > 80) {
-                    $(div_target).html("Miner" + idx.toString() + ": " + hashrate + "M / " + miner + "%");
+                    $(div_target).html("Miner: " + hashrate + "M / " + miner + "%");
                 } else {
                     $(div_target).css("color", "red");
                     $(div_target).css("font-weight", "bold");
                     if (miner_online)
-                        $(div_target).html("Miner" + idx.toString() + ": " + hashrate + "M / " + miner + "%");
+                        $(div_target).html("Miner: " + hashrate + "M / " + miner + "%");
                     else
-                        $(div_target).html("Miner" + idx.toString() + ": " + "Leaved");
+                        $(div_target).html("Miner: " + "Leaved");
                 }
             });
         }
@@ -369,14 +369,21 @@
                 var reward1m_twd = reward1d_twd * 30;
                 var balance = parseFloat(data['data'].balance);
                 var hour = parseInt((0.1-balance)/reward1d*24);
+                const d = new Date();
+                let now_hour = d.getHours();
                 //$("div.miner0").html(reward1d + " / " + reward1m + " / " + reward1m_usd);
 
-                if (hour > 24)
-                    $("div.miner1").html(reward1m_usd + " / " + parseInt(hour/24).toString() + "D," + parseInt(hour%24).toString() + "H");
-                else if (hour > 0)
+                if (hour > 24) {
+                    var days = parseInt(hour/24);
+                    var _hour = parseInt(hour)%24;
+                    if (now_hour + _hour > 15)
+                        days = days + 1;
+                    $("div.miner1").html(reward1m_usd + " / " + hour.toString() + "H" + " / " + days.toString() + " Day");
+                } else if (hour > 0) {
                     $("div.miner1").html(reward1m_usd + " / " + hour.toString() + "H");
-                else
+                } else {
                     $("div.miner1").html(reward1m_usd + " / Today");
+                }
             });
         }
 
@@ -523,7 +530,7 @@
         set_time();
         miner_data(0);
         //miner_data(1);
-		miner_balance();
+        miner_balance();
         setTimeout(function () { window.location = window.location; }, 300000);
         //setTimeout(function () { miner_balance(); }, 150000);
     </script>
