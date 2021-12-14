@@ -573,7 +573,7 @@
             function (data) {
                 var color = "#80FF00";
 
-                if (parseInt(data.priceChangePercent) <= -5)
+                if (parseInt(data.priceChangePercent) < 0)
                     color = "red";
                 $("div." + item.toUpperCase()).html("<a style=\"color:" + color + ";\" href=\"https://www.binance.com/zh-TW/trade/" + item + "_USDT\">" + item.toUpperCase()+ ": " + String(parseFloat(data.lastPrice).toFixed(2)) + "</a>");
             }
