@@ -142,7 +142,7 @@
                 //{ div: "balcony", title: "亮度：", url: "" },
                 { div: "room2", title: "礦機：00°C, 00%", url: "" },
                 { div: "", title: "", url: "" },
-                { div: "gas", title: "ETH Gas: ", url: "" }
+                { div: "gas", title: "ETH Gas: ", url: "https://etherscan.io/gastracker" }
             ]
         }
     ];
@@ -489,10 +489,10 @@
         var exist1 = data['data']['workers']['list'][0].online;
         var miner1 = parseInt(100 * data['data']['workers']['list'][0].hashrate24h / data['data']['workers']['list'][0].submitHashrate24h);
         var hashrate1 = (parseFloat(data['data']['workers']['list'][0].hashrate24h) / 1000000).toFixed(1);
-        var exist2 = data['data']['workers']['list'][1].online;
-        var miner2 = parseInt(100 * data['data']['workers']['list'][1].hashrate24h / data['data']['workers']['list'][1].submitHashrate24h);
-        var hashrate2 = (parseFloat(data['data']['workers']['list'][1].hashrate24h) / 1000000).toFixed(1);
-        var color2 = "#80FF00";
+        //var exist2 = data['data']['workers']['list'][1].online;
+        //var miner2 = parseInt(100 * data['data']['workers']['list'][1].hashrate24h / data['data']['workers']['list'][1].submitHashrate24h);
+        //var hashrate2 = (parseFloat(data['data']['workers']['list'][1].hashrate24h) / 1000000).toFixed(1);
+        //var color2 = "#80FF00";
 
         if (exist1 == 0 || miner1 < 90) {
             $("div.miner1").css("color", "red");
@@ -502,6 +502,7 @@
             //$("div.miner1").css("font-weight", "bold");
         }
 
+        /*
         if (exist2 == 0 || miner2 < 90) {
             $("div.miner2").css("color", "red");
             $("div.miner2").css("font-weight", "bold");
@@ -509,18 +510,21 @@
         } else if (miner2 < 95) {
             $("div.miner2").css("color", "orange");
         }
+        */
 
         if (exist1)
             $("div.miner1").html("Miner1: " + hashrate1 + "M, " + miner1 + "%");
         else
             $("div.miner1").html("Miner1: Leaved....");
 
+        /*
         if (exist2 && miner2 >= 90)
             $("div.miner2").html("<a style=\"color:" + color2 + ";\" href=\"http://hks.hiveos.farm/\">Miner2: " + hashrate2 + "M, " + miner2 + "%</a>");
         else if (exist2)
             $("div.miner2").html("Miner2: " + hashrate2 + "M, " + miner2 + "%");
         else
             $("div.miner2").html("Miner2: Leaved....");
+        */
     });
 
     $.getJSON("https://gpumine.org/api/bill?currency=ETH&address=0x9d96b087a6279f5b5967804b1c2c3d6952e6f531",
@@ -597,7 +601,7 @@
         function (data) {
             gas = parseInt(data.fastest)/10;
             if (gas > 0)
-                $("div.gas").html("ETH Gas: " + gas.toString());
+                $("div.gas").html("<a href=\"https://etherscan.io/gastracker\">ETH Gas: " + gas.toString()+"</a>");
         }
     );
 
