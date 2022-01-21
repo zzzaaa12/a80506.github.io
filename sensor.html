@@ -369,18 +369,21 @@
                 var reward1m_twd = reward1d_twd * 30;
                 var balance = parseFloat(data['data'].balance);
                 var hour = parseInt((0.1-balance)/reward1d*24);
+                var _hour = parseInt(hour)%24;
                 const d = new Date();
                 let now_hour = d.getHours();
                 //$("div.miner0").html(reward1d + " / " + reward1m + " / " + reward1m_usd);
 
                 if (hour > 24) {
                     var days = parseInt(hour/24);
-                    var _hour = parseInt(hour)%24;
                     if (now_hour + _hour > 15)
                         days = days + 1;
                     $("div.miner1").html(reward1m_usd + " / " + hour.toString() + "H" + " / " + days.toString() + " Day");
                 } else if (hour > 0) {
-                    $("div.miner1").html(reward1m_usd + " / " + hour.toString() + "H");
+                    if (now_hour + _hour >= 15)
+                        $("div.miner1").html(reward1m_usd + " / " + hour.toString() + "H / Tomorrow");
+                    else
+                        $("div.miner1").html(reward1m_usd + " / " + hour.toString() + "H / Today");
                 } else {
                     $("div.miner1").html(reward1m_usd + " / Today");
                 }
