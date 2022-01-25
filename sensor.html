@@ -364,6 +364,7 @@
                 var reward1d = parseFloat(data['data']['calcReward24h'].coin).toFixed(4);
                 var reward1d_usd = parseInt(data['data']['calcReward24h'].usd);
                 var reward1d_twd = parseInt(data['data']['calcReward24h'].ntd);
+                var eth_reward_1m = parseFloat(data['data']['reward24h']*30).toFixed(3);
                 var reward1m = (reward1d * 30).toFixed(3);
                 var reward1m_usd = parseInt(reward1d_usd * 30);
                 var reward1m_twd = reward1d_twd * 30;
@@ -378,14 +379,14 @@
                     var days = parseInt(hour/24);
                     if (now_hour + _hour > 15)
                         days = days + 1;
-                    $("div.miner1").html(reward1m_usd + " / " + hour.toString() + "H" + " / " + days.toString() + " Day");
+                    $("div.miner1").html(reward1m_usd + " / " + eth_reward_1m + " / " + days.toString() + " Day");
                 } else if (hour > 0) {
                     if (now_hour + _hour >= 15)
-                        $("div.miner1").html(reward1m_usd + " / " + hour.toString() + "H / Tomorrow");
+                        $("div.miner1").html(reward1m_usd + " / " + eth_reward_1m + " / " + hour.toString() + "H / Tomorrow");
                     else
-                        $("div.miner1").html(reward1m_usd + " / " + hour.toString() + "H / Today");
+                        $("div.miner1").html(reward1m_usd + " / " + eth_reward_1m + " / " + hour.toString() + "H / Today");
                 } else {
-                    $("div.miner1").html(reward1m_usd + " / Today");
+                    $("div.miner1").html(reward1m_usd + eth_reward_1m + " / " + " / Today");
                 }
             });
         }
