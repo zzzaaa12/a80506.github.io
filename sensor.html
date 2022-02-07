@@ -364,7 +364,7 @@
                 var reward1d = parseFloat(data['data']['calcReward24h'].coin).toFixed(4);
                 var reward1d_usd = parseInt(data['data']['calcReward24h'].usd);
                 var reward1d_twd = parseInt(data['data']['calcReward24h'].ntd);
-                var eth_reward_1m = parseFloat(data['data']['reward24h']*30).toFixed(3);
+                var eth_reward_1m = reward1d.toFixed(3);
                 var reward1m = (reward1d * 30).toFixed(3);
                 var reward1m_usd = parseInt(reward1d_usd * 30);
                 var reward1m_twd = reward1d_twd * 30;
