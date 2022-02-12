@@ -220,6 +220,15 @@
                 });
             });
 
+        function get_sea() {
+            $.getJSON("https://starsharks.com/go/api/market/exchange-rate",
+            function (data) {
+                sea = parseFloat(data['data']['sea']).toFixed(2);
+                $("b.coin").text(sea);
+                $("b.coin").css("color", document.getElementById("coin").style.color);
+            });
+        }
+
         function get_coin_bitstamp() {
             var price = 0, open = 0;
             var percentage;
@@ -300,7 +309,7 @@
             .fail(function(){
                 get_coin_bitstamp();
             });
-
+            get_sea();
             setTimeout(function () { get_coin(); }, 60000);
         }
 
@@ -530,17 +539,7 @@
             }
         });
 
-        function get_sea() {
-            $.getJSON("https://starsharks.com/go/api/market/exchange-rate",
-            function (data) {
-                sea = parseFloat(data['data']['sea']).toFixed(2);
-                $("b.coin").text(sea);
-                $("b.coin").css("color", document.getElementById("coin").style.color);
-            });
-        }
-
         get_coin();
-        get_sea();
         set_time();
         miner_data(0);
         //miner_data(1);
