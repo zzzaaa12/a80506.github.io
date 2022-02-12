@@ -51,7 +51,7 @@
     <div class="miner1" align="center">Miner：0% / 0%</div>
     <!-- <div class="pm10" align="center">PM10：00 ug/m3</div> -->
     <div class="time" align="center">00:00:00</div>
-    <div class="coin" align="center">　</div>
+    <div id="coin" class="coin" align="center">　</div>
 
     <script>
         var max = 20;
@@ -289,12 +289,12 @@
                         eth = parseInt(data[key].lastPrice);
 
                     if (data[key].symbol == "FILUSDT")
-                        fil = parseFloat(data[key].lastPrice).toFixed(1);
+                        fil = parseFloat(data[key].lastPrice).toFixed(0);
 
                     if (data[key].symbol == "FLOWUSDT")
-                        flow = parseFloat(data[key].lastPrice).toFixed(2);
+                        flow = parseFloat(data[key].lastPrice).toFixed(1);
 
-                    $("div.coin").html(btc + " / " + flow + "<br />" + eth + " / " + fil);
+                    $("div.coin").html(btc + " / <b class=\"coin\"></b><br />" + eth + " / " + fil + " / " + flow);
                 });
             })
             .fail(function(){
@@ -530,7 +530,17 @@
             }
         });
 
+        function get_sea() {
+            $.getJSON("https://starsharks.com/go/api/market/exchange-rate",
+            function (data) {
+                sea = parseFloat(data['data']['sea']).toFixed(2);
+                $("b.coin").text(sea);
+                $("b.coin").css("color", document.getElementById("coin").style.color);
+            });
+        }
+
         get_coin();
+        get_sea();
         set_time();
         miner_data(0);
         //miner_data(1);
