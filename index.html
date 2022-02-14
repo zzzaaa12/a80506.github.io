@@ -106,7 +106,7 @@
                 { div: "BNB", title: "", url: "" },
                 { div: "AVA", title: "", url: "" },
                 { div: "FLOW", title: "", url: "" },
-                { div: "SEA", title: "", url: "" }
+                { div: "SEA", title: "", url: "https://coinmarketcap.com/zh-tw/currencies/starsharks-sea/" }
             ]
         },
         { // [9]
@@ -619,7 +619,7 @@
         $.getJSON("https://starsharks.com/go/api/market/exchange-rate",
         function (data) {
             sea = parseFloat(data['data']['sea']).toFixed(2);
-            $("div.SEA").text("SEA: " + sea);
+            $("div.SEA").html("<a href=\"https://coinmarketcap.com/zh-tw/currencies/starsharks-sea/\">SEA: " + sea + "</a>");
         });
     }
 
