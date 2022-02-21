@@ -102,11 +102,11 @@
             items: [
                 { div: "", title: "E大專欄", url: "https://www.pressplay.cc/project/vipp/%E8%81%8A%E5%95%86E%E5%AD%B8%E9%99%A2%E5%B8%B6%E4%BD%A0%E7%A9%BF%E8%B6%8A~/0AEBC1635F2967C8D2944BBEB77512CD" },
                 { div: "DOT", title: "", url: "" },
-                { div: "FTT", title: "", url: "" },
                 { div: "BNB", title: "", url: "" },
                 { div: "AVA", title: "", url: "" },
                 { div: "FLOW", title: "", url: "" },
-                { div: "SEA", title: "", url: "https://coinmarketcap.com/zh-tw/currencies/starsharks-sea/" }
+                { div: "SEA", title: "", url: "https://coinmarketcap.com/zh-tw/currencies/starsharks-sea/" },
+                { div: "SHARK", title: "", url: "https://starsharks.com/market" },
             ]
         },
         { // [9]
@@ -623,17 +623,24 @@
         });
     }
 
+    function get_shark() {
+        $.getJSON("https://starsharks.com/go/api/market/statistic",
+        function (data) {
+            shark = parseFloat(data['data']['selling_lowest_price']).toFixed(3);
+            $("div.SHARK").html("<a href=\"https://starsharks.com/market\">Shark: " + shark + "</a>");
+        });
+    }
+
     set_time();
     get_binance("FIL");
     get_binance("BTC");
     get_binance("ETH");
     get_binance("DOT");
-    //get_binance("SRM");
     get_binance("BNB");
-    get_binance("FTT");
     get_binance("AVA");
     get_binance("FLOW");
     get_sea();
+    get_shark();
 
     /* Auto Reload */
     setTimeout(function () { window.location = window.location; }, 300000);
