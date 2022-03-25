@@ -301,7 +301,7 @@
                         fil = parseFloat(data[key].lastPrice).toFixed(0);
 
                     if (data[key].symbol == "APEUSDT")
-                        flow = parseFloat(data[key].lastPrice).toFixed(1);
+                        flow = parseFloat(data[key].lastPrice).toFixed(0);
 
                     $("div.coin").html(btc + " / <b class=\"coin\"></b><br />" + eth + " / " + fil + " / " + flow);
                 });
