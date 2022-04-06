@@ -104,7 +104,7 @@
                 { div: "LINK", title: "", url: "" },
                 { div: "BNB", title: "", url: "" },
                 { div: "APE", title: "", url: "" },
-                { div: "FLOW", title: "", url: "" },
+                { div: "SSS", title: "", url: "https://avedex.cc/token/0xC3028FbC1742a16A5D69dE1B334cbce28f5d7EB3-bsc" },
                 { div: "SEA", title: "", url: "https://avedex.cc/token/0x26193c7fa4354ae49ec53ea2cebc513dc39a10aa-bsc" },
                 { div: "SHARK", title: "", url: "https://starsharks.com/market" },
             ]
@@ -618,7 +618,9 @@
     function get_sea() {
         $.getJSON("https://starsharks.com/go/api/market/exchange-rate",
         function (data) {
+            sss = parseFloat(data['data']['sea']).toFixed(2);
             sea = parseFloat(data['data']['sea']).toFixed(2);
+            $("div.SSS").html("<a href=\"https://avedex.cc/token/0xC3028FbC1742a16A5D69dE1B334cbce28f5d7EB3-bsc\">SSS: " + sss + "</a>");
             $("div.SEA").html("<a href=\"https://avedex.cc/token/0x26193c7fa4354ae49ec53ea2cebc513dc39a10aa-bsc\">SEA: " + sea + "</a>");
         });
     }
@@ -638,7 +640,7 @@
     get_binance("LINK");
     get_binance("BNB");
     get_binance("APE");
-    get_binance("FLOW");
+    //get_binance("FLOW");
     get_sea();
     get_shark();
 
