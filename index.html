@@ -618,8 +618,8 @@
     function get_sea() {
         $.getJSON("https://starsharks.com/go/api/market/exchange-rate",
         function (data) {
-            sss = parseFloat(data['data']['sss']).toFixed(2);
-            sea = parseFloat(data['data']['sea']).toFixed(3);
+            sss = parseFloat(data['data']['sss']).toFixed(3);
+            sea = parseFloat(data['data']['sea']).toFixed(4);
             $("div.SSS").html("<a href=\"https://avedex.cc/token/0xC3028FbC1742a16A5D69dE1B334cbce28f5d7EB3-bsc\">SSS: " + sss + "</a>");
             $("div.SEA").html("<a href=\"https://avedex.cc/token/0x26193c7fa4354ae49ec53ea2cebc513dc39a10aa-bsc\">SEA: " + sea + "</a>");
         });
