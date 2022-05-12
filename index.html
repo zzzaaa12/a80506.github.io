@@ -104,9 +104,9 @@
                 { div: "LINK", title: "", url: "" },
                 { div: "BNB", title: "", url: "" },
                 { div: "APE", title: "", url: "" },
-                { div: "SSS", title: "", url: "https://avedex.cc/token/0xC3028FbC1742a16A5D69dE1B334cbce28f5d7EB3-bsc" },
-                { div: "SEA", title: "", url: "https://avedex.cc/token/0x26193c7fa4354ae49ec53ea2cebc513dc39a10aa-bsc" },
-                { div: "SHARK", title: "", url: "https://starsharks.com/market" },
+                { div: "FLOW", title: "", url: "" },
+                { div: "LUNA", title: "", url: "" },
+                { div: "UST", title: "", url: "" },
             ]
         },
         { // [9]
@@ -640,9 +640,11 @@
     get_binance("LINK");
     get_binance("BNB");
     get_binance("APE");
-    //get_binance("FLOW");
-    get_sea();
-    get_shark();
+    get_binance("FLOW");
+    get_binance("LUNA");
+    get_binance("UST");
+    //get_sea();
+    //get_shark();
 
     /* Auto Reload */
     setTimeout(function () { window.location = window.location; }, 300000);
