@@ -299,13 +299,13 @@
                         eth = parseInt(data[key].lastPrice);
 
                     if (data[key].symbol == "FILBUSD")
-                        fil = parseFloat(data[key].lastPrice).toFixed(2);
+                        fil = parseFloat(data[key].lastPrice).toFixed(1);
 
                     if (data[key].symbol == "APEBUSD")
-                        flow = parseFloat(data[key].lastPrice).toFixed(2);
+                        flow = parseFloat(data[key].lastPrice).toFixed(1);
 
                     if (data[key].symbol == "BUSDUSDT")
-                        usdt = (1 / parseFloat(data[key].lastPrice)).toFixed(4);
+                        usdt = (1 / parseFloat(data[key].lastPrice)).toFixed(3);
 
                     $("div.coin").html(btc + " / " + usdt + "<br />" + eth + " / " + fil + " / " + flow);
                 });
