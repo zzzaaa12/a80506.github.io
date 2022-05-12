@@ -278,6 +278,7 @@
                 var eth = 0;
                 var fil = 0;
                 var flow = 0;
+                var usdt = 0;
                 $.each( data, function( key, val ) {
                     if (data[key].symbol == "BTCBUSD") {
                         btc_percent = parseFloat(data[key].priceChangePercent).toFixed(1);
@@ -303,7 +304,7 @@
                     if (data[key].symbol == "APEBUSD")
                         flow = parseFloat(data[key].lastPrice).toFixed(2);
 
-                    if (data[key].symbol == "USDTBUSD")
+                    if (data[key].symbol == "BUSDUSDT")
                         usdt = (1 / parseFloat(data[key].lastPrice)).toFixed(4);
 
                     $("div.coin").html(btc + " / " + usdt + "<br />" + eth + " / " + fil + " / " + flow);
