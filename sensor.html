@@ -279,7 +279,7 @@
                 var fil = 0;
                 var flow = 0;
                 $.each( data, function( key, val ) {
-                    if (data[key].symbol == "BTCUSDT") {
+                    if (data[key].symbol == "BTCBUSD") {
                         btc_percent = parseFloat(data[key].priceChangePercent).toFixed(1);
                         if (btc_percent > 0)
                             btc_percent = "(+" + btc_percent.toString() + "%)";
@@ -294,22 +294,25 @@
 
                         btc = parseInt(data[key].lastPrice);
                     }
-                    if (data[key].symbol == "ETHUSDT")
+                    if (data[key].symbol == "ETHBUSD")
                         eth = parseInt(data[key].lastPrice);
 
-                    if (data[key].symbol == "FILUSDT")
-                        fil = parseFloat(data[key].lastPrice).toFixed(0);
+                    if (data[key].symbol == "FILBUSD")
+                        fil = parseFloat(data[key].lastPrice).toFixed(2);
 
-                    if (data[key].symbol == "APEUSDT")
-                        flow = parseFloat(data[key].lastPrice).toFixed(0);
+                    if (data[key].symbol == "APEBUSD")
+                        flow = parseFloat(data[key].lastPrice).toFixed(2);
 
-                    $("div.coin").html(btc + " / <b class=\"coin\"></b><br />" + eth + " / " + fil + " / " + flow);
+                    if (data[key].symbol == "USDTBUSD")
+                        usdt = (1 / parseFloat(data[key].lastPrice)).toFixed(4);
+
+                    $("div.coin").html(btc + " / " + usdt + "<br />" + eth + " / " + fil + " / " + flow);
                 });
             })
             .fail(function(){
                 get_coin_bitstamp();
             });
-            get_sea();
+            //get_sea();
             setTimeout(function () { get_coin(); }, 60000);
         }
 
