@@ -582,7 +582,7 @@
 
                 if (parseInt(data.priceChangePercent) < 0)
                     color = "red";
-                $("div." + item.toUpperCase()).html("<a style=\"color:" + color + ";\" href=\"https://www.binance.com/zh-TW/trade/" + item + "_USDT\">" + item.toUpperCase()+ ": " + String(parseFloat(data.lastPrice).toFixed(2)) + "</a>");
+                $("div." + item.toUpperCase()).html("<a style=\"color:" + color + ";\" href=\"https://www.binance.com/zh-TW/trade/" + item + "_BUSD\">" + item.toUpperCase()+ ": " + String(parseFloat(data.lastPrice).toFixed(2)) + "</a>");
             }
         );
     }
@@ -641,8 +641,8 @@
     get_binance("BNB");
     get_binance("APE");
     get_binance("FLOW");
-    get_binance("LUNA");
     get_binance("UST");
+    get_binance("USDT");
     //get_sea();
     //get_shark();
 
