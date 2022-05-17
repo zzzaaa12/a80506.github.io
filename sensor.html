@@ -275,6 +275,7 @@
                 var fil = 0;
                 var flow = 0;
                 var usdt = 0;
+                var ape = 0;
                 $.each( data, function( key, val ) {
                     if (data[key].symbol == "BTCBUSD") {
                         btc_percent = parseFloat(data[key].priceChangePercent).toFixed(1);
@@ -298,12 +299,15 @@
                         fil = parseFloat(data[key].lastPrice).toFixed(1);
 
                     if (data[key].symbol == "APEBUSD")
-                        flow = parseFloat(data[key].lastPrice).toFixed(1);
+                        ape = parseFloat(data[key].lastPrice).toFixed(1);
 
                     if (data[key].symbol == "BUSDUSDT")
                         usdt = (1 / parseFloat(data[key].lastPrice)).toFixed(3);
 
-                    $("div.coin").html(btc + " / " + usdt + "<br />" + eth + " / " + fil + " / " + flow);
+                    if (data[key].symbol == "FLOWBUSD")
+                        flow = parseFloat(data[key].lastPrice).toFixed(2);
+
+                    $("div.coin").html(btc + " / " + flow + "<br />" + eth + " / " + fil + " / " + ape);
                 });
             })
             .fail(function(){
@@ -400,7 +404,7 @@
             });
         }
 
-        $.getJSON("https://opendata.epa.gov.tw/api/v1/AQI?$skip=0&$top=1000&$format=json",
+        $.getJSON("https://data.epa.gov.tw/api/v2/aqx_p_432?api_key=e8dd42e6-9b8b-43f8-991e-b3dee723a52d&limit=1000&sort=ImportDate%20desc&format=json",
         function (data) {
             var found = 0;
             var site = "";
