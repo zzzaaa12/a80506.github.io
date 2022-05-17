@@ -43,7 +43,7 @@
     <!--<div class="living_room" align="center">客廳：00°C, 0%</div>-->
     <!--<div class="room1" align="center">臥室：00°C, 00%</div>-->
     <!--<div class="room2" align="center">客房：00°C, 0%</div>-->
-    <div class="room3" align="center">書房：00°C, 0%</div>
+    <div class="living_room_h" align="center">書房：00°C, 0%</div>
     <!--<div class="balcony" align="center">陽台：00°C, 00%</div>-->
     <div class="pm25" align="center">PM2.5：0 ug/m3</div>
     <div class="weather" align="center">戶外：00°C, 0%</div>
@@ -131,21 +131,17 @@
                             $("div.room2").css("color", green);
                         }
 
-                        if (room3_h == 0) {
-                            $("div.room3").css("color", gray);
-                        } else if (room3_h >= 80) {
-                            $("div.room3").css("color", "red");
-                            $("div.room3").css("font-weight", "bold");
+                        if (room3_h >= 80) {
+                            $("div.living_room_h").css("color", "red");
+                            $("div.living_room_h").css("font-weight", "bold");
                         } else if (room3_h >= 70) {
-                            $("div.room3").css("color", "orange");
-                        } else {
-                            $("div.room3").css("color", green);
+                            $("div.living_room_h").css("color", "orange");
                         }
 
                         //$("div.living_room").html("客廳：" + living_room_t + "°C, " + living_room_h + "%");
                         $("div.room1").html("臥室：" + room1_t + "°C, " + room1_h + "%");
                         $("div.room2").html("客房：" + room2_t + "°C, " + room2_h + "%");
-                        $("div.room3").html("客廳 " + living_room_h + "% / 書房 " + room3_h + "%");
+                        $("div.living_room_h").html("客廳 " + living_room_h + "% / 書房 " + room3_h + "%");
                     }
                 });
             });
