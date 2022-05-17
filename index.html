@@ -105,8 +105,8 @@
                 { div: "BNB", title: "", url: "" },
                 { div: "APE", title: "", url: "" },
                 { div: "FLOW", title: "", url: "" },
-                { div: "USDT", title: "", url: "" },
-                { div: "UST", title: "", url: "" },
+                { div: "ETHBTC", title: "", url: "" },
+                { div: "FILBTC", title: "", url: "" },
             ]
         },
         { // [9]
@@ -576,14 +576,15 @@
     });
 
     function get_binance(item) {
-        if (item == "USDT") {
-            $.getJSON("https://api.binance.com/api/v3/ticker/24hr?symbol=BUSDUSDT",
+
+        if (item == "ETHBTC" || item == "FILBTC" ) {
+            $.getJSON("https://api.binance.com/api/v3/ticker/24hr?symbol=" + item,
                 function (data) {
                     var color = "#80FF00";
 
                     if (parseInt(data.priceChangePercent) > 0)
                         color = "red";
-                    price = (1 / parseFloat(data.lastPrice)).toFixed(4);
+                    price = parseFloat(data.lastPrice);
                     $("div." + item.toUpperCase()).html("<a style=\"color:" + color + ";\" href=\"https://www.binance.com/zh-TW/trade/BUSDUSDT\">" + item.toUpperCase()+ ": " + String(price) + "</a>");
                 }
             );
@@ -654,8 +655,8 @@
     get_binance("BNB");
     get_binance("APE");
     get_binance("FLOW");
-    get_binance("UST");
-    get_binance("USDT");
+    get_binance("ETHBTC");
+    get_binance("FILBTC");
     //get_sea();
     //get_shark();
 
