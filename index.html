@@ -585,7 +585,7 @@
                     if (parseInt(data.priceChangePercent) > 0)
                         color = "red";
                     price = parseFloat(data.lastPrice);
-                    $("div." + item.toUpperCase()).html("<a style=\"color:" + color + ";\" href=\"https://www.binance.com/zh-TW/trade/BUSDUSDT\">" + item.toUpperCase()+ ": " + String(price) + "</a>");
+                    $("div." + item.toUpperCase()).html("<a style=\"color:" + color + ";\" href=\"https://www.binance.com/zh-TW/trade/" + item + "\">" + item.toUpperCase()+ ": " + String(price) + "</a>");
                 }
             );
             return;
