@@ -577,7 +577,7 @@
 
     function get_binance(item) {
 
-        if (item == "ETHBTC" || item == "FILBTC" || item == "LINKBTC" || item == "FLOWBTC") {
+        if (item == "ETHBTC" || item == "FILBTC" || item == "LINKBTC" || item == "APEBTC" || item == "UNIBTC") {
             $.getJSON("https://api.binance.com/api/v3/ticker/24hr?symbol=" + item,
                 function (data) {
                     var color = "#80FF00";
