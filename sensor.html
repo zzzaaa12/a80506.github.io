@@ -47,8 +47,8 @@
     <!--<div class="balcony" align="center">陽台：00°C, 00%</div>-->
     <div class="pm25" align="center">PM2.5：0 ug/m3</div>
     <div class="weather" align="center">戶外：00°C, 0%</div>
-    <div class="miner0" align="center">Miner：0% / 0%</div>
-    <div class="miner1" align="center">Miner：0% / 0%</div>
+    <div class="miner0" align="center">Miner：no data</div>
+    <div class="miner1" align="center">Miner：no data</div>
     <!-- <div class="pm10" align="center">PM10：00 ug/m3</div> -->
     <div class="time" align="center">00:00:00</div>
     <div id="coin" class="coin" align="center">　</div>
@@ -275,7 +275,8 @@
                 var fil = 0;
                 var flow = 0;
                 var usdt = 0;
-                var ape = 0;
+                var ava = 0;
+                var price = 0;
                 $.each( data, function( key, val ) {
                     if (data[key].symbol == "BTCBUSD") {
                         btc_percent = parseFloat(data[key].priceChangePercent).toFixed(1);
@@ -291,23 +292,21 @@
                             $("div.coin").css("color", green);
 
                         btc = parseInt(data[key].lastPrice);
-                    }
-                    if (data[key].symbol == "ETHBUSD")
+                    } else if (data[key].symbol == "ETHBUSD") {
                         eth = parseInt(data[key].lastPrice);
+                    } else {
+                        price = parseFloat(data[key].lastPrice).toFixed(1)
+                        if (price >= 10)
+                            price = parseInt(price);
+                        if (data[key].symbol == "FILBUSD")
+                            fil = price;
+                        else if (data[key].symbol == "AVABUSD")
+                            ava = price;
+                        else if (data[key].symbol == "FLOWBUSD")
+                            flow = price;
+                    }
 
-                    if (data[key].symbol == "FILBUSD")
-                        fil = parseFloat(data[key].lastPrice).toFixed(1);
-
-                    if (data[key].symbol == "APEBUSD")
-                        ape = parseFloat(data[key].lastPrice).toFixed(1);
-
-                    if (data[key].symbol == "BUSDUSDT")
-                        usdt = (1 / parseFloat(data[key].lastPrice)).toFixed(3);
-
-                    if (data[key].symbol == "FLOWBUSD")
-                        flow = parseFloat(data[key].lastPrice).toFixed(2);
-
-                    $("div.coin").html(btc + " / " + flow + "<br />" + eth + " / " + fil + " / " + ape);
+                    $("div.coin").html(btc + " / " + eth + "<br />" + fil + " / " + flow + " / " + ava);
                 });
             })
             .fail(function(){
@@ -388,7 +387,10 @@
                 let now_hour = d.getHours();
                 //$("div.miner0").html(reward1d + " / " + reward1m + " / " + reward1m_usd);
 
-                if (hour > 24) {
+                if (isNaN(hour)) {
+                    $("div.miner1").html(balance);
+                    $("div.miner0").css("color", "red");
+                } else if (hour > 24) {
                     var days = parseInt(hour/24);
                     if (now_hour + _hour > 15)
                         days = days + 1;
