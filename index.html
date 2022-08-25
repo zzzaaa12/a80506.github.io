@@ -561,9 +561,9 @@
                 $("div.balance").css("color", "orange");
 
             if (last_hour > 24) {
-                if (d.getHours() + last_hour%24 >= 15)
-                    day = day+1;
-                $("div.balance").html(balance.toFixed(5) + " / " + day + "D");
+//                if (d.getHours() + last_hour%24 >= 15)
+//                    day = day+1;
+                $("div.balance").html(balance.toFixed(5) + " / " + day + "D " + (last_hour % 24+1) + "H");
             } else if (last_hour > 0) {
                 $("div.balance").html(balance.toFixed(5) + " / " + last_hour.toString() + "H");
             } else if (reward1d > 0) {
