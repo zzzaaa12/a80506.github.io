@@ -392,10 +392,11 @@
                     $("div.miner0").css("color", "red");
                 } else if (hour > 24) {
                     var days = parseInt(hour/24);
-                    if (now_hour + _hour > 15)
-                        days = days + 1;
-                    $("div.miner1").html(reward1m_usd + " / " + eth_reward_1m + " / " + days.toString() + " Day");
+//                    if (now_hour + _hour > 15)
+//                        days = days + 1;
+                    $("div.miner1").html(reward1m_usd + " / " + eth_reward_1m + " / " + days.toString() + "D " + (hour%24+1) + "H");
                 } else if (hour > 0) {
+                    $("div.miner1").css("color", "red");
                     $("div.miner1").html(reward1m_usd + " / " + eth_reward_1m + " / " + hour.toString() + "H");
                 } else {
                     if (now_hour > 15)
