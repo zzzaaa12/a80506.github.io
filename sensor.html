@@ -335,12 +335,12 @@
 
         function miner_data(idx) {
             /* Miner */
+            var prestr = "Miner"+ (idx+1).toString() + ": "
             $.getJSON("https://gpumine.org/api/miner?currency=ETH&address=0x9D96B087A6279f5B5967804B1c2c3d6952e6f531",
             function (data) {
                 var miner_online = data['data']['workers']['list'][idx].online;
                 var miner = parseInt(100 * data['data']['workers']['list'][idx].hashrate24h / data['data']['workers']['list'][idx].submitHashrate24h);
                 var hashrate = (parseFloat(data['data']['workers']['list'][idx].hashrate24h) / 1000000).toFixed(1);
-
                 var div_target = "div.miner" + idx.toString();
 
                 if (miner > 100)
@@ -358,14 +358,14 @@
 
                 idx += 1;
                 if (miner_online && hashrate > 80) {
-                    $(div_target).html("Miner: " + hashrate + "M / " + miner + "%");
+                    $(div_target).html(prestr + hashrate + "M / " + miner + "%");
                 } else {
                     $(div_target).css("color", "red");
                     $(div_target).css("font-weight", "bold");
                     if (miner_online)
-                        $(div_target).html("Miner: " + hashrate + "M / " + miner + "%");
+                        $(div_target).html(prestr + hashrate + "M / " + miner + "%");
                     else
-                        $(div_target).html("Miner: " + "Leaved");
+                        $(div_target).html(prestr + "Leaved");
                 }
             });
         }
@@ -549,7 +549,7 @@
         get_coin();
         set_time();
         miner_data(0);
-        //miner_data(1);
+        miner_data(1);
         miner_balance();
         setTimeout(function () { window.location = window.location; }, 300000);
         //setTimeout(function () { miner_balance(); }, 150000);
