@@ -574,11 +574,15 @@
 
     function get_binance(item) {
 
+        var percent = 0;
+        var percent_html = "";
+
         if (item == "ETHBTC" || item == "FILBTC" || item == "LINKBTC" || item == "APEBTC" || item == "UNIBTC") {
             $.getJSON("https://api.binance.com/api/v3/ticker/24hr?symbol=" + item,
                 function (data) {
                     var color = "#80FF00";
-                    if (parseInt(data.priceChangePercent) > 0)
+                    percent = parseInt(data.priceChangePercent);
+                    if (percent > 0)
                         color = "red";
                     price = parseFloat(data.lastPrice).toFixed(5);
                     $("div." + item.toUpperCase()).html("<a style=\"color:" + color + ";\" href=\"https://www.binance.com/zh-TW/trade/" + item + "\">" + item.toUpperCase()+ ": " + String(price) + "</a>");
@@ -586,13 +590,18 @@
             );
             return;
         }
+
         $.getJSON("https://api.binance.com/api/v3/ticker/24hr?symbol=" + String(item).toUpperCase() + "BUSD",
             function (data) {
                 var color = "#80FF00";
-
-                if (parseInt(data.priceChangePercent) < 0)
+                percent = parseInt(data.priceChangePercent);
+                if (percent < 0) {
                     color = "red";
-                $("div." + item.toUpperCase()).html("<a style=\"color:" + color + ";\" href=\"https://www.binance.com/zh-TW/trade/" + item + "_BUSD\">" + item.toUpperCase()+ ": " + String(parseFloat(data.lastPrice).toFixed(2)) + "</a>");
+                    percent_html = " (" + percent.toString() + "%)"
+                } else if (percent > 0) {
+                    percent_html = " (+" + percent.toString() + "%)"
+                }
+                $("div." + item.toUpperCase()).html("<a style=\"color:" + color + ";\" href=\"https://www.binance.com/zh-TW/trade/" + item + "_BUSD\">" + item.toUpperCase()+ ": " + String(parseFloat(data.lastPrice).toFixed(2)) + percent_html + "</a>");
             }
         );
     }
