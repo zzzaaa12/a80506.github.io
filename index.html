@@ -596,6 +596,9 @@
         $.getJSON("https://api.binance.com/api/v3/ticker/24hr?symbol=" + String(item).toUpperCase() + "BUSD",
             function (data) {
                 var color = "#80FF00";
+                var percent = 0;
+                var price = 0;
+
                 percent = parseInt(data.priceChangePercent);
                 if (percent < 0) {
                     color = "red";
@@ -605,7 +608,12 @@
                 } else {
                     color = "yellow";
                 }
-                $("div." + item.toUpperCase()).html("<a style=\"color:" + color + ";\" href=\"https://www.binance.com/zh-TW/trade/" + item + "_BUSD\">" + item.toUpperCase()+ ": " + String(parseFloat(data.lastPrice).toFixed(2)) + percent_html + "</a>");
+
+                if (price > 1)
+                    price = parseFloat(data.lastPrice).toFixed(2)
+                else
+                    price = parseFloat(data.lastPrice).toFixed(3)
+                $("div." + item.toUpperCase()).html("<a style=\"color:" + color + ";\" href=\"https://www.binance.com/zh-TW/trade/" + item + "_BUSD\">" + item.toUpperCase()+ ": " + String(price) + percent_html + "</a>");
             }
         );
     }
