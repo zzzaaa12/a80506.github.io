@@ -609,12 +609,13 @@
                     color = "yellow";
                 }
 
-                if (price > 100)
-                    price = parseInt(data.lastPrice)
-                else if (price > 1)
-                    price = parseFloat(data.lastPrice).toFixed(2)
+                price = parseFloat(data.lastPrice);
+                if (price >= 100)
+                    price = parseInt(data.lastPrice);
+                else if (price >= 1)
+                    price = parseFloat(data.lastPrice).toFixed(2);
                 else
-                    price = parseFloat(data.lastPrice).toFixed(3)
+                    price = parseFloat(data.lastPrice).toFixed(3);
                 $("div." + item.toUpperCase()).html("<a style=\"color:" + color + ";\" href=\"https://www.binance.com/zh-TW/trade/" + item + "_BUSD\">" + item.toUpperCase()+ ": " + String(price) + percent_html + "</a>");
             }
         );
