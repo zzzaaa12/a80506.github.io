@@ -295,18 +295,19 @@
                     } else if (data[key].symbol == "ETHBUSD") {
                         eth = parseInt(data[key].lastPrice);
                     } else {
-                        price = parseFloat(data[key].lastPrice).toFixed(1)
+                        price = parseFloat(data[key].lastPrice).toFixed(2)
                         if (price >= 10)
                             price = parseInt(price);
                         if (data[key].symbol == "FILBUSD")
                             fil = price;
                         else if (data[key].symbol == "AVABUSD")
                             ava = price;
-                        else if (data[key].symbol == "FLOWBUSD")
-                            flow = price;
+                        //else if (data[key].symbol == "FLOWBUSD")
+                        //    flow = price;
                     }
 
-                    $("div.coin").html(btc + " / " + eth + "<br />" + fil + " / " + flow + " / " + ava);
+                    //$("div.coin").html(btc + " / " + eth + "<br />" + fil + " / " + flow + " / " + ava);
+                    $("div.coin").html(btc + " / " + eth + "<br />" + fil + " / " + ava);
                 });
             })
             .fail(function(){
