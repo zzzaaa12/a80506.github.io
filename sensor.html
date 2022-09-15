@@ -387,13 +387,12 @@
                 let now_hour = d.getHours();
                 //$("div.miner0").html(reward1d + " / " + reward1m + " / " + reward1m_usd);
 
+/*
                 if (isNaN(hour)) {
                     $("div.miner1").html(balance);
                     $("div.miner1").css("color", "red");
                 } else if (hour > 24) {
                     var days = parseInt(hour/24);
-//                    if (now_hour + _hour > 15)
-//                        days = days + 1;
                     $("div.miner1").html(balance + " / " + days.toString() + "D " + (hour%24+1) + "H");
                 } else if (hour > 0) {
                     $("div.miner1").css("color", "red");
@@ -404,6 +403,9 @@
                     else
                         $("div.miner1").html(balance + " / " + "Today");
                 }
+*/
+                $("div.miner1").html(balance);
+                $("div.miner1").css("color", "red");
             });
         }
 
@@ -548,8 +550,8 @@
 
         get_coin();
         set_time();
-        miner_data(0);
-        miner_data(1);
+        //miner_data(0);
+        //miner_data(1);
         miner_balance();
         setTimeout(function () { window.location = window.location; }, 300000);
         //setTimeout(function () { miner_balance(); }, 150000);
