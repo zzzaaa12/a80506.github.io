@@ -299,9 +299,9 @@
                         if (price >= 10)
                             price = parseInt(price);
                         else if (price >= 1)
-                            price = parseFloat(data[key].lastPrice).toFixed(2)
+                            price = parseFloat(price).toFixed(2)
                         else
-                            price = parseFloat(data[key].lastPrice).toFixed(3)
+                            price = parseFloat(price).toFixed(3)
                         if (data[key].symbol == "FILBUSD")
                             fil = price;
                         else if (data[key].symbol == "AVABUSD")
