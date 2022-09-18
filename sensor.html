@@ -295,9 +295,13 @@
                     } else if (data[key].symbol == "ETHBUSD") {
                         eth = parseInt(data[key].lastPrice);
                     } else {
-                        price = parseFloat(data[key].lastPrice).toFixed(2)
+                        
                         if (price >= 10)
                             price = parseInt(price);
+                        else if (price >= 1)
+                            price = parseFloat(data[key].lastPrice).toFixed(2)
+                        else
+                            price = parseFloat(data[key].lastPrice).toFixed(3)
                         if (data[key].symbol == "FILBUSD")
                             fil = price;
                         else if (data[key].symbol == "AVABUSD")
