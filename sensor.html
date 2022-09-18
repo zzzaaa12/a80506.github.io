@@ -295,7 +295,7 @@
                     } else if (data[key].symbol == "ETHBUSD") {
                         eth = parseInt(data[key].lastPrice);
                     } else {
-                        price = parseInt(data[key].lastPrice);
+                        price = parseFloat(data[key].lastPrice);
                         if (price >= 10)
                             price = parseInt(price);
                         else if (price >= 1)
