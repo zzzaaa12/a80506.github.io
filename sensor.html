@@ -414,52 +414,52 @@
             });
         }
 
-        $.getJSON("https://data.epa.gov.tw/api/v2/aqx_p_432?api_key=e8dd42e6-9b8b-43f8-991e-b3dee723a52d&limit=1000&sort=ImportDate%20desc&format=json",
+        $.getJSON("https://data.epa.gov.tw/api/v2/aqx_p_432?api_key=e8dd42e6-9b8b-43f8-991e-b3dee723a52d&limit=1000&sort=ImportDate%20desc&format=JSON",
         function (data) {
             var found = 0;
             var site = "";
             var pm25_str = "";
 
-            for (var x in data) {
-                if (data[x].SiteName == "新莊") {
-                    for (var y in data[x]) {
-                        if (y == "PM2.5") {
-                            pm25_str = data[x][y];
+            for (var x in data.records) {
+                if (data.records[x].sitename == "新莊") {
+                    for (var y in data.records[x]) {
+                        if (y == "pm2.5") {
+                            pm25_str = data.records[x][y]
                             if (parseInt(pm25_str) > 0) {
                                 found = 1;
-                                site = data[x].SiteName;
+                                site = data.records[x].sitename;
                             }
                         }
                     }
                 }
             }
 
-            for (var x in data) {
+            for (var x in data.records) {
                 if (found)
                     break;
-                if (data[x].SiteName == "三重") {
-                    for (var y in data[x]) {
-                        if (y == "PM2.5") {
-                            pm25_str = data[x][y];
+                if (data.records[x].sitename == "三重") {
+                    for (var y in data.records[x]) {
+                        if (y == "pm2.5") {
+                            pm25_str = data.records[x][y]
                             if (parseInt(pm25_str) > 0) {
                                 found = 1;
-                                site = data[x].SiteName;
+                                site = data.records[x].sitename;
                             }
                         }
                     }
                 }
             }
 
-            for (var x in data) {
+            for (var x in data.records) {
                 if (found)
                     break;
-                if (data[x].SiteName == "板橋") {
-                    for (var y in data[x]) {
-                        if (y == "PM2.5") {
-                            pm25_str = data[x][y];
+                if (data.records[x].sitename == "板橋") {
+                    for (var y in data.records[x]) {
+                        if (y == "pm2.5") {
+                            pm25_str = data.records[x][y]
                             if (parseInt(pm25_str) > 0) {
                                 found = 1;
-                                site = data[x].SiteName;
+                                site = data.records[x].sitename;
                             }
                         }
                     }
