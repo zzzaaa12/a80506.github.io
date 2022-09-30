@@ -254,52 +254,52 @@
         $("div.fil_reward1").css("color", "red");
 
 
-    $.getJSON("https://opendata.epa.gov.tw/api/v1/AQI?$skip=0&$top=1000&$format=json",
+    $.getJSON("https://data.epa.gov.tw/api/v2/aqx_p_432?api_key=e8dd42e6-9b8b-43f8-991e-b3dee723a52d&limit=1000&sort=ImportDate%20desc&format=JSON",
     function (data) {
         var found = 0;
         var site = "";
         var pm25_str = "";
 
-        for (var x in data) {
-            if (data[x].SiteName == "新莊") {
-                for (var y in data[x]) {
-                    if (y == "PM2.5") {
-                        pm25_str = data[x][y];
+        for (var x in data.records) {
+            if (data.records[x].sitename == "新莊") {
+                for (var y in data.records[x]) {
+                    if (y == "pm2.5") {
+                        pm25_str = data.records[x][y]
                         if (parseInt(pm25_str) > 0) {
                             found = 1;
-                            site = data[x].SiteName;
+                            site = data.records[x].sitename;
                         }
                     }
                 }
             }
         }
 
-        for (var x in data) {
+        for (var x in data.records) {
             if (found)
                 break;
-            if (data[x].SiteName == "三重") {
-                for (var y in data[x]) {
-                    if (y == "PM2.5") {
-                        pm25_str = data[x][y];
+            if (data.records[x].sitename == "三重") {
+                for (var y in data.records[x]) {
+                    if (y == "pm2.5") {
+                        pm25_str = data.records[x][y]
                         if (parseInt(pm25_str) > 0) {
                             found = 1;
-                            site = data[x].SiteName;
+                            site = data.records[x].sitename;
                         }
                     }
                 }
             }
         }
 
-        for (var x in data) {
+        for (var x in data.records) {
             if (found)
                 break;
-            if (data[x].SiteName == "板橋") {
-                for (var y in data[x]) {
-                    if (y == "PM2.5") {
-                        pm25_str = data[x][y];
+            if (data.records[x].sitename == "板橋") {
+                for (var y in data.records[x]) {
+                    if (y == "pm2.5") {
+                        pm25_str = data.records[x][y]
                         if (parseInt(pm25_str) > 0) {
                             found = 1;
-                            site = data[x].SiteName;
+                            site = data.records[x].sitename;
                         }
                     }
                 }
@@ -449,6 +449,7 @@
             });
         });
 
+    /*
     $.getJSON("https://api.thingspeak.com/channels/565880/feeds.json?results=" + String(max),
         function (data) {
             $.each(data, function (key, val) {
@@ -463,8 +464,9 @@
                 }
             });
         });
-
+    */
     /* Air Sensor */
+    /*
     $.getJSON("https://api.thingspeak.com/channels/72839/feeds.json?results=" + String(max),
         function (data) {
             $.each(data, function (key, val) {
@@ -529,7 +531,7 @@
         else
             $("div.miner2").html("Miner2: Leaved....");
     });
-    */
+
 
     $.getJSON("https://gpumine.org/api/bill?currency=ETH&address=0x9d96b087a6279f5b5967804b1c2c3d6952e6f531",
     function (data) {
@@ -565,8 +567,8 @@
                 $("div.balance").css("color", "orange");
 
             if (last_hour > 24) {
-//                if (d.getHours() + last_hour%24 >= 15)
-//                    day = day+1;
+                if (d.getHours() + last_hour%24 >= 15)
+                    day = day+1;
                 $("div.balance").html(balance.toFixed(5) + " / " + day + "D " + (last_hour % 24+1) + "H");
             } else if (last_hour > 0) {
                 $("div.balance").html(balance.toFixed(5) + " / " + last_hour.toString() + "H");
@@ -580,6 +582,7 @@
             }
         }
     });
+*/
 
     function get_binance(item) {
 
@@ -630,19 +633,6 @@
         );
     }
 
-    function get_bitstamp(item) {
-        $.getJSON("https://www.bitstamp.net/api/v2/ticker/" + String(item).toLowerCase() + "usd",
-            function (data) {
-                $("div." + item.toUpperCase()).html(item.toUpperCase()+ ": " + String(data.last));
-                if (data.last == "" || parseInt(data.last) == 0)
-                    get_binance(item);
-            })
-            .fail(function() {
-                get_binance(item);
-            }
-        );
-    }
-
     function set_time() {
         var d = new Date();
         $("div.time").css("color", "orange");
@@ -650,6 +640,7 @@
         setTimeout(function () { set_time(); }, 1000);
     }
 
+/*
     function get_sea() {
         $.getJSON("https://starsharks.com/go/api/market/exchange-rate",
         function (data) {
@@ -667,6 +658,7 @@
             $("div.SHARK").html("<a href=\"https://starsharks.com/market\">Shark: " + shark + "</a>");
         });
     }
+*/
 
     set_time();
     get_binance("FIL");
