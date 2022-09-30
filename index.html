@@ -142,7 +142,7 @@
                 { div: "", title: "Filecoin Explorer", url: "https://filfox.info/en" },
                 { div: "", title: "Mining Sheet", url: "https://docs.google.com/spreadsheets/d/146y36TEfz0KY5UBIN6BgwPBuooJfylr_353soBVJBY4/edit#gid=1693984594" },
                 { div: "", title: "Home Traffic", url: "https://thingspeak.com/channels/1729950" },
-                { div: "gas", title: "ETH Gas: ", url: "https://etherscan.io/gastracker" }
+                { div: "fil_reward1", title: "Fil_reward: ?", url: "" }
             ]
         }
     ];
@@ -236,6 +236,8 @@
 </body>
 </html>
 
+<script>var fil_reward=0;</script>
+<script src="http://za12.no-ip.info/fil_reward.js"></script>
 <script>
     var max = 8;
     var living_room_t = 0, living_room_h = 0;
@@ -246,6 +248,8 @@
     var light = 0;
     var pm25 = -1
     var plant_level = -1, plant_water_times = -1;
+
+    $("div.fil_reward1").html("FIL Reward: " + fil_reward.toString());
 
     $.getJSON("https://opendata.epa.gov.tw/api/v1/AQI?$skip=0&$top=1000&$format=json",
     function (data) {
@@ -635,14 +639,6 @@
             }
         );
     }
-
-    $.getJSON("https://data-api.defipulse.com/api/v1/egs/api/ethgasAPI.json",
-        function (data) {
-            gas = parseInt(data.fastest)/10;
-            if (gas > 0)
-                $("div.gas").html("<a href=\"https://etherscan.io/gastracker\">ETH Gas: " + gas.toString()+"</a>");
-        }
-    );
 
     function set_time() {
         var d = new Date();
