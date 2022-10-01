@@ -40,14 +40,14 @@
 
 <body>
     <br />
-    <!--<div class="living_room" align="center">客廳：00°C, 0%</div>-->
-    <!--<div class="room1" align="center">臥室：00°C, 00%</div>-->
+    <div class="living_room" align="center">客廳：00°C, 0%</div>
+    <div class="room1" align="center">書房：00°C, 00%</div>
     <!--<div class="room2" align="center">客房：00°C, 0%</div>-->
-    <div class="living_room_h" align="center">書房：00°C, 0%</div>
+    <!--<div class="living_room_h" align="center">書房：00°C, 0%</div>-->
     <!--<div class="balcony" align="center">陽台：00°C, 00%</div>-->
     <div class="pm25" align="center">PM2.5：0 ug/m3</div>
     <div class="weather" align="center">戶外：00°C, 0%</div>
-    <div class="miner0" align="center">Miner：no data</div>
+    <!--<div class="miner0" align="center">Miner：no data</div>-->
     <div class="miner1" align="center">Miner：no data</div>
     <!-- <div class="pm10" align="center">PM10：00 ug/m3</div> -->
     <div class="time" align="center">00:00:00</div>
@@ -86,15 +86,10 @@
                             if (val[i].field1 && val[i].field2) {
                                 living_room_t = parseInt(val[i].field1);
                                 living_room_h = parseInt(val[i].field2);
-                            } else if (val[i].field3 && val[i].field4) {
-                                room1_t = parseInt(val[i].field3);
-                                room1_h = parseInt(val[i].field4);
-                            } else if (val[i].field5 && val[i].field6) {
-                                room2_t = parseInt(val[i].field5);
-                                room2_h = parseInt(val[i].field6);
+
                             } else if (val[i].field7 && val[i].field8) {
-                                room3_t = parseInt(val[i].field7);
-                                room3_h = parseInt(val[i].field8);
+                                room1_t = parseInt(val[i].field7);
+                                room1_h = parseInt(val[i].field8);
                             }
                         }
 
@@ -138,10 +133,10 @@
                             $("div.living_room_h").css("color", "orange");
                         }
 
-                        //$("div.living_room").html("客廳：" + living_room_t + "°C, " + living_room_h + "%");
-                        $("div.room1").html("臥室：" + room1_t + "°C, " + room1_h + "%");
-                        $("div.room2").html("客房：" + room2_t + "°C, " + room2_h + "%");
-                        $("div.living_room_h").html("客廳 " + living_room_h + "% / 書房 " + room3_h + "%");
+                        $("div.living_room").html("客廳：" + living_room_t + "°C, " + living_room_h + "%");
+                        $("div.room1").html("書房：" + room1_t + "°C, " + room1_h + "%");
+                        //$("div.room2").html("客房：" + room2_t + "°C, " + room2_h + "%");
+                        //$("div.living_room_h").html("客廳 " + living_room_h + "% / 書房 " + room3_h + "%");
                     }
                 });
             });
@@ -557,7 +552,7 @@
         set_time();
         //miner_data(0);
         //miner_data(1);
-        miner_balance();
+        //miner_balance();
         setTimeout(function () { window.location = window.location; }, 300000);
         //setTimeout(function () { miner_balance(); }, 150000);
     </script>
