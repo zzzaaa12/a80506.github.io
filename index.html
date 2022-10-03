@@ -236,8 +236,6 @@
 </body>
 </html>
 
-<script>var fil_reward=-1;</script>
-<script src="http://za12.no-ip.info/fil_reward.js"></script>
 <script>
     var max = 8;
     var living_room_t = 0, living_room_h = 0;
@@ -245,14 +243,9 @@
     var room2_t = 0, room2_h = 0;
     var room3_t = 0, room3_h = 0;
     var timestamp = 0;
-    var light = 0;
+    var fil_reward = 0;
     var pm25 = -1
     var plant_level = -1, plant_water_times = -1;
-
-    $("div.fil_reward1").html("FIL Reward: " + fil_reward.toString());
-    if (fil_reward <= 0)
-        $("div.fil_reward1").css("color", "red");
-
 
     $.getJSON("https://data.epa.gov.tw/api/v2/aqx_p_432?api_key=e8dd42e6-9b8b-43f8-991e-b3dee723a52d&limit=1000&sort=ImportDate%20desc&format=JSON",
     function (data) {
@@ -449,22 +442,23 @@
             });
         });
 
-    /*
+    // FIL reward
     $.getJSON("https://api.thingspeak.com/channels/565880/feeds.json?results=" + String(max),
         function (data) {
             $.each(data, function (key, val) {
                 if (key == "feeds") {
                     for (var i = 0; i < max; i++) {
-                        if (Date.now() - Date.parse(val[i].created_at) > 1800000)
-                            continue;
-                        if (val[i].field1)
-                            light = parseInt(val[i].field1);
+                        if (parseFloat(val[i].field1) > 0) {
+                            if (Date.now() - Date.parse(val[i].created_at) > 86400000)
+                                continue;
+                            fil_reward = parseFloat(val[i].field1);
+                            $("div.fil_reward1").html("FIL Reward: " + fil_reward);
+                        }
                     }
-                    $("div.balcony").html("亮度：" + light);
                 }
             });
         });
-    */
+
     /* Air Sensor */
     /*
     $.getJSON("https://api.thingspeak.com/channels/72839/feeds.json?results=" + String(max),
