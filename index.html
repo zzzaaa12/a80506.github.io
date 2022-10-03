@@ -243,7 +243,7 @@
     var room2_t = 0, room2_h = 0;
     var room3_t = 0, room3_h = 0;
     var timestamp = 0;
-    var fil_reward = 0;
+    var fil_reward = 0, fil_storage = 0;
     var pm25 = -1
     var plant_level = -1, plant_water_times = -1;
 
@@ -452,8 +452,12 @@
                             if (Date.now() - Date.parse(val[i].created_at) > 86400000)
                                 continue;
                             fil_reward = parseFloat(val[i].field1);
-                            $("div.fil_reward1").html("FIL Reward: " + fil_reward);
+                        } else if (parseFloat(val[i].field2) > 0) {
+                            if (Date.now() - Date.parse(val[i].created_at) > 86400000)
+                                continue;
+                            fil_storage = parseFloat(val[i].field2);
                         }
+                        $("div.fil_reward1").html("FIL: " + fil_storage.toFixed(2) + " / " + fil_reward);
                     }
                 }
             });
@@ -674,4 +678,3 @@
     /* Auto Reload */
     setTimeout(function () { window.location = window.location; }, 300000);
 </script>
-
