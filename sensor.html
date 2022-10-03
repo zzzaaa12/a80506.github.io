@@ -48,7 +48,7 @@
     <div class="pm25" align="center">PM2.5：0 ug/m3</div>
     <div class="weather" align="center">戶外：00°C, 0%</div>
     <!--<div class="miner0" align="center">Miner：no data</div>-->
-    <div class="miner1" align="center">Miner：no data</div>
+    <div class="fil" align="center"></div>
     <!-- <div class="pm10" align="center">PM10：00 ug/m3</div> -->
     <div class="time" align="center">00:00:00</div>
     <div id="coin" class="coin" align="center">　</div>
@@ -64,6 +64,7 @@
         var pm25 = 0, pm10 = 0;
         var green = "#80FF00";
         var gray = "#444444";
+        var fil_reward = 0, fil_storage = 0;
 
         //$("div.living_room").css("color", gray);
         $("div.room1").css("color", gray);
@@ -170,6 +171,27 @@
             });
         });
 
+        // FIL reward
+        $.getJSON("https://api.thingspeak.com/channels/565880/feeds.json?results=" + String(max),
+            function (data) {
+                $.each(data, function (key, val) {
+                    if (key == "feeds") {
+                        for (var i = 0; i < max; i++) {
+                            if (parseFloat(val[i].field1) > 0) {
+                                if (Date.now() - Date.parse(val[i].created_at) > 86400000)
+                                    continue;
+                                fil_reward = parseFloat(val[i].field1);
+                            } else if (parseFloat(val[i].field2) > 0) {
+                                if (Date.now() - Date.parse(val[i].created_at) > 86400000)
+                                    continue;
+                                fil_storage = parseFloat(val[i].field2);
+                            }
+                            $("div.fil").html(fil_storage.toFixed(2) + "EB / " + fil_reward);
+                        }
+                    }
+                });
+            });
+            
         $.getJSON("https://api.thingspeak.com/channels/72839/feeds.json?results=" + String(max),
             function (data) {
                 $.each(data, function (key, val) {
