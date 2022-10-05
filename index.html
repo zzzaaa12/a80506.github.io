@@ -300,10 +300,10 @@
         }
 
         if (found) {
-            if (parseInt(pm25_str) > 60) {
+            if (parseInt(pm25_str) > 40) {
                 $("div.pm25").css("font-weight", "bold");
                 $("div.pm25").css("color", "red");
-            } else if (parseInt(pm25_str) > 40) {
+            } else if (parseInt(pm25_str) > 20) {
                 $("div.pm25").css("font-weight", "bold");
                 $("div.pm25").css("color", "orange");
             }
