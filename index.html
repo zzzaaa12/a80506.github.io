@@ -452,10 +452,11 @@
                             if (Date.now() - Date.parse(val[i].created_at) > 86400000)
                                 continue;
                             fil_reward = parseFloat(val[i].field1);
-                        } else if (parseFloat(val[i].field2) > 0) {
-                            if (Date.now() - Date.parse(val[i].created_at) > 86400000)
-                                continue;
-                            fil_storage = parseFloat(val[i].field2);
+                            if (parseFloat(val[i].field2) > 0) {
+                                if (Date.now() - Date.parse(val[i].created_at) > 86400000)
+                                    continue;
+                                fil_storage = parseFloat(val[i].field2);
+                            }
                         }
                         $("div.fil_reward1").html("FIL: " + fil_storage.toFixed(2) + " / " + fil_reward);
                     }
