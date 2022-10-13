@@ -76,13 +76,13 @@
         { // [6]
             title: "股市資訊",
             items: [
-                { div: "", title: "上市日報表", url: "http://bsr.twse.com.tw/bshtm" },
-                { div: "", title: "上櫃日報表", url: "http://www.gretai.org.tw/ch/stock/aftertrading/broker_trading/brokerBS.php" },
                 { div: "", title: "三大法人-期貨", url: "http://www.taifex.com.tw/cht/3/futContractsDateExcel" },
                 { div: "", title: "三大法人-選擇權", url: "http://www.taifex.com.tw/cht/3/optContractsDateExcel" },
                 { div: "", title: "三大法人-現貨", url: "http://www.twse.com.tw/zh/page/trading/fund/BFI82U.html" },
                 { div: "", title: "外資買賣超", url: "https://fubon-ebrokerdj.fbs.com.tw/Z/ZG/ZGK_D.djhtm" },
-                { div: "", title: "八大行庫", url: "http://www.capitalfutures.com.tw/Research/SectionJ/default_page.aspx?type=14" }
+                { div: "TSE", title: "", url: "" },
+                { div: "T1101", title: "", url: "" },
+                { div: "T2886", title: "", url: "" },
             ]
         },
         { // [7]
@@ -461,6 +461,29 @@
                         }
                         $("div.fil_reward1").html("FIL: " + fil_storage.toFixed(2) + " / " + fil_reward);
                     }
+                }
+            });
+        });
+
+
+    // Stock
+    $.getJSON("https://api.thingspeak.com/channels/72839/feeds.json?results=" + String(max),
+        function (data) {
+            var f1 = 0, f2 = 0, f3 = 0;
+            var json_len = 0;
+            $.each(data, function (key, val) {
+                if (key == "feeds") {
+                    for (var i = 0; i < data.channel.last_entry_id; i++) {
+                        if (val[i].field1)
+                            f1 = parseFloat(val[i].field1);
+                        else if (val[i].field2)
+                            f2 = parseFloat(val[i].field2);
+                        else if (val[i].field3)
+                            f3 = parseFloat(val[i].field3);
+                    }
+                    $("div.TSE").html("大盤: " + f2.toFixed(2).toString());
+                    $("div.T1101").html("台泥: " + f1.toFixed(2).toString());
+                    $("div.T2886").html("兆豐: " + f3.toFixed(2).toString());
                 }
             });
         });
