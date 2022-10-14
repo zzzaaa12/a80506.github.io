@@ -473,7 +473,7 @@
             var json_len = 0;
             $.each(data, function (key, val) {
                 if (key == "feeds") {
-                    for (var i = 0; i < data.channel.last_entry_id; i++) {
+                    for (var i = 0; i < max; i++) {
                         if (Date.now() - Date.parse(val[i].created_at) > 86400000)
                             continue;
                         if (val[i].field1)
