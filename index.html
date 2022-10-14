@@ -478,9 +478,9 @@
                             continue;
                         if (val[i].field1)
                             f1 = parseFloat(val[i].field1);
-                        else if (val[i].field2)
+                        if (val[i].field2)
                             f2 = parseFloat(val[i].field2);
-                        else if (val[i].field3)
+                        if (val[i].field3)
                             f3 = parseFloat(val[i].field3);
                     }
                     $("div.TSE").html("大盤: " + f2.toFixed(2).toString());
