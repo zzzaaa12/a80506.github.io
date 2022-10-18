@@ -443,7 +443,7 @@
                     for (var y in data.records[x]) {
                         if (y == "pm2.5") {
                             pm25_str = data.records[x][y]
-                            if (parseInt(pm25_str) > 0) {
+                            if (parseInt(pm25_str) >= 0 && parseInt(pm25_str) < 2000) {
                                 found = 1;
                                 site = data.records[x].sitename;
                             }
@@ -459,7 +459,7 @@
                     for (var y in data.records[x]) {
                         if (y == "pm2.5") {
                             pm25_str = data.records[x][y]
-                            if (parseInt(pm25_str) > 0) {
+                            if (parseInt(pm25_str) >= 0 && parseInt(pm25_str) < 2000) {
                                 found = 1;
                                 site = data.records[x].sitename;
                             }
@@ -475,7 +475,7 @@
                     for (var y in data.records[x]) {
                         if (y == "pm2.5") {
                             pm25_str = data.records[x][y]
-                            if (parseInt(pm25_str) > 0) {
+                            if (parseInt(pm25_str) >= 0 && parseInt(pm25_str) < 2000) {
                                 found = 1;
                                 site = data.records[x].sitename;
                             }
