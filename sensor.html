@@ -439,6 +439,8 @@
             var pm25_str = "";
 
             for (var x in data.records) {
+                if (found)
+                    break;
                 if (data.records[x].sitename == "新莊") {
                     for (var y in data.records[x]) {
                         if (y == "pm2.5") {
@@ -446,6 +448,7 @@
                             if (parseInt(pm25_str) >= 0 && parseInt(pm25_str) < 2000) {
                                 found = 1;
                                 site = data.records[x].sitename;
+                                break;
                             }
                         }
                     }
@@ -462,6 +465,7 @@
                             if (parseInt(pm25_str) >= 0 && parseInt(pm25_str) < 2000) {
                                 found = 1;
                                 site = data.records[x].sitename;
+                                break;
                             }
                         }
                     }
@@ -478,6 +482,7 @@
                             if (parseInt(pm25_str) >= 0 && parseInt(pm25_str) < 2000) {
                                 found = 1;
                                 site = data.records[x].sitename;
+                                break;
                             }
                         }
                     }
