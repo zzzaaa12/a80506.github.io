@@ -193,47 +193,6 @@
                 });
             });
             
-        $.getJSON("https://api.thingspeak.com/channels/72839/feeds.json?results=" + String(max),
-            function (data) {
-                $.each(data, function (key, val) {
-                    var timestamp = 0;
-
-                    if (key == "feeds") {
-                        for (var i = 0; i < max; i++) {
-                            if (val[i].field2)
-                                pm25 = parseInt(val[i].field2);
-
-                            if (val[i].field3)
-                                pm10 = parseInt(val[i].field3);
-
-                            timestamp = Date.parse(val[i].created_at);
-                        }
-
-                        if (Date.now() - timestamp > 1800000) // 1800000 = 0.5 hour
-                            return;
-
-                        if (pm25 >= 40) {
-                            $("div.pm25").css("color", "red");
-                            $("div.pm25").css("font-weight", "bold");
-                        } else if (pm25 >= 20) {
-                            $("div.pm25").css("color", "orange");
-                        } else {
-                            $("div.pm25").css("color", green);
-                        }
-/*
-                        if (pm10 >= 40)
-                            $("div.pm10").css("color", "red");
-                        else if (pm10 >= 20)
-                            $("div.pm10").css("color", "orange");
-                        else
-                            $("div.pm10").css("color", green);
-*/
-                        $("div.pm25").html("PM2.5：" + pm25 + " ug/m3");
-          //              $("div.pm10").html("PM10：" + pm10 + " ug/m3");
-                    }
-                });
-            });
-
         function get_sea() {
             $.getJSON("https://starsharks.com/go/api/market/exchange-rate",
             function (data) {
