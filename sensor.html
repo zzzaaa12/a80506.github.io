@@ -486,14 +486,6 @@
 
                         if (cwb_t != "" && cwb_h != "" && parseFloat(cwb_t) > -10 && parseFloat(cwb_h) > 0) {
                             $("div.weather").html("新莊：" + cwb_t + "°C, " + String(parseInt(cwb_h*100)) + "%");
-                            if (parseInt(cwb_h*100) >= 80) {
-                                $("div.weather").css("color", "#46a3ff");
-                                $("div.weather").css("font-weight", "bold");
-                            }
-                            if (parseInt(cwb_t) >= 32) {
-                                $("div.weather").css("color", "red");
-                                $("div.weather").css("font-weight", "bold");
-                            }
                             found = 1;
                             break;
                         }
@@ -518,19 +510,24 @@
 
                             if (cwb_t != "" && cwb_h != "" && parseFloat(cwb_t) > -10 && parseFloat(cwb_h) > 0) {
                                 $("div.weather").html("三重：" + cwb_t + "°C, " + String(parseInt(cwb_h*100)) + "%");
-                                if (parseInt(cwb_h*100) >= 80) {
-                                    $("div.weather").css("color", "#46a3ff");
-                                    $("div.weather").css("font-weight", "bold");
-                                }
-                                if (parseInt(cwb_t) >= 32) {
-                                    $("div.weather").css("color", "red");
-                                    $("div.weather").css("font-weight", "bold");
-                                }
                                 found = 1;
                                 break;
                             }
                         }
                     }
+                }
+            }
+            if (found) {
+                if (parseInt(cwb_h*100) >= 80) {
+                    $("div.weather").css("color", "#46a3ff");
+                    $("div.weather").css("font-weight", "bold");
+                }
+                if (parseInt(cwb_t) >= 32 || parseInt(cwb_t) <= 20) {
+                    $("div.weather").css("color", "orange");
+                    $("div.weather").css("font-weight", "bold");
+                } else if (parseInt(cwb_t) >= 28 || parseInt(cwb_t) <= 15) {
+                    $("div.weather").css("color", "red");
+                    $("div.weather").css("font-weight", "bold");
                 }
             }
         });
