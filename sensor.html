@@ -522,11 +522,11 @@
                     $("div.weather").css("color", "#46a3ff");
                     $("div.weather").css("font-weight", "bold");
                 }
-                if (parseFloat(cwb_t) >= 32 || parseFloat(cwb_t) <= 20) {
-                    $("div.weather").css("color", "orange");
-                    $("div.weather").css("font-weight", "bold");
-                } else if (parseFloat(cwb_t) >= 28 || parseFloat(cwb_t) <= 15) {
+                if (parseFloat(cwb_t) >= 32 || parseFloat(cwb_t) <= 15) {
                     $("div.weather").css("color", "red");
+                    $("div.weather").css("font-weight", "bold");
+                } else if (parseFloat(cwb_t) >= 28 || parseFloat(cwb_t) <= 20) {
+                    $("div.weather").css("color", "orange");
                     $("div.weather").css("font-weight", "bold");
                 }
             }
