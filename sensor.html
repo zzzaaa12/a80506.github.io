@@ -42,14 +42,9 @@
     <br />
     <div class="living_room" align="center">客廳：00°C, 0%</div>
     <div class="room1" align="center">書房：00°C, 00%</div>
-    <!--<div class="room2" align="center">客房：00°C, 0%</div>-->
-    <!--<div class="living_room_h" align="center">書房：00°C, 0%</div>-->
-    <!--<div class="balcony" align="center">陽台：00°C, 00%</div>-->
     <div class="pm25" align="center">PM2.5：0 ug/m3</div>
     <div class="weather" align="center">戶外：00°C, 0%</div>
-    <!--<div class="miner0" align="center">Miner：no data</div>-->
     <div class="fil" align="center"></div>
-    <!-- <div class="pm10" align="center">PM10：00 ug/m3</div> -->
     <div class="time" align="center">00:00:00</div>
     <div id="coin" class="coin" align="center">　</div>
 
@@ -520,6 +515,9 @@
             if (found) {
                 if (parseInt(cwb_h*100) >= 80) {
                     $("div.weather").css("color", "#46a3ff");
+                    $("div.weather").css("font-weight", "bold");
+                } else if (parseInt(cwb_h*100) >= 70) {
+                    $("div.weather").css("color", "orange");
                     $("div.weather").css("font-weight", "bold");
                 }
                 if (parseFloat(cwb_t) >= 32 || parseFloat(cwb_t) <= 15) {
