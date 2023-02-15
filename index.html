@@ -126,7 +126,7 @@
             items: [
 
                 { div: "", title: "Fuly.ai 放貸", url: "https://fuly.ai/dashboard/bitfinex" },
-                { div: "SOL", title: "", url: "" },
+                { div: "BLUR", title: "", url: "" },
                 { div: "DOT", title: "", url: "" },
                 { div: "HNS", title: "", url: "" },
                 { div: "ENS", title: "", url: "" },
@@ -659,7 +659,7 @@
         );
     }
 
-    function get_binance_cmc(item) {
+    function get_binance_cmc(item, slug) {
 
         var percent = 0;
         var percent_html = "";
@@ -671,11 +671,19 @@
                 var percent = 0;
                 var price = 0;
                 var name = "";
+                var i = 0;
 
                 $.each(data.data.body.data, function (key, val) {
                     if (key == item) {
 
-                        percent = parseInt(val[0].quote.USD.percent_change_24h);
+                        i = 0;
+                        while(val[i].slug.length > 0) {
+                            if (slug == val[i].slug)
+                                break;
+                            i = i + 1;
+                        }
+
+                        percent = parseInt(val[i].quote.USD.percent_change_24h);
                         if (percent < 0) {
                             color = "red";
                             percent_html = " (" + percent.toString() + "%)";
@@ -685,7 +693,7 @@
                             color = "yellow";
                         }
 
-                        price = parseFloat(val[0].quote.USD.price);
+                        price = parseFloat(val[i].quote.USD.price);
                         if (price >= 100)
                             price = parseInt(price);
                         else if (price >= 1)
@@ -695,7 +703,7 @@
                         else
                             price = parseFloat(price).toFixed(4);
 
-                        name = val[0].slug
+                        name = val[i].slug
                         $("div." + item.toUpperCase()).html("<a style=\"color:" + color + ";\" href=\"https://www.binance.com/en/price/" + name + "\">" + item.toUpperCase()+ ": " + String(price) + percent_html + "</a>");
                     }
                 });
@@ -746,10 +754,10 @@
     get_binance("AVA");
     get_binance("ENS");
     get_binance("HNT");
-    get_binance("SOL");
+    get_binance_cmc("BLUR", "blur-token");
     get_binance("DOT");
-    get_binance_cmc("HNS");
-    get_binance_cmc("SEA");
+    get_binance_cmc("HNS", "handshake");
+    get_binance_cmc("SEA", "starsharks-sea");
     get_binance("APT");
     //get_binance_cmc("SSS");
     //get_sea();
