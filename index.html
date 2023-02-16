@@ -620,12 +620,22 @@
                 function (data) {
                     var color = "#80FF00";
                     percent = parseInt(data.priceChangePercent);
-                    if (percent > 0)
+                    if (percent < 0) {
                         color = "red";
-                    else if (percent == 0)
+                        percent_html = " (" + percent.toString() + "%)";
+                    } else if (percent > 0) {
+                        percent_html = " (+" + percent.toString() + "%)";
+                    } else {
                         color = "yellow";
-                    price = parseFloat(data.lastPrice).toFixed(5);
-                    $("div." + item.toUpperCase()).html("<a style=\"color:" + color + ";\" href=\"https://www.binance.com/zh-TW/trade/" + item + "\">" + item.toUpperCase()+ ": " + String(price) + "</a>");
+                    }
+
+                    if (item == "ETHBTC") {
+                        price = parseFloat(data.lastPrice).toFixed(3);
+                        $("div." + item.toUpperCase()).html("<a style=\"color:" + color + ";\" href=\"https://www.binance.com/zh-TW/trade/" + item + "_BUSD\">" + item.toUpperCase()+ ": " + String(price) + percent_html + "</a>");
+                    } else {
+                        price = parseFloat(data.lastPrice).toFixed(5);
+                        $("div." + item.toUpperCase()).html("<a style=\"color:" + color + ";\" href=\"https://www.binance.com/zh-TW/trade/" + item + "\">" + item.toUpperCase()+ ": " + String(price) + "</a>");
+                    }
                 }
             );
             return;
