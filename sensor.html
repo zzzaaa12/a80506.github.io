@@ -325,10 +325,11 @@
                             ava = price;
                     }
 
-                    if (blur > 0)
-                        $("div.coin").html(btc + " / " + eth + "<br />" + fil + " / " + ava + " / " + blur);
-                    else
+                    if (blur > 0) {
+                        $("div.coin").html(btc + " / " + eth + "<br />" + fil + " / " + ava + " / " + parseFloat(blur).toFixed(1));
+                    } else {
                         $("div.coin").html(btc + " / " + eth + "<br />" + fil + " / " + ava);
+                    }
                 });
             })
             .fail(function(){
