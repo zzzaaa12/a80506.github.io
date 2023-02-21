@@ -60,6 +60,7 @@
         var green = "#80FF00";
         var gray = "#444444";
         var fil_reward = 0, fil_storage = 0;
+        var blur = 0;
 
         //$("div.living_room").css("color", gray);
         $("div.room1").css("color", gray);
@@ -238,6 +239,49 @@
             setTimeout(function () { get_coin_bitstamp(); }, 60000);
         }
 
+		function get_binance_cmc(item, slug) {
+
+			var percent = 0;
+			var percent_html = "";
+
+			$.getJSON("https://www.binance.com/bapi/composite/v1/public/promo/cmc/cryptocurrency/quotes/latest?symbol=" + item,
+
+				function (data) {
+					var color = "#80FF00";
+					var percent = 0;
+					var price = 0;
+					var name = "";
+					var i = 0;
+
+					$.each(data.data.body.data, function (key, val) {
+						if (key == item) {
+							i = 0;
+							while(val[i].slug.length > 0) {
+								if (slug == val[i].slug)
+									break;
+								i = i + 1;
+							}
+
+							price = parseFloat(val[i].quote.USD.price);
+							if (price >= 100)
+								price = parseInt(price);
+							else if (price >= 1)
+								price = parseFloat(price).toFixed(2);
+							else if (price >= 0.01)
+								price = parseFloat(price).toFixed(3);
+							else
+								price = parseFloat(price).toFixed(4);
+
+							name = val[i].slug
+
+							if (item == "BLUR")
+                                blur = price;
+						}
+					});
+				}
+			);
+		}
+
         function get_coin_binance() {
             $.getJSON("https://api.binance.com/api/v3/ticker/24hr",
             function (data) {
@@ -264,26 +308,27 @@
                             $("div.coin").css("color", green);
 
                         btc = parseInt(data[key].lastPrice);
+
                     } else if (data[key].symbol == "ETHBUSD") {
                         eth = parseInt(data[key].lastPrice);
+
                     } else {
                         price = parseFloat(data[key].lastPrice);
                         if (price >= 10)
                             price = parseInt(price);
-                        else if (price >= 1)
-                            price = parseFloat(price).toFixed(2)
                         else
-                            price = parseFloat(price).toFixed(3)
+                            price = parseFloat(price).toFixed(1)
+
                         if (data[key].symbol == "FILBUSD")
                             fil = price;
                         else if (data[key].symbol == "AVABUSD")
                             ava = price;
-                        //else if (data[key].symbol == "FLOWBUSD")
-                        //    flow = price;
                     }
 
-                    //$("div.coin").html(btc + " / " + eth + "<br />" + fil + " / " + flow + " / " + ava);
-                    $("div.coin").html(btc + " / " + eth + "<br />" + fil + " / " + ava);
+                    if (blur > 0)
+                        $("div.coin").html(btc + " / " + eth + "<br />" + fil + " / " + ava + " / " + blur);
+                    else
+                        $("div.coin").html(btc + " / " + eth + "<br />" + fil + " / " + ava);
                 });
             })
             .fail(function(){
@@ -530,6 +575,7 @@
             }
         });
 
+		get_binance_cmc("BLUR", "blur-token");
         get_coin();
         set_time();
         //miner_data(0);
