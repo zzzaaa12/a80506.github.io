@@ -294,7 +294,7 @@
                 var ava = 0;
                 var price = 0;
                 $.each( data, function( key, val ) {
-                    if (data[key].symbol == "BTCBUSD") {
+                    if (data[key].symbol == "BTCUSDT") {
                         btc_percent = parseFloat(data[key].priceChangePercent).toFixed(1);
                         if (btc_percent > 0)
                             btc_percent = "(+" + btc_percent.toString() + "%)";
@@ -309,7 +309,7 @@
 
                         btc = parseInt(data[key].lastPrice);
 
-                    } else if (data[key].symbol == "ETHBUSD") {
+                    } else if (data[key].symbol == "ETHUSDT") {
                         eth = parseInt(data[key].lastPrice);
 
                     } else {
@@ -319,9 +319,9 @@
                         else
                             price = parseFloat(price).toFixed(1)
 
-                        if (data[key].symbol == "FILBUSD")
+                        if (data[key].symbol == "FILUSDT")
                             fil = price;
-                        else if (data[key].symbol == "AVABUSD")
+                        else if (data[key].symbol == "AVAUSDT")
                             ava = price;
                     }
 
