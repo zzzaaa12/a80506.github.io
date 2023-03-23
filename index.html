@@ -127,7 +127,7 @@
 
                 { div: "", title: "Fuly.ai 放貸", url: "https://fuly.ai/dashboard/bitfinex" },
                 { div: "BLUR", title: "", url: "" },
-                { div: "DOT", title: "", url: "" },
+                { div: "ID", title: "", url: "" },
                 { div: "MATIC", title: "", url: "" },
                 { div: "ENS", title: "", url: "" },
                 //{ div: "HNT", title: "", url: "" },
@@ -631,7 +631,7 @@
 
                     if (item == "ETHBTC") {
                         price = parseFloat(data.lastPrice).toFixed(3);
-                        $("div." + item.toUpperCase()).html("<a style=\"color:" + color + ";\" href=\"https://www.binance.com/zh-TW/trade/" + item + "_BUSD\">" + item.toUpperCase()+ ": " + String(price) + percent_html + "</a>");
+                        $("div." + item.toUpperCase()).html("<a style=\"color:" + color + ";\" href=\"https://www.binance.com/zh-TW/trade/" + item + "_USDT\">" + item.toUpperCase()+ ": " + String(price) + percent_html + "</a>");
                     } else {
                         price = parseFloat(data.lastPrice).toFixed(5);
                         $("div." + item.toUpperCase()).html("<a style=\"color:" + color + ";\" href=\"https://www.binance.com/zh-TW/trade/" + item + "\">" + item.toUpperCase()+ ": " + String(price) + "</a>");
@@ -641,7 +641,7 @@
             return;
         }
 
-        $.getJSON("https://api.binance.com/api/v3/ticker/24hr?symbol=" + String(item).toUpperCase() + "BUSD",
+        $.getJSON("https://api.binance.com/api/v3/ticker/24hr?symbol=" + String(item).toUpperCase() + "USDT",
             function (data) {
                 var color = "#80FF00";
                 var percent = 0;
@@ -652,6 +652,7 @@
                     color = "red";
                     percent_html = " (" + percent.toString() + "%)";
                 } else if (percent > 0) {
+                    percent_html = " (+" + percent.toString() + "%)";
                     percent_html = " (+" + percent.toString() + "%)";
                 } else {
                     color = "yellow";
@@ -664,7 +665,7 @@
                     price = parseFloat(data.lastPrice).toFixed(2);
                 else
                     price = parseFloat(data.lastPrice).toFixed(3);
-                $("div." + item.toUpperCase()).html("<a style=\"color:" + color + ";\" href=\"https://www.binance.com/zh-TW/trade/" + item + "_BUSD\">" + item.toUpperCase()+ ": " + String(price) + percent_html + "</a>");
+                $("div." + item.toUpperCase()).html("<a style=\"color:" + color + ";\" href=\"https://www.binance.com/zh-TW/trade/" + item + "_USDT\">" + item.toUpperCase()+ ": " + String(price) + percent_html + "</a>");
             }
         );
     }
@@ -765,7 +766,7 @@
     get_binance("ENS");
     get_binance("HNT");
     get_binance_cmc("BLUR", "blur-token");
-    get_binance("DOT");
+    get_binance("ID");
     get_binance("MATIC");
     //get_binance_cmc("HNS", "handshake");
     get_binance_cmc("SEA", "starsharks-sea");
