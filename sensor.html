@@ -292,6 +292,7 @@
                 var flow = 0;
                 var usdt = 0;
                 var ava = 0;
+                var arb = 0;
                 var price = 0;
                 $.each( data, function( key, val ) {
                     if (data[key].symbol == "BTCUSDT") {
@@ -317,18 +318,20 @@
                         if (price >= 10)
                             price = parseInt(price);
                         else
-                            price = parseFloat(price).toFixed(1)
+                            price = parseFloat(price).toFixed(2)
 
                         if (data[key].symbol == "FILUSDT")
                             fil = price;
                         else if (data[key].symbol == "AVAUSDT")
                             ava = price;
+                        else if (data[key].symbol == "ARBUSDT")
+                            arb = price;
                     }
 
                     if (blur > 0) {
                         $("div.coin").html(btc + " / " + eth + "<br />" + fil + " / " + ava + " / " + parseFloat(blur).toFixed(1));
                     } else {
-                        $("div.coin").html(btc + " / " + eth + "<br />" + fil + " / " + ava);
+                        $("div.coin").html(btc + " / " + eth + "<br />" + fil + " / " + arb);
                     }
                 });
             })
@@ -576,7 +579,7 @@
             }
         });
 
-        get_binance_cmc("BLUR", "blur-token");
+        //get_binance_cmc("BLUR", "blur-token");
         get_coin();
         set_time();
         //miner_data(0);
