@@ -131,7 +131,7 @@
                 { div: "ARB", title: "", url: "" },
                 { div: "ENS", title: "", url: "" },
                 //{ div: "HNT", title: "", url: "" },
-                { div: "APT", title: "", url: "" },
+                { div: "MCC", title: "", url: "" },
                 { div: "SEA", title: "", url: "" },
             ]
         },
@@ -610,6 +610,19 @@
     });
 */
 
+    function get_geckoterminal(pool) {
+        var price = 0;
+        if (pool == "0xfb79d843d8d7e38bd5a7f115fa889b043db6fe76") {
+            $.getJSON("https://api.geckoterminal.com/api/v2/networks/bsc/pools/" + pool,
+                function (data) {
+                        price = parseFloat(data.data.attributes.base_token_price_usd);
+                        $("div.MCC").html("MCC: " + price.toFixed(4).toString());
+
+                }
+            );
+        }
+    }
+
     function get_binance(item) {
 
         var percent = 0;
@@ -770,7 +783,8 @@
     get_binance("ARB");
     //get_binance_cmc("HNS", "handshake");
     get_binance_cmc("SEA", "starsharks-sea");
-    get_binance("APT");
+    //get_binance("APT");
+    get_geckoterminal("0xfb79d843d8d7e38bd5a7f115fa889b043db6fe76"); //MCC
     //get_binance_cmc("SSS");
     //get_sea();
     //get_shark();
