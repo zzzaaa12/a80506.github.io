@@ -61,6 +61,7 @@
         var gray = "#444444";
         var fil_reward = 0, fil_storage = 0;
         var blur = 0;
+        var mcc = 0;
 
         //$("div.living_room").css("color", gray);
         $("div.room1").css("color", gray);
@@ -188,7 +189,7 @@
                     }
                 });
             });
-            
+           
         function get_sea() {
             $.getJSON("https://starsharks.com/go/api/market/exchange-rate",
             function (data) {
@@ -237,6 +238,18 @@
             });
 
             setTimeout(function () { get_coin_bitstamp(); }, 60000);
+        }
+
+        function get_geckoterminal(pool) {
+            var price = 0;
+            if (pool == "0xfb79d843d8d7e38bd5a7f115fa889b043db6fe76") {
+                $.getJSON("https://api.geckoterminal.com/api/v2/networks/bsc/pools/" + pool,
+                    function (data) {
+                            price = parseFloat(data.data.attributes.base_token_price_usd);
+                            mcc = price.toFixed(4);
+                    }
+                );
+            }
         }
 
         function get_binance_cmc(item, slug) {
@@ -328,8 +341,8 @@
                             arb = price;
                     }
 
-                    if (blur > 0) {
-                        $("div.coin").html(btc + " / " + eth + "<br />" + fil.toFixed(1) + " / " + arb.toFixed(1) + " / " + parseFloat(blur).toFixed(1));
+                    if (mcc > 0) {
+                        $("div.coin").html(btc + " / " + eth + "<br />" + fil + " / " + parseFloat(mcc).toFixed(2));
                     } else {
                         $("div.coin").html(btc + " / " + eth + "<br />" + fil + " / " + arb);
                     }
@@ -343,6 +356,7 @@
         }
 
         function get_coin() {
+            get_geckoterminal("0xfb79d843d8d7e38bd5a7f115fa889b043db6fe76"); //MCC
             get_coin_binance();
             //get_coin_bitstamp()
         }
@@ -505,7 +519,7 @@
                 $("div.pm25").html(site + " PM2.5：" + pm25_str);
             }
         });
-    
+   
         $.getJSON("https://opendata.cwb.gov.tw/fileapi/v1/opendataapi/O-A0001-001?Authorization=CWB-843040FB-C733-4DFA-8263-47121194BF96&downloadType=WEB&format=JSON",
         function (data) {
             var cwb_t = "";
