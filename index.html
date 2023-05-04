@@ -129,10 +129,10 @@
                 { div: "BLUR", title: "", url: "" },
                 { div: "ID", title: "", url: "" },
                 { div: "ARB", title: "", url: "" },
-                { div: "ENS", title: "", url: "" },
                 //{ div: "HNT", title: "", url: "" },
                 { div: "MCC", title: "", url: "" },
                 { div: "SEA", title: "", url: "" },
+                { div: "GAS", title: "", url: "" },
             ]
         },
         { // [11]
@@ -610,6 +610,16 @@
     });
 */
 
+    function get_eth_gas() {
+        var gas = 0;
+        $.getJSON("https://ethgasstation.info/api/ethgasAPI.json",
+            function (data) {
+                    gas = parseFloat(data.fast)/10;
+                    $("div.GAS").html("ETH Gas: " + parseInt(gas).toString());
+            }
+        );
+    }
+
     function get_geckoterminal(pool) {
         var price = 0;
         if (pool == "0xfb79d843d8d7e38bd5a7f115fa889b043db6fe76") {
@@ -763,6 +773,7 @@
 */
 
     set_time();
+    get_eth_gas();
     get_binance("FIL");
     get_binance("BTC");
     get_binance("ETH");
