@@ -615,10 +615,10 @@
         $.getJSON("https://ethgasstation.info/api/ethgasAPI.json",
             function (data) {
                     gas = parseFloat(data.fast)/10;
-                    if (gas > 50)
-                        $("div.GAS").css("color", "red")
-                    else if (gas > 35)
-                        $("div.GAS").css("color", "orange")
+                    if (gas > 60)
+                        $("div.GAS").css("color", "red");
+                    else if (gas > 40)
+                        $("div.GAS").css("color", "orange");
                     $("div.GAS").html("ETH Gas: " + parseInt(gas).toString());
             }
         );
