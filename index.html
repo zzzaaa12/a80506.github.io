@@ -612,14 +612,15 @@
 
     function get_eth_gas() {
         var gas = 0;
+        var color = "green";
         $.getJSON("https://api.gasprice.io/v1/estimates",
             function (data) {
                     gas = parseFloat(data.result.baseFee);
                     if (gas > 60)
-                        $("div.GAS").css("color", "red");
+                        color = "red";
                     else if (gas > 40)
-                        $("div.GAS").css("color", "orange");
-                    $("div.GAS").html("ETH Gas: " + parseInt(gas).toString());
+                        color = "orange";
+                    $("div.GAS").html("<a style=\"color:" + color + ";\" href=\"https://www.gasprice.io/\">" + "ETH Gas: " + parseInt(gas).toString() + "</a>");
             }
         );
     }
