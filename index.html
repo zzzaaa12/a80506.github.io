@@ -612,9 +612,9 @@
 
     function get_eth_gas() {
         var gas = 0;
-        $.getJSON("https://ethgasstation.info/api/ethgasAPI.json",
+        $.getJSON("https://api.gasprice.io/v1/estimates",
             function (data) {
-                    gas = parseFloat(data.fast)/10;
+                    gas = parseFloat(data.result.baseFee);
                     if (gas > 60)
                         $("div.GAS").css("color", "red");
                     else if (gas > 40)
