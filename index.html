@@ -612,7 +612,7 @@
 
     function get_eth_gas() {
         var gas = 0;
-        var color = "green";
+        var color = "#80FF00";
         $.getJSON("https://api.gasprice.io/v1/estimates",
             function (data) {
                     gas = parseFloat(data.result.baseFee);
