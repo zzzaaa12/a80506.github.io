@@ -631,8 +631,7 @@
             $.getJSON("https://api.geckoterminal.com/api/v2/networks/bsc/pools/" + pool,
                 function (data) {
                         price = parseFloat(data.data.attributes.base_token_price_usd);
-                        $("div.MCC").html("MCC: " + price.toFixed(4).toString());
-
+                        $("div.MCC").html("<a style=\"color:" + color + ";\" href=\"https://www.geckoterminal.com/bsc/pools/0xfb79d843d8d7e38bd5a7f115fa889b043db6fe76"\">" + "MCC: " + price.toFixed(4).toString() + "</a>");
                 }
             );
         }
@@ -801,7 +800,7 @@
     get_binance_cmc("SEA", "starsharks-sea");
     //get_binance("APT");
     get_geckoterminal("0xfb79d843d8d7e38bd5a7f115fa889b043db6fe76"); //MCC
-    //get_binance_cmc("SSS");
+    //get_binance_cmc("MCC", "matchnova");
     //get_sea();
     //get_shark();
 
