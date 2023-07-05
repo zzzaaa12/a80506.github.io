@@ -627,11 +627,13 @@
 
     function get_geckoterminal(pool) {
         var price = 0;
+        var item = "";
         if (pool == "0xfb79d843d8d7e38bd5a7f115fa889b043db6fe76") {
+            item = "MCC";
             $.getJSON("https://api.geckoterminal.com/api/v2/networks/bsc/pools/" + pool,
                 function (data) {
                         price = parseFloat(data.data.attributes.base_token_price_usd);
-                        $("div.MCC").html("<a style=\"color:" + color + ";\" href=\"https://www.geckoterminal.com/bsc/pools/0xfb79d843d8d7e38bd5a7f115fa889b043db6fe76"\">" + "MCC: " + price.toFixed(4).toString() + "</a>");
+                        $("div."+item).html("<a href='https://www.geckoterminal.com/bsc/pools/" + pool + "'>" + item + ": " + price.toFixed(4).toString() + "</a>");
                 }
             );
         }
