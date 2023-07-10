@@ -1,3 +1,6 @@
+
+
+
 <html>
 
 <head>
@@ -40,6 +43,7 @@
 
 <body>
     <br />
+    <div class="room2" align="center" style="display: none;">臥室：00°C, 00%</div>
     <div class="living_room" align="center">客廳：00°C, 0%</div>
     <div class="room1" align="center">書房：00°C, 00%</div>
     <div class="pm25" align="center">PM2.5：0 ug/m3</div>
@@ -63,6 +67,10 @@
         var blur = 0;
         var mcc = 0;
 
+        var date = new Date();
+        var now_hour = date.getHours();
+        var room2_got = 0;
+
         //$("div.living_room").css("color", gray);
         $("div.room1").css("color", gray);
         $("div.room2").css("color", gray);
@@ -84,10 +92,16 @@
                             if (val[i].field1 && val[i].field2) {
                                 living_room_t = parseInt(val[i].field1);
                                 living_room_h = parseInt(val[i].field2);
-
                             } else if (val[i].field7 && val[i].field8) {
                                 room1_t = parseInt(val[i].field7);
                                 room1_h = parseInt(val[i].field8);
+                            } else if (!room2_got && val[i].field5 && val[i].field6) {
+                                var diffmin = parseInt(((Date.now() - Date.parse(val[i].created_at))/600000));
+                                if (diffmin < 10) {
+                                    room2_t = parseFloat(val[i].field5);
+                                    room2_h = parseInt(val[i].field6);
+                                    room2_got = 1;
+                                }
                             }
                         }
 
@@ -113,12 +127,12 @@
                             $("div.room1").css("color", green);
                         }
 
-                        if (room2_h == 0) {
+                        if (room2_t == 0) {
                             $("div.room2").css("color", gray);
-                        } else if (room2_h >= 80) {
+                        } else if (room2_t >= 27) {
                             $("div.room2").css("color", "red");
                             $("div.room2").css("font-weight", "bold");
-                        } else if (room2_h >= 70) {
+                        } else if (room2_t < 23) {
                             $("div.room2").css("color", "orange");
                         } else {
                             $("div.room2").css("color", green);
@@ -130,10 +144,15 @@
                         } else if (room3_h >= 70) {
                             $("div.living_room_h").css("color", "orange");
                         }
+                        
+                        if (now_hour >= 22 || now_hour < 7) {
+                            document.querySelector('.room2').style.display = 'block';
+                            document.querySelector('.living_room').style.display = 'none';
+                        }
 
                         $("div.living_room").html("客廳：" + living_room_t + "°C, " + living_room_h + "%");
                         $("div.room1").html("書房：" + room1_t + "°C, " + room1_h + "%");
-                        //$("div.room2").html("客房：" + room2_t + "°C, " + room2_h + "%");
+                        $("div.room2").html("臥室：" + room2_t + "°C");
                         //$("div.living_room_h").html("客廳 " + living_room_h + "% / 書房 " + room3_h + "%");
                     }
                 });
