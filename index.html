@@ -143,7 +143,7 @@
                 { div: "room3", title: "書房：00°C, 00%", url: "" },
                 { div: "", title: "Crypto Currency", url: "coin.html" },
                 { div: "", title: "BTC Dominance", url: "https://tw.tradingview.com/chart/?symbol=CRYPTOCAP%3ABTC.D" },
-                { div: "", title: "Home Traffic", url: "https://thingspeak.com/channels/1729950" },
+                { div: "home_traffic", title: "Home Traffic", url: "https://thingspeak.com/channels/1729950" },
                 { div: "fil_reward1", title: "Fil_reward: -1", url: "" }
             ]
         }
@@ -466,7 +466,25 @@
             });
         });
 
-
+    // Home traffic
+    $.getJSON("https://api.thingspeak.com/channels/1729950/feeds.json?results=" + String(max),
+        function (data) {
+            $.each(data, function (key, val) {
+                if (key == "feeds") {
+                    var status = "";
+                    for (var i = 0; i < max; i++) {
+                        if (parseFloat(val[i].field1) > 0) {
+                            if (Date.now() - Date.parse(val[i].created_at) > 300000)
+                                continue;
+                            if (parseFloat(val[i].field3) == 0)
+                                status = ": <font color=\"red\">none</font>"
+                        }
+                        $("div.home_traffic").html("<a href='https://thingspeak.com/channels/1729950'>Home Traffic" + status + "</a>");
+                    }
+                }
+            });
+        });
+        
     // Stock
     $.getJSON("https://api.thingspeak.com/channels/72839/feeds.json?results=" + String(max),
         function (data) {
