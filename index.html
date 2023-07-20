@@ -131,7 +131,8 @@
                 { div: "ARB", title: "", url: "" },
                 //{ div: "HNT", title: "", url: "" },
                 { div: "MCC", title: "", url: "" },
-                { div: "SEA", title: "", url: "" },
+                { div: "WCC", title: "", url: "" },
+                //{ div: "SEA", title: "", url: "" },
                 { div: "GAS", title: "ETH Gas", url: "https://ycharts.com/indicators/ethereum_average_gas_price" },
             ]
         },
@@ -655,6 +656,15 @@
                 }
             );
         }
+        if (pool == "0x09ead9122ba8ac230746eb9730d1c099d9a6181d") {
+            item = "WCC";
+            $.getJSON("https://api.geckoterminal.com/api/v2/networks/bsc/pools/" + pool,
+                function (data) {
+                        price = parseFloat(data.data.attributes.base_token_price_usd);
+                        $("div."+item).html("<a href='https://www.geckoterminal.com/bsc/pools/" + pool + "'>" + item + ": " + price.toFixed(4).toString() + "</a>");
+                }
+            );
+        }
     }
 
     function get_binance(item) {
@@ -820,6 +830,8 @@
     get_binance_cmc("SEA", "starsharks-sea");
     //get_binance("APT");
     get_geckoterminal("0xfb79d843d8d7e38bd5a7f115fa889b043db6fe76"); //MCC
+    get_geckoterminal("0x09ead9122ba8ac230746eb9730d1c099d9a6181d"); //WCC
+    
     //get_binance_cmc("MCC", "matchnova");
     //get_sea();
     //get_shark();
