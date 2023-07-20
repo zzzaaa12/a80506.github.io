@@ -65,7 +65,6 @@
 
         var date = new Date();
         var now_hour = date.getHours();
-        var room2_got = 0;
 
         //$("div.living_room").css("color", gray);
         $("div.room1").css("color", gray);
@@ -91,12 +90,11 @@
                             } else if (val[i].field7 && val[i].field8) {
                                 room1_t = parseInt(val[i].field7);
                                 room1_h = parseInt(val[i].field8);
-                            } else if (!room2_got && val[i].field5 && val[i].field6) {
+                            } else if (val[i].field5 && val[i].field6) {
                                 var diffmin = parseInt(((Date.now() - Date.parse(val[i].created_at))/600000));
                                 if (diffmin < 10) {
                                     room2_t = parseFloat(val[i].field5);
                                     room2_h = parseInt(val[i].field6);
-                                    room2_got = 1;
                                 }
                             }
                         }
@@ -125,11 +123,11 @@
 
                         if (room2_t == 0) {
                             $("div.room2").css("color", gray);
-                        } else if (room2_t >= 27) {
+                        } else if (room2_t >= 28 || room2_t < 25) {
                             $("div.room2").css("color", "red");
                             $("div.room2").css("font-weight", "bold");
-                        } else if (room2_t < 23) {
-                            $("div.room2").css("color", "orange");
+                        //} else if (room2_t < 23) {
+                            //$("div.room2").css("color", "orange");
                         } else {
                             $("div.room2").css("color", green);
                         }
@@ -141,7 +139,7 @@
                             $("div.living_room_h").css("color", "orange");
                         }
                         
-                        if (now_hour >= 22 || now_hour < 7) {
+                        if (now_hour >= 21 || now_hour < 7) {
                             document.querySelector('.room2').style.display = 'block';
                             document.querySelector('.living_room').style.display = 'none';
                         }
