@@ -62,6 +62,7 @@
         var fil_reward = 0, fil_storage = 0;
         var blur = 0;
         var mcc = 0;
+        var wcc = 0;
 
         var date = new Date();
         var now_hour = date.getHours();
@@ -258,11 +259,18 @@
             if (pool == "0xfb79d843d8d7e38bd5a7f115fa889b043db6fe76") {
                 $.getJSON("https://api.geckoterminal.com/api/v2/networks/bsc/pools/" + pool,
                     function (data) {
-                            price = parseFloat(data.data.attributes.base_token_price_usd);
-                            mcc = price.toFixed(4);
+                            price = parseFloat(data.data.attributes.base_token_price_usd)*10000;
+                            mcc = parseInt(price);
                     }
                 );
-            }
+            } else if (pool == "0x09ead9122ba8ac230746eb9730d1c099d9a6181d") {
+                $.getJSON("https://api.geckoterminal.com/api/v2/networks/bsc/pools/" + pool,
+                    function (data) {
+                            price = parseFloat(data.data.attributes.base_token_price_usd)*10000;
+                            wcc = parseInt(price);
+                    }
+                );
+            } 
         }
 
         function get_binance_cmc(item, slug) {
@@ -354,8 +362,9 @@
                             arb = price;
                     }
 
-                    if (mcc > 0) {
-                        $("div.coin").html(btc + " / " + eth + "<br />" + fil + " / " + parseFloat(mcc).toFixed(4));
+                    if (mcc > 0 && wcc > 0) {
+                        $("div.coin").html(btc + " / " + eth + "<br />" + wcc + "/" + mcc + "/" + (mcc/wcc).toFixed(2));
+                        //$("div.coin").html(btc + " / " + eth + "<br />" + parseFloat(wcc).toFixed(4) + " / " + parseFloat(mcc).toFixed(4));
                     } else {
                         $("div.coin").html(btc + " / " + eth + "<br />" + fil + " / " + arb);
                     }
@@ -369,6 +378,7 @@
         }
 
         function get_coin() {
+            get_geckoterminal("0x09ead9122ba8ac230746eb9730d1c099d9a6181d"); //WCC
             get_geckoterminal("0xfb79d843d8d7e38bd5a7f115fa889b043db6fe76"); //MCC
             get_coin_binance();
             //get_coin_bitstamp()
