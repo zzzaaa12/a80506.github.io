@@ -250,7 +250,18 @@
     var pm25 = -1
     var plant_level = -1, plant_water_times = -1;
 
-    $.getJSON("https://data.epa.gov.tw/api/v2/aqx_p_432?api_key=e8dd42e6-9b8b-43f8-991e-b3dee723a52d&limit=1000&sort=ImportDate%20desc&format=JSON",
+    function getPm25Url() {
+        const urlOld = 'https://data.epa.gov.tw/api/v2/aqx_p_432?api_key=e8dd42e6-9b8b-43f8-991e-b3dee723a52d&limit=1000&sort=ImportDate%20desc&format=JSON';
+        const urlNew = 'https://data.​moenv.gov.tw/api/v2/aqx_p_432?api_key=e8dd42e6-9b8b-43f8-991e-b3dee723a52d&limit=1000&sort=ImportDate%20desc&format=JSON';
+        const switchDate = new Date('2023-08-22');
+        const today = new Date();
+        if (today < switchDate)
+            return urlOld;
+        else
+            return urlNew; 
+    }
+
+    $.getJSON(getPm25Url(),
     function (data) {
         var found = 0;
         var site = "";
