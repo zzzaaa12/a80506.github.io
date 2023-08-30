@@ -80,9 +80,9 @@
                 { div: "", title: "三大法人-選擇權", url: "http://www.taifex.com.tw/cht/3/optContractsDateExcel" },
                 { div: "", title: "三大法人-現貨", url: "http://www.twse.com.tw/zh/page/trading/fund/BFI82U.html" },
                 { div: "", title: "外資買賣超", url: "https://fubon-ebrokerdj.fbs.com.tw/Z/ZG/ZGK_D.djhtm" },
-                { div: "TSE", title: "", url: "" },
-                { div: "T1101", title: "", url: "" },
                 { div: "T2886", title: "", url: "" },
+                { div: "TSE", title: "", url: "" },
+                { div: "OTC", title: "", url: "" },
             ]
         },
         { // [7]
@@ -500,7 +500,7 @@
     // Stock
     $.getJSON("https://api.thingspeak.com/channels/72839/feeds.json?results=" + String(max),
         function (data) {
-            var f1 = 0, f2 = 0, f3 = 0;
+            var f1 = 0, f2 = 0, f3 = 0, f4 = 0, f5 = 0, f6 = 0;
             var json_len = 0;
             $.each(data, function (key, val) {
                 if (key == "feeds") {
@@ -508,15 +508,25 @@
                         if (Date.now() - Date.parse(val[i].created_at) > 86400000)
                             continue;
                         if (val[i].field1)
-                            f1 = parseFloat(val[i].field1);
+                            f1 = parseInt(val[i].field1);
                         if (val[i].field2)
-                            f2 = parseFloat(val[i].field2);
+                            f2 = parseInt(val[i].field2);
                         if (val[i].field3)
                             f3 = parseFloat(val[i].field3);
+                        if (val[i].field4)
+                            f4 = parseFloat(val[i].field4);
+                        if (val[i].field5)
+                            f5 = parseFloat(val[i].field5);
+                        if (val[i].field6)
+                            f6 = parseFloat(val[i].field6);
                     }
-                    $("div.TSE").html("大盤: " + f2.toFixed(2).toString());
-                    $("div.T1101").html("台泥: " + f1.toFixed(2).toString());
-                    $("div.T2886").html("兆豐: " + f3.toFixed(2).toString());
+                    var sign = '', sign2 = '';
+                    if (f2 > 0)
+                        sign = '+';
+                    if (f5 > 0)
+                        sign2 = '+';
+                    $("div.TSE").html(f1.toString() + ", " + sign + f2.toString() + ", " + sign + f3.toFixed(2).toString() + "%");
+                    $("div.OTC").html(f4.toFixed(2).toString() + ", " + sign2 + f5.toFixed(2).toString() + ", " + sign + f6.toFixed(2).toString() + "%");
                 }
             });
         });
