@@ -521,12 +521,17 @@
                             f6 = parseFloat(val[i].field6);
                     }
                     var sign = '', sign2 = '';
-                    if (f2 > 0)
+                    var color = '', color2 = '';
+                    if (f2 > 0) {
                         sign = '+';
-                    if (f5 > 0)
+                        color = 'style="color: red;"';
+                    }
+                    if (f5 > 0) {
                         sign2 = '+';
-                    $("div.TSE").html(f1.toString() + ", " + sign + f2.toString() + ", " + sign + f3.toFixed(2).toString() + "%");
-                    $("div.OTC").html(f4.toFixed(2).toString() + ", " + sign2 + f5.toFixed(2).toString() + ", " + sign + f6.toFixed(2).toString() + "%");
+                        color2 = 'style="color: red;"';
+                    }
+                    $("div.TSE").html("<a href='https://tw.stock.yahoo.com/t/idx.php' "+ color + " >" + f1.toString() + ", " + sign + f2.toString() + ", " + sign + f3.toFixed(2).toString() + "%</a>");
+                    $("div.OTC").html("<a href='https://tw.stock.yahoo.com/t/otc.php' "+ color2 + " >" + f4.toFixed(2).toString() + ", " + sign2 + f5.toFixed(2).toString() + ", " + sign + f6.toFixed(2).toString() + "%</a>");
                 }
             });
         });
