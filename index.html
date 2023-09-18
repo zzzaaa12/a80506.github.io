@@ -325,26 +325,26 @@
         }
     });
 
-    $.getJSON("https://opendata.cwb.gov.tw/fileapi/v1/opendataapi/O-A0001-001?Authorization=CWB-843040FB-C733-4DFA-8263-47121194BF96&downloadType=WEB&format=JSON",
+    $.getJSON("https://opendata.cwa.gov.tw/fileapi/v1/opendataapi/O-A0001-001?Authorization=CWB-843040FB-C733-4DFA-8263-47121194BF96&downloadType=WEB&format=JSON",
     function (data) {
         var cwb_t = "";
         var cwb_h = "";
         var found = 0;
 
-        for (var x in data.cwbopendata.location) {
+        for (var x in data.cwaopendata.location) {
             if (found)
                 break;
-            if (data.cwbopendata.location[x].locationName == "新莊") {
-                if (data.cwbopendata.location[x].time.obsTime != "") {
-                    timestamp = Date.parse(data.cwbopendata.location[x].time.obsTime);
+            if (data.cwaopendata.location[x].locationName == "新莊") {
+                if (data.cwaopendata.location[x].time.obsTime != "") {
+                    timestamp = Date.parse(data.cwaopendata.location[x].time.obsTime);
                     if (Date.now() - timestamp > 5400000)
                         break;
                 }
-                for (var y in data.cwbopendata.location[x].weatherElement) {
-                    if (data.cwbopendata.location[x].weatherElement[y].elementName == "TEMP")
-                        cwb_t = data.cwbopendata.location[x].weatherElement[y].elementValue.value;
-                    else if (data.cwbopendata.location[x].weatherElement[y].elementName == "HUMD")
-                        cwb_h = data.cwbopendata.location[x].weatherElement[y].elementValue.value;
+                for (var y in data.cwaopendata.location[x].weatherElement) {
+                    if (data.cwaopendata.location[x].weatherElement[y].elementName == "TEMP")
+                        cwb_t = data.cwaopendata.location[x].weatherElement[y].elementValue.value;
+                    else if (data.cwaopendata.location[x].weatherElement[y].elementName == "HUMD")
+                        cwb_h = data.cwaopendata.location[x].weatherElement[y].elementValue.value;
 
                     if (cwb_t != "" && cwb_h != "" && parseFloat(cwb_t) > -10 && parseFloat(cwb_h) > 0) {
                         $("div.weather").html("新莊：" + cwb_t + "°C, " + String(parseInt(cwb_h*100)) + "%");
@@ -363,20 +363,20 @@
             }
         }
         if (found == 0) {
-            for (var x in data.cwbopendata.location) {
+            for (var x in data.cwaopendata.location) {
                 if (found)
                     break;
-                if (data.cwbopendata.location[x].locationName == "三重") {
-                    if (data.cwbopendata.location[x].time.obsTime != "") {
-                        timestamp = Date.parse(data.cwbopendata.location[x].time.obsTime);
+                if (data.cwaopendata.location[x].locationName == "三重") {
+                    if (data.cwaopendata.location[x].time.obsTime != "") {
+                        timestamp = Date.parse(data.cwaopendata.location[x].time.obsTime);
                         if (Date.now() - timestamp > 5400000)
                             break;
                     }
-                    for (var y in data.cwbopendata.location[x].weatherElement) {
-                        if (data.cwbopendata.location[x].weatherElement[y].elementName == "TEMP")
-                            cwb_t = data.cwbopendata.location[x].weatherElement[y].elementValue.value;
-                        else if (data.cwbopendata.location[x].weatherElement[y].elementName == "HUMD")
-                            cwb_h = data.cwbopendata.location[x].weatherElement[y].elementValue.value;
+                    for (var y in data.cwaopendata.location[x].weatherElement) {
+                        if (data.cwaopendata.location[x].weatherElement[y].elementName == "TEMP")
+                            cwb_t = data.cwaopendata.location[x].weatherElement[y].elementValue.value;
+                        else if (data.cwaopendata.location[x].weatherElement[y].elementName == "HUMD")
+                            cwb_h = data.cwaopendata.location[x].weatherElement[y].elementValue.value;
 
                         if (cwb_t != "" && cwb_h != "" && parseFloat(cwb_t) > -10 && parseFloat(cwb_h) > 0) {
                             $("div.weather").html("三重：" + cwb_t + "°C, " + String(parseInt(cwb_h*100)) + "%");
