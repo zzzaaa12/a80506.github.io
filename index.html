@@ -712,13 +712,13 @@
                         color = "yellow";
                     }
 
-                    if (item == "ETHBTC") {
-                        price = parseFloat(data.lastPrice).toFixed(3);
-                        $("div." + item.toUpperCase()).html("<a style=\"color:" + color + ";\" href=\"https://www.binance.com/zh-TW/trade/" + item + "_USDT\">" + item.toUpperCase()+ ": " + String(price) + percent_html + "</a>");
-                    } else {
+//                    if (item == "ETHBTC") {
+//                        price = parseFloat(data.lastPrice).toFixed(3);
+//                        $("div." + item.toUpperCase()).html("<a style=\"color:" + color + ";\" href=\"https://www.binance.com/zh-TW/trade/" + item + "_USDT\">" + item.toUpperCase()+ ": " + String(price) + percent_html + "</a>");
+//                    } else {
                         price = parseFloat(data.lastPrice).toFixed(5);
                         $("div." + item.toUpperCase()).html("<a style=\"color:" + color + ";\" href=\"https://www.binance.com/zh-TW/trade/" + item + "\">" + item.toUpperCase()+ ": " + String(price) + "</a>");
-                    }
+//                    }
                 }
             );
             return;
