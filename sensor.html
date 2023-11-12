@@ -77,132 +77,136 @@
         $("div.miner1").css("color", gray);
         //$("div.pm10").css("color", gray);
 
-        $.getJSON("https://api.thingspeak.com/channels/72313/feeds.json?results=" + String(max),
+        function get_sensor() {
+            $.getJSON("https://api.thingspeak.com/channels/72313/feeds.json?results=" + String(max),
+                function (data) {
+                    $.each(data, function (key, val) {
+                        if (key == "feeds") {
+                            for (var i = 0; i < max; i++) {
+                                if (Date.now() - Date.parse(val[i].created_at) > 1800000)
+                                    continue;
+
+                                if (val[i].field1 && val[i].field2) {
+                                    living_room_t = parseInt(val[i].field1);
+                                    living_room_h = parseInt(val[i].field2);
+                                } else if (val[i].field7 && val[i].field8) {
+                                    room1_t = parseInt(val[i].field7);
+                                    room1_h = parseInt(val[i].field8);
+                                } else if (val[i].field5 && val[i].field6) {
+                                    var diffmin = parseInt(((Date.now() - Date.parse(val[i].created_at))/600000));
+                                    if (diffmin < 10) {
+                                        room2_t = parseFloat(val[i].field5);
+                                        room2_h = parseInt(val[i].field6);
+                                    }
+                                }
+                            }
+
+                            if (living_room_h == 0) {
+                                $("div.living_room").css("color", gray);
+                            } else if (living_room_h >= 80) {
+                                $("div.living_room").css("color", "red");
+                                $("div.living_room").css("font-weight", "bold");
+                            } else if (living_room_h >= 70) {
+                                $("div.living_room").css("color", "orange");
+                            } else {
+                                $("div.living_room").css("color", green);
+                            }
+
+                            if (room1_h == 0) {
+                                $("div.room1").css("color", gray);
+                            } else if (room1_h >= 80) {
+                                $("div.room1").css("color", "red");
+                                $("div.room1").css("font-weight", "bold");
+                            } else if (room1_h >= 70) {
+                                $("div.room1").css("color", "orange");
+                            } else {
+                                $("div.room1").css("color", green);
+                            }
+
+                            if (room2_t == 0) {
+                                $("div.room2").css("color", gray);
+                            } else if (room2_t >= 28 || room2_t < 25) {
+                                $("div.room2").css("color", "red");
+                                $("div.room2").css("font-weight", "bold");
+                            //} else if (room2_t < 23) {
+                                //$("div.room2").css("color", "orange");
+                            } else {
+                                $("div.room2").css("color", green);
+                            }
+
+                            if (room3_h >= 80) {
+                                $("div.living_room_h").css("color", "red");
+                                $("div.living_room_h").css("font-weight", "bold");
+                            } else if (room3_h >= 70) {
+                                $("div.living_room_h").css("color", "orange");
+                            }
+                            
+                            //if (now_hour >= 21 || now_hour < 7) {
+                            //    document.querySelector('.room2').style.display = 'block';
+                            //    document.querySelector('.living_room').style.display = 'none';
+                            //}
+
+                            $("div.living_room").html("客廳：" + living_room_t + "°C, " + living_room_h + "%");
+                            $("div.room1").html("書房：" + room1_t + "°C, " + room1_h + "%");
+                            $("div.room2").html("臥室：" + room2_t + "°C");
+                            //$("div.living_room_h").html("客廳 " + living_room_h + "% / 書房 " + room3_h + "%");
+                        }
+                    });
+                });
+
+            $.getJSON("https://api.thingspeak.com/channels/565880/feeds.json?results=" + String(max),
             function (data) {
+                var timestamp = 0;
                 $.each(data, function (key, val) {
                     if (key == "feeds") {
                         for (var i = 0; i < max; i++) {
-                            if (Date.now() - Date.parse(val[i].created_at) > 1800000)
-                                continue;
-
                             if (val[i].field1 && val[i].field2) {
-                                living_room_t = parseInt(val[i].field1);
-                                living_room_h = parseInt(val[i].field2);
-                            } else if (val[i].field7 && val[i].field8) {
-                                room1_t = parseInt(val[i].field7);
-                                room1_h = parseInt(val[i].field8);
-                            } else if (val[i].field5 && val[i].field6) {
-                                var diffmin = parseInt(((Date.now() - Date.parse(val[i].created_at))/600000));
-                                if (diffmin < 10) {
-                                    room2_t = parseFloat(val[i].field5);
-                                    room2_h = parseInt(val[i].field6);
-                                }
+                                balcony_t = parseInt(val[i].field1);
+                                balcony_h = parseInt(val[i].field2);
+                                timestamp = Date.parse(val[i].created_at);
                             }
                         }
 
-                        if (living_room_h == 0) {
-                            $("div.living_room").css("color", gray);
-                        } else if (living_room_h >= 80) {
-                            $("div.living_room").css("color", "red");
-                            $("div.living_room").css("font-weight", "bold");
-                        } else if (living_room_h >= 70) {
-                            $("div.living_room").css("color", "orange");
+                        if (balcony_h == 0 || Date.now() - timestamp > 1800000) { // 1800000 = 0.5 hour
+                            return;
+                        } else if (balcony_h >= 80) {
+                            $("div.balcony").css("color", "red");
+                            $("div.balcony").css("font-weight", "bold");
+                        } else if (balcony_h >= 70) {
+                            $("div.balcony").css("color", "orange");
                         } else {
-                            $("div.living_room").css("color", green);
+                            $("div.balcony").css("color", green);
                         }
 
-                        if (room1_h == 0) {
-                            $("div.room1").css("color", gray);
-                        } else if (room1_h >= 80) {
-                            $("div.room1").css("color", "red");
-                            $("div.room1").css("font-weight", "bold");
-                        } else if (room1_h >= 70) {
-                            $("div.room1").css("color", "orange");
-                        } else {
-                            $("div.room1").css("color", green);
-                        }
-
-                        if (room2_t == 0) {
-                            $("div.room2").css("color", gray);
-                        } else if (room2_t >= 28 || room2_t < 25) {
-                            $("div.room2").css("color", "red");
-                            $("div.room2").css("font-weight", "bold");
-                        //} else if (room2_t < 23) {
-                            //$("div.room2").css("color", "orange");
-                        } else {
-                            $("div.room2").css("color", green);
-                        }
-
-                        if (room3_h >= 80) {
-                            $("div.living_room_h").css("color", "red");
-                            $("div.living_room_h").css("font-weight", "bold");
-                        } else if (room3_h >= 70) {
-                            $("div.living_room_h").css("color", "orange");
-                        }
-                        
-                        //if (now_hour >= 21 || now_hour < 7) {
-                        //    document.querySelector('.room2').style.display = 'block';
-                        //    document.querySelector('.living_room').style.display = 'none';
-                        //}
-
-                        $("div.living_room").html("客廳：" + living_room_t + "°C, " + living_room_h + "%");
-                        $("div.room1").html("書房：" + room1_t + "°C, " + room1_h + "%");
-                        $("div.room2").html("臥室：" + room2_t + "°C");
-                        //$("div.living_room_h").html("客廳 " + living_room_h + "% / 書房 " + room3_h + "%");
+                        $("div.balcony").html("陽台：" + balcony_t + "°C, " + balcony_h + "%");
                     }
                 });
             });
-
-        $.getJSON("https://api.thingspeak.com/channels/565880/feeds.json?results=" + String(max),
-        function (data) {
-            var timestamp = 0;
-            $.each(data, function (key, val) {
-                if (key == "feeds") {
-                    for (var i = 0; i < max; i++) {
-                        if (val[i].field1 && val[i].field2) {
-                            balcony_t = parseInt(val[i].field1);
-                            balcony_h = parseInt(val[i].field2);
-                            timestamp = Date.parse(val[i].created_at);
-                        }
-                    }
-
-                    if (balcony_h == 0 || Date.now() - timestamp > 1800000) { // 1800000 = 0.5 hour
-                        return;
-                    } else if (balcony_h >= 80) {
-                        $("div.balcony").css("color", "red");
-                        $("div.balcony").css("font-weight", "bold");
-                    } else if (balcony_h >= 70) {
-                        $("div.balcony").css("color", "orange");
-                    } else {
-                        $("div.balcony").css("color", green);
-                    }
-
-                    $("div.balcony").html("陽台：" + balcony_t + "°C, " + balcony_h + "%");
-                }
-            });
-        });
+        }
 
         // FIL reward
-        $.getJSON("https://api.thingspeak.com/channels/565880/feeds.json?results=" + String(max),
-            function (data) {
-                $.each(data, function (key, val) {
-                    if (key == "feeds") {
-                        for (var i = 0; i < max; i++) {
-                            if (parseFloat(val[i].field1) > 0) {
-                                if (Date.now() - Date.parse(val[i].created_at) > 86400000)
-                                    continue;
-                                fil_reward = parseFloat(val[i].field1);
-                                if (parseFloat(val[i].field2) > 0) {
+        function get_filecoin() {
+            $.getJSON("https://api.thingspeak.com/channels/565880/feeds.json?results=" + String(max),
+                function (data) {
+                    $.each(data, function (key, val) {
+                        if (key == "feeds") {
+                            for (var i = 0; i < max; i++) {
+                                if (parseFloat(val[i].field1) > 0) {
                                     if (Date.now() - Date.parse(val[i].created_at) > 86400000)
                                         continue;
-                                    fil_storage = parseFloat(val[i].field2);
+                                    fil_reward = parseFloat(val[i].field1);
+                                    if (parseFloat(val[i].field2) > 0) {
+                                        if (Date.now() - Date.parse(val[i].created_at) > 86400000)
+                                            continue;
+                                        fil_storage = parseFloat(val[i].field2);
+                                    }
                                 }
+                                $("div.fil").html(fil_storage.toFixed(3) + "EB / " + fil_reward);
                             }
-                            $("div.fil").html(fil_storage.toFixed(3) + "EB / " + fil_reward);
                         }
-                    }
+                    });
                 });
-            });
+        }
            
         function get_sea() {
             $.getJSON("https://starsharks.com/go/api/market/exchange-rate",
@@ -483,112 +487,90 @@
                 return urlNew; 
         }
 
-        $.getJSON(getPm25Url(),
-        function (data) {
-            var found = 0;
-            var site = "";
-            var pm25_str = "";
+        function get_pm25() {
+            $.getJSON(getPm25Url(), function (data) {
+                var found = 0;
+                var site = "";
+                var pm25_str = "";
 
-            for (var x in data.records) {
-                if (found)
-                    break;
-                if (data.records[x].sitename == "新莊") {
-                    for (var y in data.records[x]) {
-                        if (y == "pm2.5") {
-                            pm25_str = data.records[x][y]
-                            if (parseInt(pm25_str) >= 0 && parseInt(pm25_str) < 2000) {
-                                found = 1;
-                                site = data.records[x].sitename;
-                                break;
+                for (var x in data.records) {
+                    if (found)
+                        break;
+                    if (data.records[x].sitename == "新莊") {
+                        for (var y in data.records[x]) {
+                            if (y == "pm2.5") {
+                                pm25_str = data.records[x][y]
+                                if (parseInt(pm25_str) >= 0 && parseInt(pm25_str) < 2000) {
+                                    found = 1;
+                                    site = data.records[x].sitename;
+                                    break;
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            for (var x in data.records) {
-                if (found)
-                    break;
-                if (data.records[x].sitename == "三重") {
-                    for (var y in data.records[x]) {
-                        if (y == "pm2.5") {
-                            pm25_str = data.records[x][y]
-                            if (parseInt(pm25_str) >= 0 && parseInt(pm25_str) < 2000) {
-                                found = 1;
-                                site = data.records[x].sitename;
-                                break;
+                for (var x in data.records) {
+                    if (found)
+                        break;
+                    if (data.records[x].sitename == "三重") {
+                        for (var y in data.records[x]) {
+                            if (y == "pm2.5") {
+                                pm25_str = data.records[x][y]
+                                if (parseInt(pm25_str) >= 0 && parseInt(pm25_str) < 2000) {
+                                    found = 1;
+                                    site = data.records[x].sitename;
+                                    break;
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            for (var x in data.records) {
-                if (found)
-                    break;
-                if (data.records[x].sitename == "板橋") {
-                    for (var y in data.records[x]) {
-                        if (y == "pm2.5") {
-                            pm25_str = data.records[x][y]
-                            if (parseInt(pm25_str) >= 0 && parseInt(pm25_str) < 2000) {
-                                found = 1;
-                                site = data.records[x].sitename;
-                                break;
+                for (var x in data.records) {
+                    if (found)
+                        break;
+                    if (data.records[x].sitename == "板橋") {
+                        for (var y in data.records[x]) {
+                            if (y == "pm2.5") {
+                                pm25_str = data.records[x][y]
+                                if (parseInt(pm25_str) >= 0 && parseInt(pm25_str) < 2000) {
+                                    found = 1;
+                                    site = data.records[x].sitename;
+                                    break;
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            if (found) {
-                if (parseInt(pm25_str) > 40) {
-                    $("div.pm25").css("font-weight", "bold");
-                    $("div.pm25").css("color", "red");
-                } else if (parseInt(pm25_str) > 20) {
-                    $("div.pm25").css("font-weight", "bold");
-                    $("div.pm25").css("color", "orange");
-                } else {
-                    $("div.pm25").css("color", green);
-                }
-                $("div.pm25").html(site + " PM2.5：" + pm25_str);
-            }
-        });
-   
-        $.getJSON("https://opendata.cwb.gov.tw/fileapi/v1/opendataapi/O-A0001-001?Authorization=CWB-843040FB-C733-4DFA-8263-47121194BF96&downloadType=WEB&format=JSON",
-        function (data) {
-            var cwb_t = "";
-            var cwb_h = "";
-            var found = 0;
-            var timestamp = 0;
-
-            for (var x in data.cwaopendata.location) {
-                if (found)
-                    break;
-                if (data.cwaopendata.location[x].locationName == "新莊") {
-                    if (data.cwaopendata.location[x].time.obsTime != "") {
-                        timestamp = Date.parse(data.cwaopendata.location[x].time.obsTime);
-                        if (Date.now() - timestamp > 5400000)
-                            break;
+                if (found) {
+                    if (parseInt(pm25_str) > 40) {
+                        $("div.pm25").css("font-weight", "bold");
+                        $("div.pm25").css("color", "red");
+                    } else if (parseInt(pm25_str) > 20) {
+                        $("div.pm25").css("font-weight", "bold");
+                        $("div.pm25").css("color", "orange");
+                    } else {
+                        $("div.pm25").css("color", green);
                     }
-                    for (var y in data.cwaopendata.location[x].weatherElement) {
-                        if (data.cwaopendata.location[x].weatherElement[y].elementName == "TEMP")
-                            cwb_t = data.cwaopendata.location[x].weatherElement[y].elementValue.value;
-                        else if (data.cwaopendata.location[x].weatherElement[y].elementName == "HUMD")
-                            cwb_h = data.cwaopendata.location[x].weatherElement[y].elementValue.value;
-
-                        if (cwb_t != "" && cwb_h != "" && parseFloat(cwb_t) > -10 && parseFloat(cwb_h) > 0) {
-                            $("div.weather").html("新莊：" + cwb_t + "°C, " + String(parseInt(cwb_h*100)) + "%");
-                            found = 1;
-                            break;
-                        }
-                    }
+                    $("div.pm25").html(site + " PM2.5：" + pm25_str);
                 }
-            }
-            if (found == 0) {
+            });
+        }
+
+        function get_weather() {
+            $.getJSON("https://opendata.cwb.gov.tw/fileapi/v1/opendataapi/O-A0001-001?Authorization=CWB-843040FB-C733-4DFA-8263-47121194BF96&downloadType=WEB&format=JSON",
+            function (data) {
+                var cwb_t = "";
+                var cwb_h = "";
+                var found = 0;
+                var timestamp = 0;
+
                 for (var x in data.cwaopendata.location) {
                     if (found)
                         break;
-                    if (data.cwaopendata.location[x].locationName == "三重") {
+                    if (data.cwaopendata.location[x].locationName == "新莊") {
                         if (data.cwaopendata.location[x].time.obsTime != "") {
                             timestamp = Date.parse(data.cwaopendata.location[x].time.obsTime);
                             if (Date.now() - timestamp > 5400000)
@@ -601,39 +583,73 @@
                                 cwb_h = data.cwaopendata.location[x].weatherElement[y].elementValue.value;
 
                             if (cwb_t != "" && cwb_h != "" && parseFloat(cwb_t) > -10 && parseFloat(cwb_h) > 0) {
-                                $("div.weather").html("三重：" + cwb_t + "°C, " + String(parseInt(cwb_h*100)) + "%");
+                                $("div.weather").html("新莊：" + cwb_t + "°C, " + String(parseInt(cwb_h*100)) + "%");
                                 found = 1;
                                 break;
                             }
                         }
                     }
                 }
-            }
-            if (found) {
-                if (parseInt(cwb_h*100) >= 80) {
-                    $("div.weather").css("color", "#46a3ff");
-                    $("div.weather").css("font-weight", "bold");
-                } else if (parseInt(cwb_h*100) >= 70) {
-                    $("div.weather").css("color", "orange");
-                    $("div.weather").css("font-weight", "bold");
-                }
-                if (parseFloat(cwb_t) >= 32 || parseFloat(cwb_t) <= 15) {
-                    $("div.weather").css("color", "red");
-                    $("div.weather").css("font-weight", "bold");
-                } else if (parseFloat(cwb_t) >= 28 || parseFloat(cwb_t) <= 20) {
-                    $("div.weather").css("color", "orange");
-                    $("div.weather").css("font-weight", "bold");
-                }
-            }
-        });
+                if (found == 0) {
+                    for (var x in data.cwaopendata.location) {
+                        if (found)
+                            break;
+                        if (data.cwaopendata.location[x].locationName == "三重") {
+                            if (data.cwaopendata.location[x].time.obsTime != "") {
+                                timestamp = Date.parse(data.cwaopendata.location[x].time.obsTime);
+                                if (Date.now() - timestamp > 5400000)
+                                    break;
+                            }
+                            for (var y in data.cwaopendata.location[x].weatherElement) {
+                                if (data.cwaopendata.location[x].weatherElement[y].elementName == "TEMP")
+                                    cwb_t = data.cwaopendata.location[x].weatherElement[y].elementValue.value;
+                                else if (data.cwaopendata.location[x].weatherElement[y].elementName == "HUMD")
+                                    cwb_h = data.cwaopendata.location[x].weatherElement[y].elementValue.value;
 
-        //get_binance_cmc("BLUR", "blur-token");
-        get_coin();
+                                if (cwb_t != "" && cwb_h != "" && parseFloat(cwb_t) > -10 && parseFloat(cwb_h) > 0) {
+                                    $("div.weather").html("三重：" + cwb_t + "°C, " + String(parseInt(cwb_h*100)) + "%");
+                                    found = 1;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                if (found) {
+                    if (parseInt(cwb_h*100) >= 80) {
+                        $("div.weather").css("color", "#46a3ff");
+                        $("div.weather").css("font-weight", "bold");
+                    } else if (parseInt(cwb_h*100) >= 70) {
+                        $("div.weather").css("color", "orange");
+                        $("div.weather").css("font-weight", "bold");
+                    }
+                    if (parseFloat(cwb_t) >= 32 || parseFloat(cwb_t) <= 15) {
+                        $("div.weather").css("color", "red");
+                        $("div.weather").css("font-weight", "bold");
+                    } else if (parseFloat(cwb_t) >= 28 || parseFloat(cwb_t) <= 20) {
+                        $("div.weather").css("color", "orange");
+                        $("div.weather").css("font-weight", "bold");
+                    }
+                }
+            });
+        }
+
+        function get_all() {
+            //get_binance_cmc("BLUR", "blur-token");
+            get_coin();
+            get_pm25();
+            get_weather();
+            get_sensor();
+            get_filecoin();
+            //miner_data(0);
+            //miner_data(1);
+            //miner_balance();
+            //setTimeout(function () { window.location = window.location; }, 300000);
+            setTimeout(function () { get_all(); }, 300000);
+        }
+
         set_time();
-        //miner_data(0);
-        //miner_data(1);
-        //miner_balance();
-        setTimeout(function () { window.location = window.location; }, 300000);
+        get_all();
         //setTimeout(function () { miner_balance(); }, 150000);
     </script>
 </body>
