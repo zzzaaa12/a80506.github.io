@@ -140,7 +140,7 @@
                             } else if (room3_h >= 70) {
                                 $("div.living_room_h").css("color", "orange");
                             }
-                            
+                           
                             //if (now_hour >= 21 || now_hour < 7) {
                             //    document.querySelector('.room2').style.display = 'block';
                             //    document.querySelector('.living_room').style.display = 'none';
@@ -207,7 +207,7 @@
                     });
                 });
         }
-           
+          
         function get_sea() {
             $.getJSON("https://starsharks.com/go/api/market/exchange-rate",
             function (data) {
@@ -274,7 +274,7 @@
                             wcc = parseInt(price);
                     }
                 );
-            } 
+            }
         }
 
         function get_binance_cmc(item, slug) {
@@ -476,19 +476,8 @@
             });
         }
 
-        function getPm25Url() {
-            const urlOld = 'https://data.epa.gov.tw/api/v2/aqx_p_432?api_key=e8dd42e6-9b8b-43f8-991e-b3dee723a52d&limit=1000&sort=ImportDate%20desc&format=JSON';
-            const urlNew = 'https://data.​moenv.gov.tw/api/v2/aqx_p_432?api_key=e8dd42e6-9b8b-43f8-991e-b3dee723a52d&limit=1000&sort=ImportDate%20desc&format=JSON';
-            const switchDate = new Date('2023-08-22');
-            const today = new Date();
-            if (today < switchDate)
-                return urlOld;
-            else
-                return urlNew; 
-        }
-
         function get_pm25() {
-            $.getJSON(getPm25Url(), function (data) {
+            $.getJSON("https://data.moenv.gov.tw/api/v2/aqx_p_432?api_key=e8dd42e6-9b8b-43f8-991e-b3dee723a52d&format=JSON", function (data) {
                 var found = 0;
                 var site = "";
                 var pm25_str = "";
@@ -559,62 +548,62 @@
             });
         }
 
+        function change_weather_div(data, station) {
+            var cwb_t = "";
+            var cwb_h = "";
+            var cwb_w = "";
+            if (data.ObsTime.DateTime != "") {
+                timestamp = Date.parse(data.ObsTime.DateTime);
+                if (Date.now() - timestamp > 5400000)
+                    return 0;
+            }
+            if (data.WeatherElement) {
+                cwb_t = data.WeatherElement.AirTemperature;
+                cwb_h = data.WeatherElement.RelativeHumidity;
+                cwb_w = data.WeatherElement.Weather;
+
+                if (cwb_t != "" && cwb_h != "" && parseFloat(cwb_t) > -10 && parseFloat(cwb_h) > 0) {
+                    $("div.weather").html(station + "：" + cwb_t + "°C, " + String(parseInt(cwb_h)) + "%");
+                    if (parseInt(cwb_h*100) >= 80) {
+                        $("div.weather").css("color", "#46a3ff");
+                        $("div.weather").css("font-weight", "bold");
+                    }
+                    if (parseInt(cwb_t) >= 32) {
+                        $("div.weather").css("color", "red");
+                        $("div.weather").css("font-weight", "bold");
+                    }
+                    found = 1;
+                }
+            }
+        }
+    
         function get_weather() {
-            $.getJSON("https://opendata.cwb.gov.tw/fileapi/v1/opendataapi/O-A0001-001?Authorization=CWB-843040FB-C733-4DFA-8263-47121194BF96&downloadType=WEB&format=JSON",
+            $.getJSON("https://opendata.cwa.gov.tw/fileapi/v1/opendataapi/O-A0001-001?Authorization=CWB-843040FB-C733-4DFA-8263-47121194BF96&downloadType=WEB&format=JSON",
             function (data) {
-                var cwb_t = "";
-                var cwb_h = "";
                 var found = 0;
-                var timestamp = 0;
 
-                for (var x in data.cwaopendata.location) {
-                    if (found)
-                        break;
-                    if (data.cwaopendata.location[x].locationName == "新莊") {
-                        if (data.cwaopendata.location[x].time.obsTime != "") {
-                            timestamp = Date.parse(data.cwaopendata.location[x].time.obsTime);
-                            if (Date.now() - timestamp > 5400000)
-                                break;
-                        }
-                        for (var y in data.cwaopendata.location[x].weatherElement) {
-                            if (data.cwaopendata.location[x].weatherElement[y].elementName == "TEMP")
-                                cwb_t = data.cwaopendata.location[x].weatherElement[y].elementValue.value;
-                            else if (data.cwaopendata.location[x].weatherElement[y].elementName == "HUMD")
-                                cwb_h = data.cwaopendata.location[x].weatherElement[y].elementValue.value;
-
-                            if (cwb_t != "" && cwb_h != "" && parseFloat(cwb_t) > -10 && parseFloat(cwb_h) > 0) {
-                                $("div.weather").html("新莊：" + cwb_t + "°C, " + String(parseInt(cwb_h*100)) + "%");
-                                found = 1;
-                                break;
-                            }
-                        }
+                for (var x in data.cwaopendata.dataset.Station) {
+                    if (data.cwaopendata.dataset.Station[x].StationName == "新莊") {
+                        found = change_weather_div(data.cwaopendata.dataset.Station[x], "新莊")
+                        if (found)
+                            break;
                     }
                 }
                 if (found == 0) {
-                    for (var x in data.cwaopendata.location) {
+                    for (var x in data.cwaopendata.dataset.Station) {
+                        found = change_weather_div(data.cwaopendata.dataset.Station[x], "三重")
                         if (found)
                             break;
-                        if (data.cwaopendata.location[x].locationName == "三重") {
-                            if (data.cwaopendata.location[x].time.obsTime != "") {
-                                timestamp = Date.parse(data.cwaopendata.location[x].time.obsTime);
-                                if (Date.now() - timestamp > 5400000)
-                                    break;
-                            }
-                            for (var y in data.cwaopendata.location[x].weatherElement) {
-                                if (data.cwaopendata.location[x].weatherElement[y].elementName == "TEMP")
-                                    cwb_t = data.cwaopendata.location[x].weatherElement[y].elementValue.value;
-                                else if (data.cwaopendata.location[x].weatherElement[y].elementName == "HUMD")
-                                    cwb_h = data.cwaopendata.location[x].weatherElement[y].elementValue.value;
-
-                                if (cwb_t != "" && cwb_h != "" && parseFloat(cwb_t) > -10 && parseFloat(cwb_h) > 0) {
-                                    $("div.weather").html("三重：" + cwb_t + "°C, " + String(parseInt(cwb_h*100)) + "%");
-                                    found = 1;
-                                    break;
-                                }
-                            }
-                        }
                     }
                 }
+                if (found == 0) {
+                    for (var x in data.cwaopendata.dataset.Station) {
+                        found = change_weather_div(data.cwaopendata.dataset.Station[x], "板橋")
+                        if (found)
+                            break;
+                    }
+                }
+
                 if (found) {
                     if (parseInt(cwb_h*100) >= 80) {
                         $("div.weather").css("color", "#46a3ff");
