@@ -324,7 +324,7 @@
             cwb_w = data.WeatherElement.Weather;
 
             if (cwb_t != "" && cwb_h != "" && parseFloat(cwb_t) > -10 && parseFloat(cwb_h) > 0) {
-                $("div.weather").html(station + "：" + cwb_t + "°C, " + String(parseInt(cwb_h)) + "%, " + cwb_w);
+                $("div.weather").html(station + "：" + cwb_t + "°C, " + String(parseInt(cwb_h)) + "%");
                 if (parseInt(cwb_h*100) >= 80) {
                     $("div.weather").css("color", "#46a3ff");
                     $("div.weather").css("font-weight", "bold");
