@@ -578,51 +578,34 @@
             return 0;
         }
     
-        function get_weather() {
-            $.getJSON("https://opendata.cwa.gov.tw/fileapi/v1/opendataapi/O-A0001-001?Authorization=CWB-843040FB-C733-4DFA-8263-47121194BF96&downloadType=WEB&format=JSON",
-            function (data) {
-                var found = 0;
 
-                for (var x in data.cwaopendata.dataset.Station) {
-                    if (data.cwaopendata.dataset.Station[x].StationName == "新莊") {
-                        found = change_weather_div(data.cwaopendata.dataset.Station[x], "新莊")
-                        if (found)
-                            break;
-                    }
-                }
-                if (found == 0) {
-                    for (var x in data.cwaopendata.dataset.Station) {
-                        found = change_weather_div(data.cwaopendata.dataset.Station[x], "三重")
-                        if (found)
-                            break;
-                    }
-                }
-                if (found == 0) {
-                    for (var x in data.cwaopendata.dataset.Station) {
-                        found = change_weather_div(data.cwaopendata.dataset.Station[x], "板橋")
-                        if (found)
-                            break;
-                    }
-                }
-
-                if (found) {
-                    if (parseInt(cwb_h*100) >= 80) {
-                        $("div.weather").css("color", "#46a3ff");
-                        $("div.weather").css("font-weight", "bold");
-                    } else if (parseInt(cwb_h*100) >= 70) {
-                        $("div.weather").css("color", "orange");
-                        $("div.weather").css("font-weight", "bold");
-                    }
-                    if (parseFloat(cwb_t) >= 32 || parseFloat(cwb_t) <= 15) {
-                        $("div.weather").css("color", "red");
-                        $("div.weather").css("font-weight", "bold");
-                    } else if (parseFloat(cwb_t) >= 28 || parseFloat(cwb_t) <= 20) {
-                        $("div.weather").css("color", "orange");
-                        $("div.weather").css("font-weight", "bold");
-                    }
-                }
-            });
+    function get_weather_place(data, station) {
+        for (var x in data.cwaopendata.dataset.Station) {
+            if (data.cwaopendata.dataset.Station[x].StationName == station) {
+                found = change_weather_div(data.cwaopendata.dataset.Station[x], station)
+                if (found)
+                    return 1;
+            }
         }
+        return 0;
+    }
+
+    function get_weather() {
+        $.getJSON("https://opendata.cwa.gov.tw/fileapi/v1/opendataapi/O-A0001-001?Authorization=CWB-843040FB-C733-4DFA-8263-47121194BF96&downloadType=WEB&format=JSON",
+        function (data) {
+            var found = 0;
+
+            const cities = ["新莊", "三重", "五股", "蘆洲", "板橋"];
+
+            for (const city of cities) {
+                if (get_weather_place(data, city)) {
+                    return;
+                }
+            }
+
+
+        });
+    }
 
         function get_all() {
             //get_binance_cmc("BLUR", "blur-token");
