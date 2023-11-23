@@ -333,9 +333,10 @@
                     $("div.weather").css("color", "red");
                     $("div.weather").css("font-weight", "bold");
                 }
-                found = 1;
+                return 1;
             }
         }
+        return 0;
     }
 
     function get_weather() {
@@ -840,3 +841,4 @@
     /* Auto Reload */
     setTimeout(function () { window.location = window.location; }, 300000);
 </script>
+
