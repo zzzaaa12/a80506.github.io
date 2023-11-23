@@ -477,73 +477,41 @@
         }
 
         function get_pm25() {
-            $.getJSON("https://data.moenv.gov.tw/api/v2/aqx_p_432?api_key=e8dd42e6-9b8b-43f8-991e-b3dee723a52d&format=JSON", function (data) {
-                var found = 0;
-                var site = "";
-                var pm25_str = "";
+            $.getJSON("https://data.moenv.gov.tw/api/v2/aqx_p_432?api_key=e8dd42e6-9b8b-43f8-991e-b3dee723a52d&format=JSON",
+            function (data) {
+                const citiesToCheck = ["新莊", "林口", "菜寮", "五股", "蘆洲", "板橋"];
+                let found = 0;
+                let site = "";
+                let pm25_str = "";
 
-                for (var x in data.records) {
-                    if (found)
-                        break;
-                    if (data.records[x].sitename == "新莊") {
-                        for (var y in data.records[x]) {
-                            if (y == "pm2.5") {
-                                pm25_str = data.records[x][y]
-                                if (parseInt(pm25_str) >= 0 && parseInt(pm25_str) < 2000) {
-                                    found = 1;
-                                    site = data.records[x].sitename;
-                                    break;
-                                }
-                            }
+                for (const city of citiesToCheck) {
+                    for (const record of data.records) {
+                        if (record.sitename === city && parseInt(record["pm2.5"]) > 0) {
+                            found = 1;
+                            site = record.sitename;
+                            pm25_str = record["pm2.5"];
+                            break;
                         }
                     }
-                }
-
-                for (var x in data.records) {
                     if (found)
                         break;
-                    if (data.records[x].sitename == "三重") {
-                        for (var y in data.records[x]) {
-                            if (y == "pm2.5") {
-                                pm25_str = data.records[x][y]
-                                if (parseInt(pm25_str) >= 0 && parseInt(pm25_str) < 2000) {
-                                    found = 1;
-                                    site = data.records[x].sitename;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                for (var x in data.records) {
-                    if (found)
-                        break;
-                    if (data.records[x].sitename == "板橋") {
-                        for (var y in data.records[x]) {
-                            if (y == "pm2.5") {
-                                pm25_str = data.records[x][y]
-                                if (parseInt(pm25_str) >= 0 && parseInt(pm25_str) < 2000) {
-                                    found = 1;
-                                    site = data.records[x].sitename;
-                                    break;
-                                }
-                            }
-                        }
-                    }
                 }
 
                 if (found) {
-                    if (parseInt(pm25_str) > 40) {
-                        $("div.pm25").css("font-weight", "bold");
-                        $("div.pm25").css("color", "red");
-                    } else if (parseInt(pm25_str) > 20) {
-                        $("div.pm25").css("font-weight", "bold");
-                        $("div.pm25").css("color", "orange");
+                    const pm25Value = parseInt(pm25_str);
+                    const pm25Div = $("div.pm25");
+
+                    if (pm25Value > 40) {
+                        pm25Div.css("color", "red");
+                        pm25Div.css("font-weight", "bold");
+                    } else if (pm25Value > 20) {
+                        pm25Div.css("color", "orange");
+                        pm25Div.css("font-weight", "bold");
                     } else {
-                        $("div.pm25").css("color", green);
+                        pm25Div.css("color", "80FF00");
                     }
-                    $("div.pm25").html(site + " PM2.5：" + pm25_str);
+
+                    pm25Div.html(`${site} PM2.5：${pm25_str}`);
                 }
             });
         }
