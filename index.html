@@ -247,70 +247,44 @@
     var room3_t = 0, room3_h = 0;
     var timestamp = 0;
     var fil_reward = 0, fil_storage = 0;
-    var pm25 = -1
-    var plant_level = -1, plant_water_times = -1;
 
-    $.getJSON("https://data.moenv.gov.tw/api/v2/aqx_p_432?api_key=e8dd42e6-9b8b-43f8-991e-b3dee723a52d&format=JSON",
-    function (data) {
-        var found = 0;
-        var site = "";
-        var pm25_str = "";
+    function get_pm25() {
+        $.getJSON("https://data.moenv.gov.tw/api/v2/aqx_p_432?api_key=e8dd42e6-9b8b-43f8-991e-b3dee723a52d&format=JSON",
+        function (data) {
+            const citiesToCheck = ["新莊", "林口", "菜寮", "五股", "蘆洲", "板橋"];
+            let found = 0;
+            let site = "";
+            let pm25_str = "";
 
-        for (var x in data.records) {
-            if (data.records[x].sitename == "新莊") {
-                for (var y in data.records[x]) {
-                    if (y == "pm2.5") {
-                        pm25_str = data.records[x][y]
-                        if (parseInt(pm25_str) > 0) {
-                            found = 1;
-                            site = data.records[x].sitename;
-                        }
+            for (const city of citiesToCheck) {
+                for (const record of data.records) {
+                    if (record.sitename === city && parseInt(record["pm2.5"]) > 0) {
+                        found = 1;
+                        site = record.sitename;
+                        pm25_str = record["pm2.5"];
+                        break;
                     }
                 }
+                if (found)
+                    break;
             }
-        }
-        for (var x in data.records) {
-            if (found)
-                break;
-            if (data.records[x].sitename == "三重") {
-                for (var y in data.records[x]) {
-                    if (y == "pm2.5") {
-                        pm25_str = data.records[x][y]
-                        if (parseInt(pm25_str) > 0) {
-                            found = 1;
-                            site = data.records[x].sitename;
-                        }
-                    }
-                }
-            }
-        }
-        for (var x in data.records) {
-            if (found)
-                break;
-            if (data.records[x].sitename == "板橋") {
-                for (var y in data.records[x]) {
-                    if (y == "pm2.5") {
-                        pm25_str = data.records[x][y]
-                        if (parseInt(pm25_str) > 0) {
-                            found = 1;
-                            site = data.records[x].sitename;
-                        }
-                    }
-                }
-            }
-        }
 
-        if (found) {
-            if (parseInt(pm25_str) > 40) {
-                $("div.pm25").css("font-weight", "bold");
-                $("div.pm25").css("color", "red");
-            } else if (parseInt(pm25_str) > 20) {
-                $("div.pm25").css("font-weight", "bold");
-                $("div.pm25").css("color", "orange");
+            if (found) {
+                const pm25Value = parseInt(pm25_str);
+                const pm25Div = $("div.pm25");
+
+                if (pm25Value > 40) {
+                    pm25Div.css("color", "red");
+                    pm25Div.css("font-weight", "bold");
+                } else if (pm25Value > 20) {
+                    pm25Div.css("color", "orange");
+                    pm25Div.css("font-weight", "bold");
+                }
+
+                pm25Div.html(`${site} PM2.5：${pm25_str}`);
             }
-            $("div.pm25").html(site + " PM2.5：" + pm25_str);
-        }
-    });
+        });
+    }
 
     function change_weather_div(data, station) {
         if (data.ObsTime.DateTime != "") {
@@ -339,35 +313,31 @@
         return 0;
     }
 
+    function get_weather_place(data, station) {
+        for (var x in data.cwaopendata.dataset.Station) {
+            if (data.cwaopendata.dataset.Station[x].StationName == station) {
+                found = change_weather_div(data.cwaopendata.dataset.Station[x], station)
+                if (found)
+                    return 1;
+            }
+        }
+        return 0;
+    }
+
     function get_weather() {
         $.getJSON("https://opendata.cwa.gov.tw/fileapi/v1/opendataapi/O-A0001-001?Authorization=CWB-843040FB-C733-4DFA-8263-47121194BF96&downloadType=WEB&format=JSON",
         function (data) {
-            var cwb_t = "";
-            var cwb_h = "";
-            var cwb_w = "";
             var found = 0;
 
-            for (var x in data.cwaopendata.dataset.Station) {
-                if (data.cwaopendata.dataset.Station[x].StationName == "新莊") {
-                    found = change_weather_div(data.cwaopendata.dataset.Station[x], "新莊")
-                    if (found)
-                        break;
+            const cities = ["新莊", "三重", "五股", "蘆洲", "板橋"];
+
+            for (const city of cities) {
+                if (get_weather_place(data, city)) {
+                    return;
                 }
             }
-            if (found == 0) {
-                for (var x in data.cwaopendata.dataset.Station) {
-                    found = change_weather_div(data.cwaopendata.dataset.Station[x], "三重")
-                    if (found)
-                        break;
-                }
-            }
-            if (found == 0) {
-                for (var x in data.cwaopendata.dataset.Station) {
-                    found = change_weather_div(data.cwaopendata.dataset.Station[x], "板橋")
-                    if (found)
-                        break;
-                }
-            }
+
+
         });
     }
 
@@ -837,6 +807,7 @@
     //get_sea();
     //get_shark();
 
+    get_pm25();
     get_weather();
     /* Auto Reload */
     setTimeout(function () { window.location = window.location; }, 300000);
