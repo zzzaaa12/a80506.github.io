@@ -331,6 +331,7 @@
                 var usdt = 0;
                 var ava = 0;
                 var arb = 0;
+                var op = 0;
                 var price = 0;
                 $.each( data, function( key, val ) {
                     if (data[key].symbol == "BTCUSDT") {
@@ -355,6 +356,8 @@
                         price = parseFloat(data[key].lastPrice);
                         if (price >= 10)
                             price = parseInt(price);
+                        else if (price > 1)
+                            price = parseFloat(price).toFixed(1)
                         else
                             price = parseFloat(price).toFixed(2)
 
@@ -364,13 +367,15 @@
                             ava = price;
                         else if (data[key].symbol == "ARBUSDT")
                             arb = price;
+                        else if (data[key].symbol == "OPUSDT")
+                            op = price;
                     }
 
                     if (mcc > 0 && wcc > 0) {
                         $("div.coin").html(btc + " / " + eth + "<br />" + wcc + " / " + mcc + " / " + fil);
                         //$("div.coin").html(btc + " / " + eth + "<br />" + parseFloat(wcc).toFixed(4) + " / " + parseFloat(mcc).toFixed(4));
                     } else {
-                        $("div.coin").html(btc + " / " + eth + "<br />" + fil + " / " + arb);
+                        $("div.coin").html(btc + " / " + eth + "<br />" + fil + " / " + arb + " / " + op);
                     }
                 });
             })
