@@ -354,7 +354,9 @@
 
                     } else {
                         price = parseFloat(data[key].lastPrice);
-                        if (price >= 10)
+                        if (data[key].symbol == "ARBUSDT")
+                            price = parseFloat(price).toFixed(2);
+                        else if (price >= 10)
                             price = parseInt(price);
                         else if (price > 1)
                             price = parseFloat(price).toFixed(1)
