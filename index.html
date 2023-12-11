@@ -622,7 +622,8 @@
             $.getJSON("https://api.geckoterminal.com/api/v2/networks/bsc/pools/" + pool,
                 function (data) {
                         price = parseFloat(data.data.attributes.base_token_price_usd);
-                        $("div."+item).html("<a href='https://www.geckoterminal.com/bsc/pools/" + pool + "'>" + item + ": " + price.toFixed(4).toString() + "</a>");
+                        if (price > 0.08)
+                            $("div."+item).html("<a href='https://www.geckoterminal.com/bsc/pools/" + pool + "'>" + item + ": " + price.toFixed(4).toString() + "</a>");
                 }
             );
         }
@@ -631,7 +632,8 @@
             $.getJSON("https://api.geckoterminal.com/api/v2/networks/bsc/pools/" + pool,
                 function (data) {
                         price = parseFloat(data.data.attributes.base_token_price_usd);
-                        $("div."+item).html("<a href='https://www.geckoterminal.com/bsc/pools/" + pool + "'>" + item + ": " + price.toFixed(4).toString() + "</a>");
+                        if (price > 0.015)
+                            $("div."+item).html("<a href='https://www.geckoterminal.com/bsc/pools/" + pool + "'>" + item + ": " + price.toFixed(4).toString() + "</a>");
                 }
             );
         }
@@ -692,7 +694,12 @@
                     price = parseFloat(data.lastPrice).toFixed(2);
                 else
                     price = parseFloat(data.lastPrice).toFixed(3);
-                $("div." + item.toUpperCase()).html("<a style=\"color:" + color + ";\" href=\"https://www.binance.com/zh-TW/trade/" + item + "_USDT\">" + item.toUpperCase()+ ": " + String(price) + percent_html + "</a>");
+
+
+                if (item == "BLUR")
+                    $("div.MCC").html("<a style=\"color:" + color + ";\" href=\"https://www.binance.com/zh-TW/trade/" + item + "_USDT\">" + item.toUpperCase()+ ": " + String(price) + percent_html + "</a>");
+                else
+                    $("div." + item.toUpperCase()).html("<a style=\"color:" + color + ";\" href=\"https://www.binance.com/zh-TW/trade/" + item + "_USDT\">" + item.toUpperCase()+ ": " + String(price) + percent_html + "</a>");
             }
         );
     }
@@ -794,6 +801,7 @@
     get_binance("ENS");
     get_binance("HNT");
     get_binance("OP");
+    get_binance("BLUR");
     //get_binance_cmc("BLUR", "blur-token");
     get_binance("SSV");
     get_binance("ARB");
