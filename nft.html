@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenSea NFT Floor Prices</title>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+  <table border="1" id="nftTable">
+    <tr>
+      <th>Collection Name</th>
+      <th>Floor Price</th>
+      <th>Symbol</th>
+    </tr>
+  </table>
+
+  <script>
+    function getFloorPrice(collectionName, rowId, priceId, symbolId) {
+      $.ajax({
+        url: 'https://api.opensea.io/api/v2/collections/' + collectionName + '/stats',
+        headers: {
+          'accept': 'application/json',
+          'x-api-key': '639530c6338446aa8aed88f42680a52c' // 替換成你的 OpenSea API key
+        },
+        method: 'GET',
+        success: function(data) {
+          var floorPrice = data.total.floor_price.toFixed(4);
+          var floorPriceSymbol = data.total.floor_price_symbol;
+          $('#' + priceId).text(floorPrice);
+          $('#' + symbolId).text(floorPriceSymbol);
+        },
+        error: function(error) {
+          console.log('Error:', error);
+          $('#' + rowId).html('<td colspan="3">Error fetching data.</td>');
+        }
+      });
+    }
+
+    // 定義要追蹤的 NFT 集合
+    var collections = [
+      'demihuman',
+      'fomo-dog-club',
+      'murmurcats',
+      'phantabear',
+      'karafuru',
+      'zombieclub-token',
+      '0xgf',
+      'alpacadabraz',
+      'zombiepod-genesis',
+      'zoofrenz-apefrenz-2-0',
+      'trekkinftofficial',
+      'firstproject',
+      '8immortals',
+      '8immortals02',
+      'astrogator-fam',
+      'zoofrenz-apefrenz-2-0',
+      'metaforce-rampage-alpha',
+      'alpacadabraz-3d',
+      'headgame',
+      'nouns3d',
+      'baller-bananas-nfts',
+      'perils-of-sese-by-all-seeing-seneca',
+      'onchainmonkey',
+      'friendship-bracelets-by-alexis-andre'
+    ];
+
+    // 動態生成表格和集合數據
+    for (var i = 0; i < collections.length; i++) {
+      var collection = collections[i];
+      var rowId = collection + 'Row';
+      var priceId = collection + 'FloorPrice';
+      var symbolId = collection + 'Symbol';
+
+      // 添加表格行
+      $('#nftTable').append(
+        '<tr id="' + rowId + '">' +
+          '<td>' + collection + '</td>' +
+          '<td id="' + priceId + '"></td>' +
+          '<td id="' + symbolId + '"></td>' +
+        '</tr>'
+      );
+
+      // 獲取並顯示地板價格和符號
+      getFloorPrice(collection, rowId, priceId, symbolId);
+    }
+  </script>
+
+</body>
+</html>
