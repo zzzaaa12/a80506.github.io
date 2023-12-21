@@ -543,10 +543,10 @@
                         $("div.weather").css("color", "#46a3ff");
                         $("div.weather").css("font-weight", "bold");
                     }
-                    if (parseInt(cwb_t) >= 32) {
+                    if (parseInt(cwb_t) >= 32 || parseInt(cwb_t) < 15) {
                         $("div.weather").css("color", "red");
                         $("div.weather").css("font-weight", "bold");
-                    } else if (parseInt(cwb_t) < 15) {
+                    } else if (parseInt(cwb_t) < 20) {
                         $("div.weather").css("color", "orange");
                         $("div.weather").css("font-weight", "bold");
                     }
