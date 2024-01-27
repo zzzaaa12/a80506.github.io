@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>隨機數字</title>
+    <style>
+        body {
+            background-color: black;
+            color: yellow;
+            font-size: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="randomNumber"></div>
+    <script>
+        function generateRandomNumber() {
+            return Math.floor(Math.random() * 101);
+        }
+
+        function updateNumber() {
+            document.getElementById('randomNumber').textContent = generateRandomNumber();
+        }
+
+        setInterval(updateNumber, 5000);
+        updateNumber(); // 初始化時也更新一次數字
+    </script>
+</body>
+</html>
