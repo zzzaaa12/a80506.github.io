@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>幣安BTC月線圖</title>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            width: 80%;
+            max-width: 1200px;
+        }
+        #apiData, #chart_div {
+            margin-top: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+    </style>
+    <script type="text/javascript">
+        google.charts.load('current', {'packages':['corechart']});
+
+        async function getBinanceData() {
+            const response = await fetch('https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1M');
+            const data = await response.json();
+            return data.map(item => [new Date(item[0]), parseFloat(item[1]), parseFloat(item[2]), parseFloat(item[3]), parseFloat(item[4])]);
+        }
+
+        async function drawChart() {
+            const btcData = await getBinanceData();
+            btcData.unshift(['Date', 'Low', 'Open', 'Close', 'High']); // 添加列名
+
+            const data = google.visualization.arrayToDataTable(btcData);
+            const options = {
+                legend: 'none',
+                candlestick: {
+                    fallingColor: { strokeWidth: 0, fill: '#a52714' }, // red
+                    risingColor: { strokeWidth: 0, fill: '#0f9d58' }   // green
+                }
+            };
+
+            const chart = new google.visualization.CandlestickChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
+        }
+
+        google.charts.setOnLoadCallback(drawChart);
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>幣安BTC月線圖</h1>
+        <div id="chart_div" style="width: 100%; height: 500px;"></div>
+    </div>
+</body>
+</html>
