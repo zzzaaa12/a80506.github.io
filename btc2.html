@@ -2,15 +2,15 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Google Charts K線圖</title>
+    <title>多貨幣 K線圖</title>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script>
         google.charts.load('current', {'packages':['corechart']});
 
-        google.charts.setOnLoadCallback(drawChart);
+        google.charts.setOnLoadCallback(drawCharts);
 
-        async function drawChart() {
-            const rawData = await fetch('https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1M&startTime=' + new Date('2019-01-01').getTime());
+        async function drawChart(symbol, elementId) {
+            const rawData = await fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol}USDT&interval=1M&startTime=${new Date('2019-01-01').getTime()}`);
             const jsonData = await rawData.json();
 
             const data = new google.visualization.DataTable();
@@ -32,20 +32,32 @@
 
             var options = {
                 legend: 'none',
-                bar: { groupWidth: '100%' }, // Remove space between bars.
+                bar: { groupWidth: '100%' },
                 candlestick: {
                     fallingColor: { strokeWidth: 0, fill: '#a52714' }, // red
                     risingColor: { strokeWidth: 0, fill: '#0f9d58' }   // green
                 }
             };
 
-            var chart = new google.visualization.CandlestickChart(document.getElementById('chart_div'));
-
+            var chart = new google.visualization.CandlestickChart(document.getElementById(elementId));
             chart.draw(data, options);
+        }
+
+        function drawCharts() {
+            const symbols = ['BTC', 'ETH', 'BNB', 'SOL', 'LINK', 'DOT', 'ATOM'];
+            symbols.forEach(symbol => {
+                const chartDiv = document.createElement('div');
+                chartDiv.id = symbol.toLowerCase() + '-chart';
+                chartDiv.style.width = '100%';
+                chartDiv.style.height = '500px';
+                document.body.appendChild(chartDiv);
+
+                drawChart(symbol, chartDiv.id);
+            });
         }
     </script>
 </head>
 <body>
-    <div id="chart_div" style="width: 100%; height: 500px;"></div>
+    <!-- Chart divs are dynamically created in the drawCharts function -->
 </body>
 </html>
