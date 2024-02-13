@@ -62,7 +62,7 @@
                     });
 
                     const options = {
-                        title: symbol.toUpperCase().replace('USDT', '') + ` ${interval === '1w' ? '週' : '月'}線圖`,
+                        title: symbol.toUpperCase().replace('USDT', '') + ` ${interval === '1w' ? '週' : interval === '1d' ? '日' : interval === '4h' ? '4小時' : '1小時'}線圖`,
                         legend: 'none',
                         bar: { groupWidth: '100%' },
                         candlestick: {
@@ -94,12 +94,17 @@
                 chartDiv.id = symbol.toLowerCase() + '-chart';
                 chartsContainer.appendChild(chartDiv);
 
-
-                                            drawChart(symbol, interval);
+                drawChart(symbol, interval);
             });
         }
-
         google.charts.setOnLoadCallback(() => drawCharts('1M'));
+
+        // 重新繪製圖表以適應新選擇的時間間隔
+        function updateCharts() {
+            const selectedInterval = document.getElementById('intervalSelect').value;
+            drawCharts(selectedInterval);
+        }
     </script>
 </body>
 </html>
+       
