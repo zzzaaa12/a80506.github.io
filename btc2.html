@@ -31,23 +31,24 @@
                 const close = parseFloat(item[4]);
                 const low = parseFloat(item[3]);
                 const high = parseFloat(item[2]);
-                const color = close >= open ? 'green' : 'red'; // 綠漲紅跌
+                const color = (close < open) ? 'red' : 'green'; // 紅跌綠漲
                 return [new Date(item[0]), low, open, close, high, color];
             });
         }
 
         async function drawChart(symbol, elementId) {
             const btcData = await getBinanceData(symbol);
-            btcData.unshift(['Date', {label: 'Low', type: 'number'}, {label: 'Open', type: 'number'}, {label: 'Close', type: 'number'}, {label: 'High', type: 'number'}, {role: 'style', type: 'string'}]); // 添加列名
+            btcData.unshift(['Date', 'Low', 'Open', 'Close', 'High', {role: 'style', type: 'string'}, {type: 'string', role: 'tooltip', 'p': {'html': true}}]);
 
             const data = google.visualization.arrayToDataTable(btcData);
             const options = {
                 title: `${symbol}月線圖`,
                 legend: 'none',
                 candlestick: {
-                    fallingColor: { strokeWidth: 0 }, // 定義為空，使用style的顏色
-                    risingColor: { strokeWidth: 0 }   // 定義為空，使用style的顏色
-                }
+                    fallingColor: { strokeWidth: 0, fill: '#a52714' }, // red
+                    risingColor: { strokeWidth: 0, fill: '#0f9d58' }   // green
+                },
+                tooltip: {isHtml: true}
             };
 
             const chart = new google.visualization.CandlestickChart(document.getElementById(elementId));
