@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>多貨幣 K線圖</title>
+    <title>月線圖</title>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script>
         google.charts.load('current', {'packages':['corechart']});
@@ -10,7 +10,7 @@
         google.charts.setOnLoadCallback(drawCharts);
 
         async function drawChart(symbol, elementId) {
-            const rawData = await fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol}USDT&interval=1M&startTime=${new Date('2019-01-01').getTime()}`);
+            const rawData = await fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=1M&limit=70`);
             const jsonData = await rawData.json();
 
             const data = new google.visualization.DataTable();
@@ -31,6 +31,7 @@
             });
 
             var options = {
+                title: symbol.toUpperCase().replace('USDT', '') + ' 月線圖',
                 legend: 'none',
                 bar: { groupWidth: '100%' },
                 candlestick: {
@@ -44,7 +45,7 @@
         }
 
         function drawCharts() {
-            const symbols = ['BTC', 'ETH', 'BNB', 'SOL', 'LINK', 'DOT', 'ATOM'];
+            const symbols = ['BTCUSDT', 'ETHUSDT', 'BNBUSDT', 'SOLUSDT', 'LINKUSDT', 'DOTUSDT', 'ATOMUSDT', 'ATOMBTC', 'DOTBTC'];
             symbols.forEach(symbol => {
                 const chartDiv = document.createElement('div');
                 chartDiv.id = symbol.toLowerCase() + '-chart';
