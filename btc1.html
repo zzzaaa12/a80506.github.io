@@ -6,7 +6,7 @@
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <style>
         body {
-            background-color: #f0e68c; /* 鵝黃色背景 */
+            background-color: #ffffe0; /* 淡黃色背景 */
             margin: 0;
             position: relative;
         }
@@ -69,8 +69,8 @@
                             fallingColor: { strokeWidth: 0, fill: '#a52714' }, // red
                             risingColor: { strokeWidth: 0, fill: '#0f9d58' }   // green
                         },
-                        backgroundColor: '#f0e68c', // 設置背景色為鵝黃色
-                        chartArea: { backgroundColor: '#f0e68c' }
+                        backgroundColor: '#ffffe0', // 設置背景色為淡黃色
+                        chartArea: { backgroundColor: '#ffffe0' }
                     };
 
                     const chartDiv = document.createElement('div');
@@ -97,13 +97,9 @@
                 drawChart(symbol, interval);
             });
         }
-        google.charts.setOnLoadCallback(() => drawCharts('1M'));
 
-        // 重新繪製圖表以適應新選擇的時間間隔
-        function updateCharts() {
-            const selectedInterval = document.getElementById('intervalSelect').value;
-            drawCharts(selectedInterval);
-        }
+        google.charts.setOnLoadCallback(() => drawCharts('1M'));
+   
     </script>
 </body>
 </html>
