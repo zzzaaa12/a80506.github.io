@@ -10,7 +10,7 @@
         google.charts.setOnLoadCallback(drawCharts);
 
         async function drawChart(symbol, elementId) {
-            const rawData = await fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol}USDT&interval=1w&limit=70`);
+            const rawData = await fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=1w&limit=70`);
             const jsonData = await rawData.json();
 
             const data = new google.visualization.DataTable();
@@ -31,7 +31,7 @@
             });
 
             var options = {
-                title: symbol + ' 週線圖',
+                title: symbol.toUpperCase().replace('USDT', '') + ' 週線圖',
                 legend: 'none',
                 bar: { groupWidth: '100%' },
                 candlestick: {
@@ -45,7 +45,7 @@
         }
 
         function drawCharts() {
-            const symbols = ['BTC', 'ETH', 'BNB', 'SOL', 'LINK', 'DOT', 'ATOM'];
+            const symbols = ['BTCUSDT', 'ETHUSDT', 'BNBUSDT', 'SOLUSDT', 'LINKUSDT', 'DOTUSDT', 'ATOMUSDT', 'ATOMBTC', 'DOTBTC'];
             symbols.forEach(symbol => {
                 const chartDiv = document.createElement('div');
                 chartDiv.id = symbol.toLowerCase() + '-chart';
