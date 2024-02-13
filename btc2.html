@@ -2,63 +2,81 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>K線圖</title>
-    <script src="https://code.highcharts.com/stock/highstock.js"></script>
-    <script src="https://code.highcharts.com/stock/modules/data.js"></script>
-    <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+    <title>techan.js K線圖</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/techan.js/0.8.0/techan.min.js"></script>
     <style>
-        body {
-            margin: 0;
-        }
-        #container {
-            height: 400px;
-            min-width: 310px;
+        #chart {
             width: 100%;
         }
     </style>
 </head>
 <body>
-    <div id="container"></div>
+    <div id="chart"></div>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const fetchData = async (symbol) => {
-                const response = await fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=1M&startTime=${new Date('2019-01-01').getTime()}`);
-                const data = await response.json();
-                return data.map(d => [
-                    d[0], // 時間
-                    parseFloat(d[1]), // 開盤
-                    parseFloat(d[2]), // 最高
-                    parseFloat(d[3]), // 最低
-                    parseFloat(d[4])  // 收盤
-                ]);
-            };
+        var svg = d3.select("#chart").append("svg"),
+            margin = {top: 20, right: 20, bottom: 30, left: 50},
+            width = document.getElementById('chart').clientWidth - margin.left - margin.right,
+            height = 500 - margin.top - margin.bottom;
 
-            const renderChart = async () => {
-                const btcData = await fetchData('BTCUSDT');
+        var x = techan.scale.financetime()
+                .range([0, width]);
 
-                Highcharts.stockChart('container', {
-                    chart: {
-                        alignTicks: false
-                    },
-                    rangeSelector: {
-                        selected: 1
-                    },
-                    title: {
-                        text: 'BTCUSDT K線圖'
-                    },
-                    series: [{
-                        type: 'candlestick',
-                        name: 'BTCUSDT',
-                        data: btcData,
-                        tooltip: {
-                            valueDecimals: 2
-                        }
-                    }]
-                });
-            };
+        var y = d3.scaleLinear()
+                .range([height, 0]);
 
-            renderChart();
-        });
+        var candlestick = techan.plot.candlestick()
+                .xScale(x)
+                .yScale(y);
+
+        var xAxis = d3.axisBottom(x),
+            yAxis = d3.axisLeft(y);
+
+        svg.attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        d3.json("https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1M&startTime=" + new Date('2019-01-01').getTime())
+            .then(function(data) {
+                var accessor = candlestick.accessor();
+
+                data = data.map(function(d) {
+                    return {
+                        date: new Date(d[0]),
+                        open: +d[1],
+                        high: +d[2],
+                        low: +d[3],
+                        close: +d[4],
+                        volume: +d[5]
+                    };
+                }).sort(function(a, b) { return d3.ascending(accessor.d(a), accessor.d(b)); });
+
+                svg.selectAll("g.candlestick").data([data])
+                    .enter().append("g")
+                        .attr("class", "candlestick")
+                        .call(candlestick);
+
+                svg.append("g")
+                    .attr("class", "x axis")
+                    .attr("transform", "translate(0," + height + ")")
+                    .call(xAxis);
+
+                svg.append("g")
+                    .attr("class", "y axis")
+                    .call(yAxis);
+            })
+            .catch(function(error) {
+                console.log(error);
+            });
+
+        window.onresize = function() {
+            width = document.getElementById('chart').clientWidth - margin.left - margin.right;
+            svg.attr("width", width);
+            x.range([0, width]);
+            svg.selectAll("g.candlestick").call(candlestick);
+            svg.selectAll("g.x.axis").call(xAxis);
+        };
     </script>
 </body>
 </html>
