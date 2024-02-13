@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>週線圖</title>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+        google.charts.load('current', {'packages':['corechart']});
+
+        google.charts.setOnLoadCallback(drawCharts);
+
+        async function drawChart(symbol, elementId) {
+            const rawData = await fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol}USDT&interval=1w&limit=70`);
+            const jsonData = await rawData.json();
+
+            const data = new google.visualization.DataTable();
+            data.addColumn('string', 'Date');
+            data.addColumn('number', 'Low');
+            data.addColumn('number', 'Open');
+            data.addColumn('number', 'Close');
+            data.addColumn('number', 'High');
+
+            jsonData.forEach(kline => {
+                data.addRow([
+                    new Date(kline[0]).toISOString().slice(0, 10),
+                    parseFloat(kline[3]), // Low
+                    parseFloat(kline[1]), // Open
+                    parseFloat(kline[4]), // Close
+                    parseFloat(kline[2]), // High
+                ]);
+            });
+
+            var options = {
+                title: symbol + ' 週線圖',
+                legend: 'none',
+                bar: { groupWidth: '100%' },
+                candlestick: {
+                    fallingColor: { strokeWidth: 0, fill: '#a52714' }, // red
+                    risingColor: { strokeWidth: 0, fill: '#0f9d58' }   // green
+                }
+            };
+
+            var chart = new google.visualization.CandlestickChart(document.getElementById(elementId));
+            chart.draw(data, options);
+        }
+
+        function drawCharts() {
+            const symbols = ['BTC', 'ETH', 'BNB', 'SOL', 'LINK', 'DOT', 'ATOM'];
+            symbols.forEach(symbol => {
+                const chartDiv = document.createElement('div');
+                chartDiv.id = symbol.toLowerCase() + '-chart';
+                chartDiv.style.width = '100%';
+                chartDiv.style.height = '500px';
+                document.body.appendChild(chartDiv);
+
+                drawChart(symbol, chartDiv.id);
+            });
+        }
+    </script>
+</head>
+<body>
+    <!-- Chart divs are dynamically created in the drawCharts function -->
+</body>
+</html>
