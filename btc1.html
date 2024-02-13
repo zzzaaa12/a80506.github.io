@@ -8,7 +8,7 @@
         body {
             font-family: Arial, sans-serif;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
             height: 100vh;
             margin: 0;
@@ -17,12 +17,19 @@
             width: 80%;
             max-width: 1200px;
         }
+        #klineValue {
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>幣安BTC月線圖</h1>
         <canvas id="btcChart"></canvas>
+        <div id="klineValue">
+            <p><strong>K線棒數值:</strong></p>
+            <p id="klineData">請將鼠標移動到圖表上以顯示數據</p>
+        </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/chartjs-chart-financial"></script>
@@ -60,7 +67,24 @@
                                 unit: 'month'
                             }
                         }]
-                    }
+                    },
+                    tooltips: {
+                        callbacks: {
+                            title: function(tooltipItem, data) {
+                                return data['labels'][tooltipItem[0]['index']];
+                            },
+                            label: function(tooltipItem, data) {
+                                let item = data['datasets'][0]['data'][tooltipItem['index']];
+                                return `開: ${item.o} 高: ${item.h} 低: ${item.l} 收: ${item.c}`;
+                            },
+                            afterLabel: function(tooltipItem, data) {
+                                let item = data['datasets'][0]['data'][tooltipItem['index']];
+                                document.getElementById('klineData').innerText = `開: ${item.o} 高: ${item.h} 低: ${item.l} 收: ${item.c}`;
+                            }
+                        },
+                        mode: 'index',
+                        intersect: false,
+                    },
                 }
             });
         }
