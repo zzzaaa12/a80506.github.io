@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>幣安BTC月線圖</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            width: 80%;
+            max-width: 1200px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>幣安BTC月線圖</h1>
+        <canvas id="btcChart"></canvas>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/chartjs-chart-financial"></script>
+    <script>
+        async function getBinanceData() {
+            const response = await fetch('https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1M');
+            const data = await response.json();
+            return data.map(item => {
+                return {
+                    t: new Date(item[0]),
+                    o: parseFloat(item[1]),
+                    h: parseFloat(item[2]),
+                    l: parseFloat(item[3]),
+                    c: parseFloat(item[4])
+                };
+            });
+        }
+
+        async function drawChart() {
+            const btcData = await getBinanceData();
+            const ctx = document.getElementById('btcChart').getContext('2d');
+            const btcChart = new Chart(ctx, {
+                type: 'candlestick',
+                data: {
+                    datasets: [{
+                        label: 'BTC',
+                        data: btcData
+                    }]
+                },
+                options: {
+                    scales: {
+                        xAxes: [{
+                            type: 'time',
+                            time: {
+                                unit: 'month'
+                            }
+                        }]
+                    }
+                }
+            });
+        }
+
+        drawChart();
+    </script>
+</body>
+</html>
