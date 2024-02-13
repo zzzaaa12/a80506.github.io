@@ -17,10 +17,12 @@
             width: 80%;
             max-width: 1200px;
         }
-        #klineData {
+        #apiData {
             margin-top: 20px;
             max-height: 400px;
             overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
         }
     </style>
 </head>
@@ -28,9 +30,9 @@
     <div class="container">
         <h1>幣安BTC月線圖</h1>
         <canvas id="btcChart"></canvas>
-        <div id="klineData">
-            <h2>K線棒數值:</h2>
-            <!-- K線棒數據將顯示在這裡 -->
+        <div id="apiData">
+            <h2>API數據:</h2>
+            <!-- API數據將顯示在這裡 -->
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -39,6 +41,7 @@
         async function getBinanceData() {
             const response = await fetch('https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1M');
             const data = await response.json();
+            displayApiData(data); // 顯示原始API數據
             return data.map(item => {
                 return {
                     t: new Date(item[0]),
@@ -48,6 +51,11 @@
                     c: parseFloat(item[4])
                 };
             });
+        }
+
+        function displayApiData(data) {
+            const apiDataDiv = document.getElementById('apiData');
+            apiDataDiv.innerHTML += `<pre>${JSON.stringify(data, null, 2)}</pre>`;
         }
 
         async function drawChart() {
@@ -71,17 +79,6 @@
                         }]
                     }
                 }
-            });
-
-            displayKlineData(btcData);
-        }
-
-        function displayKlineData(data) {
-            const klineDataDiv = document.getElementById('klineData');
-            data.forEach(item => {
-                const date = item.t.toDateString();
-                const klineInfo = `<p>${date} - 開: ${item.o}, 高: ${item.h}, 低: ${item.l}, 收: ${item.c}</p>`;
-                klineDataDiv.innerHTML += klineInfo;
             });
         }
 
