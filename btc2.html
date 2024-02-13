@@ -1,74 +1,76 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>加密貨幣月線圖</title>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <title>加密貨幣K線圖</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/techan.js/0.8.0/techan.min.js"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 0;
-        }
-        .container {
-            width: 80%;
-            max-width: 1200px;
-            margin-bottom: 20px;
+        .chart {
+            display: inline-block;
+            width: 600px;
+            height: 400px;
         }
     </style>
-    <script type="text/javascript">
-        google.charts.load('current', {'packages':['corechart']});
-
-        async function getBinanceData(symbol) {
-            const startTime = new Date('2019-01-01').getTime();
-            const response = await fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=1M&startTime=${startTime}`);
-            const data = await response.json();
-            return data.map(item => {
-                const open = parseFloat(item[1]);
-                const close = parseFloat(item[4]);
-                const low = parseFloat(item[3]);
-                const high = parseFloat(item[2]);
-                const color = (close < open) ? 'red' : 'green'; // 紅跌綠漲
-                return [new Date(item[0]), low, open, close, high, color];
-            });
-        }
-
-        async function drawChart(symbol, elementId) {
-            const btcData = await getBinanceData(symbol);
-            btcData.unshift(['Date', 'Low', 'Open', 'Close', 'High', {role: 'style', type: 'string'}, {type: 'string', role: 'tooltip', 'p': {'html': true}}]);
-
-            const data = google.visualization.arrayToDataTable(btcData);
-            const options = {
-                title: `${symbol}月線圖`,
-                legend: 'none',
-                candlestick: {
-                    fallingColor: { strokeWidth: 0, fill: '#a52714' }, // red
-                    risingColor: { strokeWidth: 0, fill: '#0f9d58' }   // green
-                },
-                tooltip: {isHtml: true}
-            };
-
-            const chart = new google.visualization.CandlestickChart(document.getElementById(elementId));
-            chart.draw(data, options);
-        }
-
-        google.charts.setOnLoadCallback(() => {
-            drawChart('BTCUSDT', 'chart_btc');
-            drawChart('ETHUSDT', 'chart_eth');
-            drawChart('SOLUSDT', 'chart_sol');
-            drawChart('BNBUSDT', 'chart_bnb');
-            drawChart('LINKUSDT', 'chart_link');
-        });
-    </script>
 </head>
 <body>
-    <div class="container" id="chart_btc" style="width: 100%; height: 500px;"></div>
-    <div class="container" id="chart_eth" style="width: 100%; height: 500px;"></div>
-    <div class="container" id="chart_sol" style="width: 100%; height: 500px;"></div>
-    <div class="container" id="chart_bnb" style="width: 100%; height: 500px;"></div>
-    <div class="container" id="chart_link" style="width: 100%; height: 500px;"></div>
+    <div id="btc-chart" class="chart"></div>
+    <div id="eth-chart" class="chart"></div>
+    <div id="sol-chart" class="chart"></div>
+    <div id="bnb-chart" class="chart"></div>
+    <div id="link-chart" class="chart"></div>
+
+    <script>
+        const symbols = ['BTCUSDT', 'ETHUSDT', 'SOLUSDT', 'BNBUSDT', 'LINKUSDT'];
+
+        symbols.forEach(symbol => {
+            fetchKlineData(symbol);
+        });
+
+        function fetchKlineData(symbol) {
+            const startTime = new Date('2020-01-01').getTime();
+            fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=1M&startTime=${startTime}`)
+                .then(response => response.json())
+                .then(data => {
+                    const processedData = data.map(d => ({
+                        date: new Date(d[0]),
+                        open: +d[1],
+                        high: +d[2],
+                        low: +d[3],
+                        close: +d[4]
+                    }));
+                    drawChart(symbol.toLowerCase() + '-chart', processedData);
+                })
+                .catch(err => console.error(err));
+        }
+
+        function drawChart(divId, data) {
+            const margin = { top: 20, right: 20, bottom: 30, left: 50 },
+                width = 600 - margin.left - margin.right,
+                height = 400 - margin.top - margin.bottom;
+
+            const x = techan.scale.financetime().range([0, width]);
+            const y = d3.scaleLinear().range([height, 0]);
+
+            const svg = d3.select('#' + divId).append('svg')
+                .attr('width', width + margin.left + margin.right)
+                .attr('height', height + margin.top + margin.bottom)
+                .append('g')
+                .attr('transform', `translate(${margin.left}, ${margin.top})`);
+
+            const candlestick = techan.plot.candlestick()
+                .xScale(x)
+                .yScale(y);
+
+            x.domain(data.map(d => d.date));
+            y.domain(techan.scale.plot.ohlc(data, candlestick.accessor()).domain());
+
+            svg.append('g')
+                .datum(data)
+                .attr('class', 'candlestick')
+                .call(candlestick);
+        }
+    </script>
 </body>
 </html>
