@@ -2,14 +2,14 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>週線與月線圖</title>
+    <title>多時間間隔 K 線圖</title>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script>
         google.charts.load('current', {'packages':['corechart']});
 
         function drawChart(symbol, interval) {
             const elementId = symbol.toLowerCase() + '-chart';
-            const rawData = fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${interval}&limit=70`)
+            fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${interval}&limit=70`)
                 .then(response => response.json())
                 .then(jsonData => {
                     const data = new google.visualization.DataTable();
@@ -30,7 +30,7 @@
                     });
 
                     const options = {
-                        title: symbol.toUpperCase().replace('USDT', '') + ` ${interval === '1w' ? '週' : '月'}線圖`,
+                        title: symbol.toUpperCase().replace('USDT', '') + ` ${interval} K線圖`,
                         legend: 'none',
                         bar: { groupWidth: '100%' },
                         candlestick: {
@@ -68,6 +68,9 @@
     <select id="intervalSelect" onchange="drawCharts(this.value)">
         <option value="1M">月線圖</option>
         <option value="1w">週線圖</option>
+        <option value="1d">日線圖</option>
+        <option value="4h">4 小時線圖</option>
+        <option value="1h">1 小時線圖</option>
     </select>
     <div id="charts-container"></div>
 </body>
