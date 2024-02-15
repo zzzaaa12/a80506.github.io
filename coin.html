@@ -1,116 +1,206 @@
+<!DOCTYPE html>
+<script>
+    symbols = ['BTCUSDT',
+               'ETHUSDT',
+               'ETHBTC',
+               'FILUSDT',
+               'FILBTC',
+               'ARBBTC',
+               'OPBTC',
+               'MATICBTC',
+               'SSVBTC',
+               'BNBBTC',
+               'SOLBTC',
+               'LINKBTC',
+               'BANDBTC',
+               'ATOMBTC',
+               'DOTBTC'];
+    color_red='#d70000';
+    color_green='#008700';
+    
+</script>
 <html>
-
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Cryptocurrency Information</title>
-    <style type="text/css">
-        body { font-size: 9pt; background-color: #000000; }
-        table { border-collapse: collapse; border-color: #707070; }
-        td { empty-cells: show; color: #FFFF00; text-align: center; border-color: #707070; }
-        td.title { font-weight: bolder; color: #000000; background-color: #FF9933; }
-        a { text-decoration: none }
-        div { color: #80FF00; }
-    </style>
-    <style type="text/css"></style>
-</head>
-<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
-    crossorigin="anonymous"></script>
-
-<body>
+    <meta charset="UTF-8">
+    <title>Crypto Chart</title>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script>
-        var items = [
-            [ "BTCUSDT", "1" ],
-            [ "ETHUSDT", "1027" ],
-            [ "FILUSDT", "2280" ],
-            [ "FTTUSDT", "4195" ],
-            [ "FLOWUSDT", "4558" ],
-            [ "AXSUSDT", "6783" ],
-            [ "SOLUSDT", "5426" ],
-            [ "SRMUSDT", "6187" ],
-            [ "LUNAUSDT", "4172"],
-            [ "BNBUSDT", "1839" ],
-            [ "LINKUSDT", "1975" ],
-            [ "UNIUSDT", "7083" ],
-            [ "AAVEUSDT", "7278" ],
-            //[ "COMPUSDT", "5692" ],
-            [ "DOTUSDT", "6636" ],
-            [ "ADAUSDT", "2010" ],
-            [ "AXSBTC", "" ],
-            [ "SOLBTC", "" ],
-            [ "SRMBTC", "" ],
-            [ "LUNABTC", "" ],
-            [ "FLOWBTC", "" ],
-            [ "ETHBTC", "" ],
-            [ "FILBTC", "" ],
-            [ "BNBBTC", "" ],
-            [ "FTTBTC", "" ],
-            [ "LINKBTC", "" ]
-        ];
+        google.charts.load('current', {'packages':['corechart']});
 
-        var item_title = "";
-        var item_url = "";
-        var i, j;
-        document.write("<table border=\"0\" width=\"100%\" height=\"100%\" align=\"center\" valign=\"center\"><tbody><tr><td>");
-        document.write("<table border=\"1\" width=\"75%\" height=\"70%\" align=\"center\"><tbody>");
-        for (i = 0; i < 5; i++) {
-            document.write("<tr>");
-            for (j = 0; j < 5; j++) {
-                 document.write("<td><div class=\"" + items[(i*5+j)][0] + "\">" + "</div></td>");
-            }
-            document.write("</tr>");
+        function drawWeeklyChart(symbol) {
+            const elementId = symbol.toLowerCase() + '-weekly-chart';
+            fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=1w&limit=100`)
+                .then(response => response.json())
+                .then(jsonData => {
+                    const data = new google.visualization.DataTable();
+                    data.addColumn('string', 'Date');
+                    data.addColumn('number', 'Low');
+                    data.addColumn('number', 'Open');
+                    data.addColumn('number', 'Close');
+                    data.addColumn('number', 'High');
+
+                    jsonData.forEach(kline => {
+                        data.addRow([
+                            new Date(kline[0]).toISOString().slice(0, 10),
+                            parseFloat(kline[3]), // Low
+                            parseFloat(kline[1]), // Open
+                            parseFloat(kline[4]), // Close
+                            parseFloat(kline[2])  // High
+                        ]);
+                    });
+
+                    const options = {
+                        title: symbol.toUpperCase().replace('USDT', '') + ' 週線圖',
+                        legend: 'none',
+                        bar: { groupWidth: '100%' },
+                        candlestick: {
+                            fallingColor: { strokeWidth: 2, fill: color_red, stroke: color_red }, // red
+                            risingColor: { strokeWidth: 2, fill: color_green,  stroke: color_green }  // green
+                        },
+                        vAxis: {
+                            minorGridlines: {
+                                color: 'transparent'
+                            }
+                        }
+                    };
+
+                    const chart = new google.visualization.CandlestickChart(document.getElementById(elementId));
+                    google.visualization.events.addListener(chart, 'ready', function() {
+                        document.querySelectorAll(`#${elementId} svg g rect`).forEach(function(path) {
+                            if (path.getAttribute('fill') === '#3366cc') { // fix library setting
+                                path.setAttribute('width', 1.3);
+                                path.setAttribute('fill', '#6F6F6F');
+                            }
+                        });
+                    });
+                    chart.draw(data, options);
+                })
+                .catch(error => console.error('Error fetching data: ', error));
         }
-        document.write("</tbody></table>");
-        document.write("</td></tr></tbody></table>");
+
+        function drawMonthlyChart(symbol) {
+            const elementId = symbol.toLowerCase() + '-monthly-chart';
+            fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=1M&limit=70`)
+                .then(response => response.json())
+                .then(jsonData => {
+                    const data = new google.visualization.DataTable();
+                    data.addColumn('string', 'Date');
+                    data.addColumn('number', 'Low');
+                    data.addColumn('number', 'Open');
+                    data.addColumn('number', 'Close');
+                    data.addColumn('number', 'High');
+
+                    jsonData.forEach(kline => {
+                        if (symbol === 'FILBTC' || symbol === 'FILUSDT') {
+                            cutoffDate = new Date('2021-11-01'); // 设置日期阈值
+                            klineDate = new Date(kline[0]);
+                            if (klineDate < cutoffDate)
+                                return; // 跳过第一个数据点
+                        }
+                        data.addRow([
+                            new Date(kline[0]).toISOString().slice(0, 10),
+                            parseFloat(kline[3]), // Low
+                            parseFloat(kline[1]), // Open
+                            parseFloat(kline[4]), // Close
+                            parseFloat(kline[2])  // High
+                        ]);
+                    });
+
+                    const options = {
+                        title: symbol.toUpperCase().replace('USDT', '') + ' 月線圖',
+                        legend: 'none',
+                        bar: { groupWidth: '100%' },
+                        candlestick: {
+                            fallingColor: { strokeWidth: 0, fill: color_red }, // red
+                            risingColor: { strokeWidth: 0, fill: color_green } // green
+                        },
+                        vAxis: {
+                            minorGridlines: {
+                                color: 'transparent'
+                            }
+                        }
+                    };
+
+                    const chart = new google.visualization.CandlestickChart(document.getElementById(elementId));
+                    google.visualization.events.addListener(chart, 'ready', function() {
+                        document.querySelectorAll(`#${elementId} svg g rect`).forEach(function(path) {
+                            if (path.getAttribute('fill') === '#3366cc') { // fix library setting
+                                path.setAttribute('width', 1.3);
+                                path.setAttribute('fill', '#6F6F6F');
+                            }
+                        });
+                    });
+                    chart.draw(data, options);
+                })
+                .catch(error => console.error('Error fetching data: ', error));
+        }
+
+        function drawCharts() {
+            const chartsContainer = document.getElementById('charts-container');
+            chartsContainer.innerHTML = ''; // Clear existing charts
+
+            symbols.forEach(symbol => {
+                const symbolContainer = document.createElement('div');
+                symbolContainer.classList.add('symbol-container');
+                
+                const weeklyChartDiv = document.createElement('div');
+                weeklyChartDiv.id = symbol.toLowerCase() + '-weekly-chart';
+                weeklyChartDiv.classList.add('chart');
+                weeklyChartDiv.style.width = '49%';
+                weeklyChartDiv.style.height = '550px';
+                weeklyChartDiv.style.margin = '0 auto'; // Center the chart
+                symbolContainer.appendChild(weeklyChartDiv);
+                
+                const monthlyChartDiv = document.createElement('div');
+                monthlyChartDiv.id = symbol.toLowerCase() + '-monthly-chart';
+                monthlyChartDiv.classList.add('chart');
+                monthlyChartDiv.style.width = '49%';
+                monthlyChartDiv.style.height = '550px';
+                monthlyChartDiv.style.margin = '0 auto'; // Center the chart
+                symbolContainer.appendChild(monthlyChartDiv);
+
+                chartsContainer.appendChild(symbolContainer);
+
+                drawWeeklyChart(symbol);
+                drawMonthlyChart(symbol);
+            });
+        }
+
+        google.charts.setOnLoadCallback(drawCharts);
+document.querySelectorAll('svg').forEach(function(path) {
+    alert('go');
+    if (path.getAttribute('fill') === '#3366cc') {
+
+        path.setAttribute('fill', '#000000');
+    }
+});
     </script>
+
+    <style>
+        .symbol-container {
+            margin-bottom: 20px;
+        }
+        
+        .chart {
+            border: 1px solid #ccc;
+            float: left;
+            margin-right: 10px;
+        }
+        #charts-container {
+            margin: 0 auto;
+            width: 98%;
+            padding: 0; /* 移除內邊距 */
+            border: none; /* 移除邊框 */
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            /* 確保頁面的body和html元素沒有額外的邊距或內邊距 */
+        }
+    </style>
+</head>
+<body>
+    <div id="charts-container"></div>
 </body>
 </html>
-
-<script>
-    /* Cryptocurrency */
-    $.getJSON("https://api.binance.com/api/v3/ticker/24hr",
-        function (data) {
-            var count = 0;
-            var found;
-
-            for (var key in data) {
-                var coin = data[key].symbol;
-                var price = parseFloat(data[key].lastPrice);
-                var price_change = parseFloat(data[key].priceChange);
-                var percentage = parseFloat(data[key].priceChangePercent);
-                var graph_url = "";
-                var div = "";
-                var sign = "";
-                var green = "#80FF00";
-                var color = "#ff0000";
-
-                found = 0;
-                for (var i in items) {
-                    if (items[i][0] == coin) {
-                        div = "div." + items[i][0];
-                        found = 1;
-                        break;
-                    }
-                }
-
-                if (!found)
-                    continue;
-
-                if (i < 15) {
-                    graph_url = "<img src=\"" + "https://s3.coinmarketcap.com/generated/sparklines/web/7d/usd/"+ items[i][1] + ".png\">";
-                    coin = coin.replace("USDT",": ");
-                } else {
-                    coin = coin.replace("BTC", "/BTC: ");
-                }
-
-                if (price_change > 0) {
-                    color = green;
-                    sign = "+";
-                }
-
-                $(div).html("<font color=" + "ffff00" + ">"+ coin + "</font> <font color="+ color +">" + price + "<br />" + sign + price_change + " (" + sign + percentage.toString() + "%)</font><br />" + graph_url);
-            }
-        });
-
-    /* Auto Reload */
-    setTimeout(function () { window.location = window.location; }, 120000);
-</script>
