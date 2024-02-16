@@ -301,9 +301,8 @@
 </head>
 <body>
     <div id="charts-container"></div>
-    <div id="floating-menu" class="hidden"></div>
-    <div id="menu-toggle">選單</div>
-    <div id="floating-menu" class="hidden"></div>
+    <div id="floating-menu"></div>
+    <div id="menu-toggle">隱藏選單</div>
 
     <script>
         // ... 其他JavaScript代碼 ...
@@ -329,12 +328,12 @@
                 const menu = document.getElementById('floating-menu');
                 if (menu.classList.contains('hidden')) {
                     menu.classList.remove('hidden');
-                    this.textContent = '隱藏';
+                    this.textContent = '隱藏選單';
                 } else {
                     menu.classList.add('hidden');
-                    this.textContent = '選單';
+                    this.textContent = '顯示選單';
                 }
-                            createFloatingMenu();
+                createFloatingMenu();
 
             };
         };
