@@ -16,12 +16,13 @@
         { // [9]
             title: "加密貨幣",
             items: [
-                { div: "time", title: "", url: "" },
+               // { div: "time", title: "", url: "" },
                 { div: "BTC", title: "BTC: 000 (+0%)", url: "" },
                 { div: "ETH", title: "ETH: 000 (+0%)", url: "" },
                 { div: "SOL", title: "", url: "" },
                 { div: "FIL", title: "", url: "" },
                 { div: "STRK", title: "", url: "" },
+                { div: "BNB", title: "", url: "" },
                 { div: "ETHBTC", title: "", url: "" },
             ]
         },
@@ -48,7 +49,7 @@
     <title>Alex's index</title>
     <style type="text/css">
         body {
-            font-size: 5pt;
+            font-size: 5;
             background-color: #000000;
         }
 
@@ -102,7 +103,7 @@
         for (i = 0; i < list_table.length; i++) {
             document.write("<td>");
             document.write("<table border=\"1\" width=\"280\" align=\"center\"><tbody>");
-            document.write("<tr><td class=\"title\">" + list_table[i].title + "</td></tr>");
+            //document.write("<tr><td class=\"title\">" + list_table[i].title + "</td></tr>");
 
             for (j = 0; j < 7; j++) {
                 item_title = list_table[i].items[j].title;
@@ -111,7 +112,7 @@
                 if (item_title == "")
                     item_title = "　";
 
-                document.write("<tr><td height=\"90\"><div class=\"" + item_div + "\"><a href=\"" + item_url + "\">" + item_title + "</a></div></td></tr>");
+                document.write("<tr><td height=\"70\"><div class=\"" + item_div + "\"><a href=\"" + item_url + "\">" + item_title + "</a></div></td></tr>");
             }
 
             document.write("</tbody></table>");
@@ -428,7 +429,7 @@
     function set_time() {
         var d = new Date();
         $("div.time").css("color", "orange");
-        $("div.time").html((d.getMonth()+1) + "/" + d.getDate() + " "+ d.toLocaleTimeString("en-US", { hour12: false , hour: "2-digit", minute: "2-digit"}));
+        $("div.time").html("<font size=\"9\">"+(d.getMonth()+1) + "/" + d.getDate() + " "+ d.toLocaleTimeString("en-US", { hour12: false , hour: "2-digit", minute: "2-digit"})) + "</font>";
         setTimeout(function () { set_time(); }, 1000);
     }
 
@@ -470,6 +471,7 @@
     get_binance("OP");
     get_binance("BLUR");
 	get_binance("XAI");
+	get_binance("BNB");
     //get_binance_cmc("BLUR", "blur-token");
     get_binance("SSV");
     get_binance("ARB");
