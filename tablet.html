@@ -112,7 +112,7 @@
                 if (item_title == "")
                     item_title = "　";
 
-                document.write("<tr><td height=\"70\"><div class=\"" + item_div + "\"><a href=\"" + item_url + "\">" + item_title + "</a></div></td></tr>");
+                document.write("<tr><td height=\"60\"><div class=\"" + item_div + "\"><a href=\"" + item_url + "\">" + item_title + "</a></div></td></tr>");
             }
 
             document.write("</tbody></table>");
@@ -333,7 +333,7 @@
 //                        $("div." + item.toUpperCase()).html("<a style=\"color:" + color + ";\" href=\"https://www.binance.com/zh-TW/trade/" + item + "_USDT\">" + item.toUpperCase()+ ": " + String(price) + percent_html + "</a>");
 //                    } else {
                         price = parseFloat(data.lastPrice).toFixed(5);
-                        $("div." + item.toUpperCase()).html("<font size=\"6\"><a style=\"color:" + color + ";\" href=\"https://www.binance.com/zh-TW/trade/" + item + "\">" + item.toUpperCase()+ ": " + String(price) + "</a></font>");
+                        $("div." + item.toUpperCase()).html("<font size=\"5\"><a style=\"color:" + color + ";\" href=\"https://www.binance.com/zh-TW/trade/" + item + "\">" + item.toUpperCase()+ ": " + String(price) + "</a></font>");
 //                    }
                 }
             );
@@ -367,9 +367,9 @@
 
 
                 if (item == "BLUR")
-                    $("div.BLUR").html("<font size=\"6\"><a style=\"color:" + color + ";\" href=\"https://www.binance.com/zh-TW/trade/" + item + "_USDT\">" + item.toUpperCase()+ ": " + String(price) + percent_html + "</a></font>");
+                    $("div.BLUR").html("<font size=\"5\"><a style=\"color:" + color + ";\" href=\"https://www.binance.com/zh-TW/trade/" + item + "_USDT\">" + item.toUpperCase()+ ": " + String(price) + percent_html + "</a></font>");
                 else
-                    $("div." + item.toUpperCase()).html("<font size=\"6\"><a style=\"color:" + color + ";\" href=\"https://www.binance.com/zh-TW/trade/" + item + "_USDT\">" + item.toUpperCase()+ ": " + String(price) + percent_html + "</a></font>");
+                    $("div." + item.toUpperCase()).html("<font size=\"5\"><a style=\"color:" + color + ";\" href=\"https://www.binance.com/zh-TW/trade/" + item + "_USDT\">" + item.toUpperCase()+ ": " + String(price) + percent_html + "</a></font>");
             }
         );
     }
@@ -419,7 +419,7 @@
                             price = parseFloat(price).toFixed(4);
 
                         name = val[i].slug
-                        $("div." + item.toUpperCase()).html("<font size=\"6\"><a style=\"color:" + color + ";\" href=\"https://www.binance.com/en/price/" + name + "\">" + item.toUpperCase()+ ": " + String(price) + percent_html + "</a></font>");
+                        $("div." + item.toUpperCase()).html("<font size=\"5\"><a style=\"color:" + color + ";\" href=\"https://www.binance.com/en/price/" + name + "\">" + item.toUpperCase()+ ": " + String(price) + percent_html + "</a></font>");
                     }
                 });
             }
