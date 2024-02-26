@@ -39,6 +39,10 @@
 </head>
 <body>
     <script>
+        function reloadPage() {
+            window.location.reload();
+        }
+
         function get_binance(item) {
             var percent = 0;
             var percent_html = "";
@@ -62,6 +66,7 @@
                 );
                 return;
             }
+
             $.getJSON("https://api.binance.com/api/v3/ticker/24hr?symbol=" + String(item).toUpperCase() + "USDT",
                 function (data) {
                     var color = "#80FF00";
@@ -92,6 +97,7 @@
                 }
             );
         }
+
         // 當文檔加載完成時執行
         document.addEventListener("DOMContentLoaded", function() {
             // 定義自定義名稱的陣列
@@ -116,7 +122,9 @@
                 get_binance(itemNames[i]);
             }
         });
-        setTimeout(function () { window.location = window.location; }, 300000);
+
+        setTimeout(reloadPage, 300000);
     </script>
+
 </body>
 </html>
