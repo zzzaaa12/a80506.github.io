@@ -1,43 +1,121 @@
-<html>
-
+<!DOCTYPE html>
+<html lang="zh-Hant">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>DHT sendors</title>
+    <title>Crypto Price</title>
     <style type="text/css">
         body {
+            font-size: 60pt;
+            font-family: 'Noto Sans TC', sans-serif;
             background-color: #000000;
+        }
+
+        div {
+            color: #808080;
+            margin: 30px;
+        }
+
+        div.time {
+            color: #FFFF00;
+            font-size: 135pt;
+            font-weight: bold;
+        }
+
+        div.coin {
+            font-size: 95pt;
+            color: #FFFFFF;
+            font-weight: bold;
+        }
+
+        div.weather {
+            font-size: 60pt;
+            font-weight: bold;
+            color: #FFFFFF;
         }
     </style>
     <style type="text/css"></style>
     <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
         crossorigin="anonymous"></script>
 </head>
-
 <body>
-    <div align="center">
-        <iframe width="450" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/72313/charts/1?dynamic=true&max=50&min=0&results=100&title=%E5%AE%A2%E5%BB%B3-%E6%BA%AB%E5%BA%A6&type=spline&yaxismax=40&yaxismin=5"></iframe>
-        <iframe width="450" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/72313/charts/2?dynamic=true&max=100&min=0&results=100&title=%E5%AE%A2%E5%BB%B3-%E6%BF%95%E5%BA%A6&type=spline&yaxismax=100&yaxismin=30"></iframe>
-    </div>
-    <div align="center">
-        <iframe width="450" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/72313/charts/3?bgcolor=%23ffffff&color=%23d62020&dynamic=true&max=100&min=1&results=100&title=%E4%B8%BB%E8%87%A5-%E6%BA%AB%E5%BA%A6&type=spline&yaxismax=40&yaxismin=5"></iframe>
-        <iframe width="450" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/72313/charts/4?dynamic=true&max=100&min=1&results=100&title=%E4%B8%BB%E8%87%A5-%E6%BF%95%E5%BA%A6&type=spline&yaxismax=100&yaxismin=40"></iframe>
-    </div>
-    <div align="center">
-        <iframe width="450" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/72313/charts/5?bgcolor=%23ffffff&color=%23d62020&dynamic=true&max=50&min=0&results=100&title=%E5%AE%A2%E6%88%BF-%E6%BA%AB%E5%BA%A6&type=spline&yaxismax=60&yaxismin=5"></iframe>
-        <iframe width="450" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/72313/charts/6?bgcolor=%23ffffff&color=%23d62020&dynamic=true&max=100&min=0&results=100&title=%E5%AE%A2%E6%88%BF-%E6%BF%95%E5%BA%A6&type=spline&yaxismax=100&yaxismin=30"></iframe>
-    </div>
-    <div align="center">
-        <iframe width="450" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/72313/charts/7?bgcolor=%23ffffff&color=%23d62020&dynamic=true&max=50&min=0&results=100&title=%E6%9B%B8%E6%88%BF-%E6%BA%AB%E5%BA%A6&type=spline&yaxismax=40&yaxismin=5"></iframe>
-        <iframe width="450" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/72313/charts/8?bgcolor=%23ffffff&color=%23d62020&dynamic=true&max=100&min=0&results=100&title=%E6%9B%B8%E6%88%BF-%E6%BF%95%E5%BA%A6&type=spline&yaxismax=100&yaxismin=30"></iframe>
-    </div>
-    <div align="center">
-        <iframe width="450" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/565880/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&max=500&min=0&results=50&title=%E4%BA%AE%E5%BA%A6&type=spline&yaxismax=400&yaxismin=0"></iframe>
-        <iframe width="450" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/72839/charts/1?dynamic=true&title=PM1.0&type=spline"></iframe>
-    </div>
-    <div align="center">
-        <iframe width="450" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/72839/charts/2?dynamic=false&title=PM2.5&type=spline"></iframe>
-        <iframe width="450" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/72839/charts/3?dynamic=false&title=PM10&type=spline"></iframe>
-    </div>
-</body>
+    <script>
+        function get_binance(item) {
+            var percent = 0;
+            var percent_html = "";
 
+            if (item == "ETHBTC" || item == "FILBTC" || item == "LINKBTC" || item == "APEBTC" || item == "UNIBTC") {
+                $.getJSON("https://api.binance.com/api/v3/ticker/24hr?symbol=" + item,
+                    function (data) {
+                        var color = "#80FF00";
+                        percent = parseInt(data.priceChangePercent);
+                        if (percent < 0) {
+                            color = "red";
+                            percent_html = " (" + percent.toString() + "%)";
+                        } else if (percent > 0) {
+                            percent_html = " (+" + percent.toString() + "%)";
+                        } else {
+                            color = "yellow";
+                        }
+                        price = parseFloat(data.lastPrice);
+                        $("div." + item.toUpperCase()).html("<span style=\"color:" + color + ";\" >" + item.toUpperCase()+ ": " + String(price) + "</span>");
+                    }
+                );
+                return;
+            }
+            $.getJSON("https://api.binance.com/api/v3/ticker/24hr?symbol=" + String(item).toUpperCase() + "USDT",
+                function (data) {
+                    var color = "#80FF00";
+                    var percent = 0;
+                    var price = 0;
+
+                    percent = parseInt(data.priceChangePercent);
+                    if (percent < 0) {
+                        color = "red";
+                        percent_html = " (" + percent.toString() + "%)";
+                    } else if (percent > 0) {
+                        percent_html = " (+" + percent.toString() + "%)";
+                        percent_html = " (+" + percent.toString() + "%)";
+                    } else {
+                        color = "yellow";
+                    }
+
+                    price = parseFloat(data.lastPrice);
+                    if (price >= 100)
+                        price = parseInt(data.lastPrice);
+                    else if (price >= 1)
+                        price = parseFloat(data.lastPrice).toFixed(2);
+                    else
+                        price = parseFloat(data.lastPrice).toFixed(3);
+
+
+                    $("div." + item.toUpperCase()).html("<span style=\"color:" + color + ";\" >" + item.toUpperCase()+ ": " + String(price) + percent_html + "</span>");
+                }
+            );
+        }
+        // 當文檔加載完成時執行
+        document.addEventListener("DOMContentLoaded", function() {
+            // 定義自定義名稱的陣列
+            var itemNames = ["LINK", "DOT", "BNB", "SOL", "UNI", "BLUR", "STX", "WLD", "ETHBTC"];
+
+            // 使用 for 循環創建和配置每個元素
+            for (var i = 0; i < itemNames.length; i++) {
+                // 創建一個新的 div 元素
+                var div = document.createElement("div");
+
+                // 給 div 添加 class 屬性
+                div.className = itemNames[i];
+
+                // 設置 div 的 align 屬性
+                div.setAttribute("align", "center");
+
+                // 為 div 添加內容，使用陣列中的名稱
+                div.textContent = itemNames[i];
+
+                // 將 div 添加到 body 的末尾
+                document.body.appendChild(div);
+                get_binance(itemNames[i]);
+            }
+        });
+    </script>
+</body>
 </html>
