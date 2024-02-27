@@ -63,47 +63,47 @@
                             color = "yellow";
                         }
                         price = parseFloat(data.lastPrice);
-                        $("div." + item.toUpperCase()).html("<span style=\"color:" + color + ";\" >" + item.toUpperCase()+ ": " + String(price) + "</span>");
+                        $("div." + item.toUpperCase()).html("<strong><span style=\"color:" + color + ";\" >" + item.toUpperCase()+ ": " + String(price) + "</span></strong>");
                     }
                 );
-                return;
-            }
 
-            $.getJSON("https://api.binance.com/api/v3/ticker/24hr?symbol=" + String(item).toUpperCase() + "USDT",
-                function (data) {
-                    var color = "#80FF00";
-                    var percent = 0;
-                    var price = 0;
+            } else {
+                $.getJSON("https://api.binance.com/api/v3/ticker/24hr?symbol=" + String(item).toUpperCase() + "USDT",
+                    function (data) {
+                        var color = "#80FF00";
+                        var percent = 0;
+                        var price = 0;
 
-                    percent = parseInt(data.priceChangePercent);
-                    if (percent < 0) {
-                        color = "red";
-                        percent_html = " (" + percent.toString() + "%)";
-                    } else if (percent > 0) {
-                        percent_html = " (+" + percent.toString() + "%)";
-                        percent_html = " (+" + percent.toString() + "%)";
-                    } else {
-                        color = "yellow";
+                        percent = parseInt(data.priceChangePercent);
+                        if (percent < 0) {
+                            color = "red";
+                            percent_html = " (" + percent.toString() + "%)";
+                        } else if (percent > 0) {
+                            percent_html = " (+" + percent.toString() + "%)";
+                            percent_html = " (+" + percent.toString() + "%)";
+                        } else {
+                            color = "yellow";
+                        }
+
+                        price = parseFloat(data.lastPrice);
+                        if (price >= 100)
+                            price = parseInt(data.lastPrice);
+                        else if (price >= 1)
+                            price = parseFloat(data.lastPrice).toFixed(2);
+                        else
+                            price = parseFloat(data.lastPrice).toFixed(3);
+
+
+                        $("div." + item.toUpperCase()).html("<strong><span style=\"color:" + color + ";\" >" + item.toUpperCase()+ ": " + String(price) + percent_html + "</span></strong>");
                     }
-
-                    price = parseFloat(data.lastPrice);
-                    if (price >= 100)
-                        price = parseInt(data.lastPrice);
-                    else if (price >= 1)
-                        price = parseFloat(data.lastPrice).toFixed(2);
-                    else
-                        price = parseFloat(data.lastPrice).toFixed(3);
-
-
-                    $("div." + item.toUpperCase()).html("<strong><span style=\"color:" + color + ";\" >" + item.toUpperCase()+ ": " + String(price) + percent_html + "</span></strong>");
-                }
-            );
+                );
+            }
         }
 
         // 當文檔加載完成時執行
         document.addEventListener("DOMContentLoaded", function() {
             // 定義自定義名稱的陣列
-            var itemNames = ["LINK", "BNB", "SOL", "UNI", "BLUR", "STX", "WLD", "ETHBTC"];
+            var itemNames = ["LINK", "SSV", "SOL", "UNI", "BLUR", "STX", "WLD", "ETHBTC"];
 
             // 使用 for 循環創建和配置每個元素
             for (var i = 0; i < itemNames.length; i++) {
