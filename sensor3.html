@@ -37,6 +37,16 @@
             background-color: red; /* 設定背景色為紅色 */
         }
 
+        .green-bg2 {
+            background-color: #33CC33; /* 設定背景色為綠色 */
+            color: #000;
+        }
+
+        .red-bg2 {
+            background-color: #FF6633; /* 設定背景色為紅色 */
+            color: #000;
+        }
+
         .black-bg {
             background-color: black; /* 設定背景色為黑色 */
         }
@@ -86,10 +96,14 @@
                             var block = document.createElement('div');
                             block.className = 'block';
                             var priceChangePercent = parseFloat(data.priceChangePercent);
-                            if (priceChangePercent > 5) {
+                            if (priceChangePercent > 10) {
                                 block.classList.add('red-bg', 'black-text');
-                            } else if (priceChangePercent < -5) {
+                            } else if (priceChangePercent > 5) {
+                                block.classList.add('red-bg2', 'black-text');
+                            } else if (priceChangePercent < -10) {
                                 block.classList.add('green-bg', 'black-text');
+                            } else if (priceChangePercent < -5) {
+                                block.classList.add('green-bg2', 'black-text');
                             } else if (priceChangePercent > 1) {
                                 block.classList.add('black-bg', 'green-text');
                             } else if (priceChangePercent < -1) {
