@@ -8,7 +8,7 @@
         body, html {
             margin: 0;
             padding: 0;
-            height: 70%;
+            height: 90%; /* 調整高度，留下10%的空白 */
             width: 100%;
             background-color: black; /* 設定背景色為黑色 */
             color: #fff; /* 設定文字顏色為白色 */
@@ -18,7 +18,7 @@
         .container {
             display: grid;
             grid-template-columns: repeat(4, 1fr); /* 將畫面分成4列 */
-            height: 100vh; /* 使容器填滿整個視窗高度 */
+            height: 100%; /* 使用全部可視區域高度 */
             grid-gap: 0; /* 取消格線 */
         }
 
@@ -52,19 +52,21 @@
         .price {
             font-size: 30px;
         }
+
+        /* 調整底部空白 */
+        .bottom-space {
+            height: 10%;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <!-- 生成4*8的區塊 -->
     </div>
+    <div class="bottom-space"></div> <!-- 底部空白 -->
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            function reloadPage() {
-                location.reload(); // 重新載入整個網頁
-            }
-
             function fetchAndUpdate() {
                 var container = document.querySelector('.container');
                 var coins = ['BTC', 'ETH', 'STX', 'RIF', 'SOL', 'BNB', 'STRK', 'SUI',
@@ -106,8 +108,8 @@
             // 首次載入時執行
             fetchAndUpdate();
 
-            // 每三分鐘重新載入整個網頁
-            setInterval(reloadPage, 180000);
+            // 每三分鐘重新載入一次
+            setInterval(fetchAndUpdate, 180000);
         });
     </script>
 </body>
