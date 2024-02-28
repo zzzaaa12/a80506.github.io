@@ -120,7 +120,7 @@
                                 percent_str = "+" + percent_str;
                             // 移除價格末尾多餘的零，並移除百分比
                             var price = parseFloat(data.lastPrice).toFixed(2);
-                            block.innerHTML = `<center><div>${coin}<br />${price}<br /> ${percent_str} </div></center>`;
+                            block.innerHTML = `<center><div>${coin}<br /> ${percent_str} </div></center>`;
                             container.appendChild(block);
                         })
                         .catch(error => console.error('Error fetching ' + coin + ' price:', error));
