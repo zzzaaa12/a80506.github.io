@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>加密貨幣報價</title>
+    <title>CryptoBlock</title>
     <style>
         body, html {
             margin: 0;
@@ -83,10 +83,14 @@
         document.addEventListener("DOMContentLoaded", function() {
             function fetchAndUpdate() {
                 var container = document.querySelector('.container');
-                var coins = ['BTC', 'ETH', 'STX', 'RIF', 'SOL', 'BNB', 'STRK', 'SUI',
-                            'APT', 'ORDI', 'ARB', 'MATIC', 'MANTA', 'XAI', 'DOT', 'ATOM',
-                            'STG', 'LINK', 'PYTH', 'ALT', 'SSV', 'PENDLE', 'MAGIC', 'BLUR',
-                            'WLD', 'UNI', 'DYDX', 'JUP', 'FIL', 'AR', 'STORJ', 'ICP'];
+                var coins = ['BTC', 'ETH', 'SOL', 'BNB', 
+			     'STX', 'ORDI', '1000SATS', 'RIF',  
+                             'ARB', 'OP', 'STRK', 'XAI',
+                             'LINK', 'PYTH', 'DOT', 'ATOM',
+                             'FIL', 'AR', 'STORJ', 'ICP',
+                             'BLUR','UNI', 'DYDX', 'JUP', 
+                             'STG', 'ALT', 'MANTA', 'MATIC',
+                             'SSV', 'PENDLE', 'MAGIC', 'WLD'];
 
                 container.innerHTML = ''; // 清空容器內的內容
 
