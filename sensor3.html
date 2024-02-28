@@ -62,7 +62,10 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             var container = document.querySelector('.container');
-            var coins = ['ORDI', 'ETH', 'STX', 'RIF', 'SOL', 'BNB', 'STRK', 'SUI', 'APT', 'OP', 'ARB', 'MATIC', 'MANTA', 'XAI', 'DOT', 'ATOM', 'STG', 'LINK', 'PYTH', 'ALT', 'SSV', 'PENDLE', 'MAGIC', 'BLUR', 'WLD', 'UNI', 'DYDX', 'JUP', 'DOGE', 'SHIB', 'BTC', 'FIL'];
+            var coins = ['BTC', 'ETH', 'STX', 'RIF', 'SOL', 'BNB', 'STRK', 'SUI',
+                         'APT', 'ORDI', 'ARB', 'MATIC', 'MANTA', 'XAI', 'DOT', 'ATOM',
+                         'STG', 'LINK', 'PYTH', 'ALT', 'SSV', 'PENDLE', 'MAGIC', 'BLUR',
+                         'WLD', 'UNI', 'DYDX', 'JUP'];
 
             coins.forEach(function(coin) {
                 fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=' + coin + 'USDT')
