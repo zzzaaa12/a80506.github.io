@@ -61,7 +61,7 @@
         }
 
         .price {
-            font-size: 40px;
+            font-size: 45px;
         }
         .top-space {
             height: 2%;
@@ -120,6 +120,7 @@
                                 percent_str = "+" + percent_str;
                             // 移除價格末尾多餘的零，並移除百分比
                             var price = parseFloat(data.lastPrice).toFixed(2);
+                            coin = coin.replace("1000", "");
                             block.innerHTML = `<center><div>${coin}<br /> ${percent_str} </div></center>`;
                             container.appendChild(block);
                         })
