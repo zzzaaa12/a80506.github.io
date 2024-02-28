@@ -61,39 +61,53 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            var container = document.querySelector('.container');
-            var coins = ['BTC', 'ETH', 'STX', 'RIF', 'SOL', 'BNB', 'STRK', 'SUI',
-                         'APT', 'ORDI', 'ARB', 'MATIC', 'MANTA', 'XAI', 'DOT', 'ATOM',
-                         'STG', 'LINK', 'PYTH', 'ALT', 'SSV', 'PENDLE', 'MAGIC', 'BLUR',
-                         'WLD', 'UNI', 'DYDX', 'JUP'];
+            function reloadPage() {
+                location.reload(); // 重新載入整個網頁
+            }
 
-            coins.forEach(function(coin) {
-                fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=' + coin + 'USDT')
-                    .then(response => response.json())
-                    .then(data => {
-                        var block = document.createElement('div');
-                        block.className = 'block';
-                        var priceChangePercent = parseFloat(data.priceChangePercent);
-                        if (priceChangePercent > 5) {
-                            block.classList.add('red-bg', 'black-text');
-                        } else if (priceChangePercent < -5) {
-                            block.classList.add('green-bg', 'black-text');
-                        } else if (priceChangePercent > 1) {
-                            block.classList.add('black-bg', 'green-text');
-                        } else if (priceChangePercent < -1) {
-                            block.classList.add('black-bg', 'red-text');
-                        }
+            function fetchAndUpdate() {
+                var container = document.querySelector('.container');
+                var coins = ['BTC', 'ETH', 'STX', 'RIF', 'SOL', 'BNB', 'STRK', 'SUI',
+                            'APT', 'ORDI', 'ARB', 'MATIC', 'MANTA', 'XAI', 'DOT', 'ATOM',
+                            'STG', 'LINK', 'PYTH', 'ALT', 'SSV', 'PENDLE', 'MAGIC', 'BLUR',
+                            'WLD', 'UNI', 'DYDX', 'JUP'];
 
-			var percent_str = priceChangePercent.toFixed(2).toString() + "%";
-			if (priceChangePercent > 0)
-				percent_str = "+" + percent_str;
-                        // 移除價格末尾多餘的零，並移除百分比
-                        var price = parseFloat(data.lastPrice).toFixed(2);
-                        block.innerHTML = `<center><div>${coin}<br /> ${percent_str} </div></center>`;
-                        container.appendChild(block);
-                    })
-                    .catch(error => console.error('Error fetching ' + coin + ' price:', error));
-            });
+                container.innerHTML = ''; // 清空容器內的內容
+
+                coins.forEach(function(coin) {
+                    fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=' + coin + 'USDT')
+                        .then(response => response.json())
+                        .then(data => {
+                            var block = document.createElement('div');
+                            block.className = 'block';
+                            var priceChangePercent = parseFloat(data.priceChangePercent);
+                            if (priceChangePercent > 5) {
+                                block.classList.add('red-bg', 'black-text');
+                            } else if (priceChangePercent < -5) {
+                                block.classList.add('green-bg', 'black-text');
+                            } else if (priceChangePercent > 1) {
+                                block.classList.add('black-bg', 'green-text');
+                            } else if (priceChangePercent < -1) {
+                                block.classList.add('black-bg', 'red-text');
+                            }
+
+                            var percent_str = priceChangePercent.toFixed(2).toString() + "%";
+                            if (priceChangePercent > 0)
+                                percent_str = "+" + percent_str;
+                            // 移除價格末尾多餘的零，並移除百分比
+                            var price = parseFloat(data.lastPrice).toFixed(2);
+                            block.innerHTML = `<center><div>${coin}<br /> ${percent_str} </div></center>`;
+                            container.appendChild(block);
+                        })
+                        .catch(error => console.error('Error fetching ' + coin + ' price:', error));
+                });
+            }
+
+            // 首次載入時執行
+            fetchAndUpdate();
+
+            // 每三分鐘重新載入整個網頁
+            setInterval(reloadPage, 180000);
         });
     </script>
 </body>
