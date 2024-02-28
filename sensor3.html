@@ -50,7 +50,7 @@
         }
 
         .price {
-            font-size: 30px;
+            font-size: 40px;
         }
 
         /* 調整底部空白 */
@@ -93,7 +93,7 @@
                                 block.classList.add('black-bg', 'red-text');
                             }
 
-                            var percent_str = priceChangePercent.toFixed(2).toString() + "%";
+                            var percent_str = priceChangePercent.toFixed(1).toString() + "%";
                             if (priceChangePercent > 0)
                                 percent_str = "+" + percent_str;
                             // 移除價格末尾多餘的零，並移除百分比
