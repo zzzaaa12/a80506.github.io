@@ -8,7 +8,7 @@
         body, html {
             margin: 0;
             padding: 0;
-            height: 100%;
+            height: 90%;
             width: 100%;
             background-color: black; /* 設定背景色為黑色 */
             color: #fff; /* 設定文字顏色為白色 */
@@ -71,13 +71,13 @@
                         var block = document.createElement('div');
                         block.className = 'block';
                         var priceChangePercent = parseFloat(data.priceChangePercent);
-                        if (priceChangePercent > 10) {
+                        if (priceChangePercent > 5) {
                             block.classList.add('red-bg', 'black-text');
-                        } else if (priceChangePercent < -10) {
+                        } else if (priceChangePercent < -5) {
                             block.classList.add('green-bg', 'black-text');
-                        } else if (priceChangePercent > 0) {
+                        } else if (priceChangePercent > 1) {
                             block.classList.add('black-bg', 'green-text');
-                        } else if (priceChangePercent < 0) {
+                        } else if (priceChangePercent < -1) {
                             block.classList.add('black-bg', 'red-text');
                         }
 
