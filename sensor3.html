@@ -122,7 +122,7 @@
                             var price = parseFloat(data.lastPrice).toFixed(2);
                             coin = coin.replace("1000", "");
                             // 更新區塊內容
-                            if (priceChangePercent < 1 || priceChangePercent > -1)
+                            if (priceChangePercent < 1 && priceChangePercent > -1)
                                 block.innerHTML = `<center><div>${coin}<br /> ${price} </div></center>`;
                             else
                                 block.innerHTML = `<center><div>${coin}<br /> ${percent_str} </div></center>`;
