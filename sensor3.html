@@ -123,7 +123,7 @@
                             if (price >= 100)
                                 price = parseInt(price);
                             else if (price >= 1)
-                                price = price.toFixed(2);
+                                price = parseFloat(data.lastPrice).toFixed(2);
                             coin = coin.replace("1000", "");
                             // 更新區塊內容
                             if (priceChangePercent < 1 && priceChangePercent > -1)
