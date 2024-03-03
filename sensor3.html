@@ -11,7 +11,7 @@
             height: 94%; /* 調整高度，留下4%的空白 */
             width: 100%;
             background-color: black; /* 設定背景色為黑色 */
-            color: #fff; /* 設定文字顏色為白色 */
+            color: #ffff00; /* 設定文字顏色為白色 */
             font-weight: bold; /* 使用粗體字 */
             font-size: 18px;
         }
@@ -120,11 +120,11 @@
                                 percent_str = "+" + percent_str;
                             // 移除價格末尾多餘的零，並移除百分比
                             var price = parseFloat(data.lastPrice);
-                            if (price > 100)
-                                price = parseInt(data.lastPrice).toFixed(2);
-                            else if (price > 1)
+                            if (price >= 100)
+                                price = parseInt(data.lastPrice);
+                            else if (price >= 1)
                                 price = parseFloat(data.lastPrice).toFixed(2);
-                            else if (price > 0.01)
+                            else if (price >= 0.01)
                                 price = parseFloat(data.lastPrice).toFixed(4);
                             else
                                 price = parseFloat(data.lastPrice).toFixed(6);
