@@ -373,7 +373,7 @@
                         else if (data[key].symbol == "AVAUSDT")
                             ava = price;
                         else if (data[key].symbol == "ARBUSDT")
-                            arb = price;
+                            arb = price.toFixed(1);
                         else if (data[key].symbol == "OPUSDT")
                             op = price;
                     }
@@ -410,82 +410,6 @@
             var d = new Date();
             $("div.time").html(d.toLocaleTimeString("en-US", { hour12: false , hour: "2-digit", minute: "2-digit"}));
             setTimeout(function () { set_time(); }, 1000);
-        }
-
-        function miner_data(idx) {
-            /* Miner */
-            var prestr = "Miner"+ (idx+1).toString() + ": "
-            $.getJSON("https://gpumine.org/api/miner?currency=ETH&address=0x9D96B087A6279f5B5967804B1c2c3d6952e6f531",
-            function (data) {
-                var miner_online = data['data']['workers']['list'][idx].online;
-                var miner = parseInt(100 * data['data']['workers']['list'][idx].hashrate24h / data['data']['workers']['list'][idx].submitHashrate24h);
-                var hashrate = (parseFloat(data['data']['workers']['list'][idx].hashrate24h) / 1000000).toFixed(1);
-                var div_target = "div.miner" + idx.toString();
-
-                if (miner > 100)
-                    miner = 100;
-
-                if (miner < 85) {
-                    $(div_target).css("color", "red");
-                    $(div_target).css("font-weight", "bold");
-                } else if (miner < 92) {
-                    $(div_target).css("color", "orange");
-                    $(div_target).css("font-weight", "bold");
-                } else {
-                    $(div_target).css("color", green);
-                }
-
-                idx += 1;
-                if (miner_online && hashrate > 80) {
-                    $(div_target).html(prestr + hashrate + "M / " + miner + "%");
-                } else {
-                    $(div_target).css("color", "red");
-                    $(div_target).css("font-weight", "bold");
-                    if (miner_online)
-                        $(div_target).html(prestr + hashrate + "M / " + miner + "%");
-                    else
-                        $(div_target).html(prestr + "Leaved");
-                }
-            });
-        }
-
-        function miner_balance() {
-            $.getJSON("https://gpumine.org/api/bill?currency=ETH&address=0x9D96B087A6279f5B5967804B1c2c3d6952e6f531",
-            function (data) {
-                var reward1d = parseFloat(data['data']['calcReward24h'].coin).toFixed(4);
-                var reward1d_usd = parseInt(data['data']['calcReward24h'].usd);
-                var reward1d_twd = parseInt(data['data']['calcReward24h'].ntd);
-                var eth_reward_1m = (30 * parseFloat(data['data']['calcReward24h'].coin)).toFixed(3);
-                var reward1m = (reward1d * 30).toFixed(3);
-                var reward1m_usd = parseInt(reward1d_usd * 30);
-                var reward1m_twd = reward1d_twd * 30;
-                var balance = parseFloat(data['data'].balance);
-                var hour = parseInt((0.1-balance)/reward1d*24);
-                var _hour = parseInt(hour)%24;
-                const d = new Date();
-                let now_hour = d.getHours();
-                //$("div.miner0").html(reward1d + " / " + reward1m + " / " + reward1m_usd);
-
-/*
-                if (isNaN(hour)) {
-                    $("div.miner1").html(balance);
-                    $("div.miner1").css("color", "red");
-                } else if (hour > 24) {
-                    var days = parseInt(hour/24);
-                    $("div.miner1").html(balance + " / " + days.toString() + "D " + (hour%24+1) + "H");
-                } else if (hour > 0) {
-                    $("div.miner1").css("color", "red");
-                    $("div.miner1").html(balance + " / " + hour.toString() + "H");
-                } else {
-                    if (now_hour > 15)
-                        $("div.miner1").html(balance + " / " + "Tomorrow");
-                    else
-                        $("div.miner1").html(balance + " / " + "Today");
-                }
-*/
-                $("div.miner1").html(balance);
-                $("div.miner1").css("color", "red");
-            });
         }
 
         function get_pm25() {
