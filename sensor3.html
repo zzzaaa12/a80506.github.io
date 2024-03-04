@@ -58,6 +58,11 @@
             color: #000;
         }
 
+        .orange-bg {
+            background-color: #FFA042; /* 設定背景色為紅色 */
+            color: #000;
+        }
+
         .black-bg {
             background-color: black; /* 設定背景色為黑色 */
         }
@@ -71,15 +76,15 @@
         }
 
         .top-space {
-            height: 2%;
+            height: 0%;
         }
 
         .middle-space {
-            height: 2%;
+            height: 0%;
         }
 
         .XXXBTC {
-            height: 2%;
+            height: 6%;
         }
     </style>
 </head>
@@ -181,7 +186,7 @@
                             if (priceChangePercent < -10) {
                                 block.classList.add('red-bg', 'black-text');
                             } else if (priceChangePercent < -5) {
-                                block.classList.add('red-bg2', 'black-text');
+                                block.classList.add('orange-bg', 'black-text');
                             } else if (priceChangePercent > 10) {
                                 block.classList.add('green-bg', 'black-text');
                             } else if (priceChangePercent > 5) {
