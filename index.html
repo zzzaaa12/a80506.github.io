@@ -129,9 +129,9 @@
                 { div: "SSV", title: "", url: "" },
                 { div: "ARB", title: "", url: "" },
                 { div: "OP", title: "", url: "" },
-                { div: "STX", title: "", url: "" },
                 { div: "", title: "BTC Dominance", url: "https://tw.tradingview.com/chart/?symbol=CRYPTOCAP%3ABTC.D" },
                 { div: "", title: "Alt-Coins", url: "coin.html" },
+                { div: "XXXBTC", title: "Coinblock", url: "https://a80506.github.io/coinblock-w.html"},
             ]
         },
         { // [11]
@@ -190,7 +190,8 @@
             color: #707070;
         }
 
-        .XXX {
+        .XXX,
+        .XXXBTC{
             display: grid;
             grid-template-columns: repeat(8, 1fr); /* 將畫面分成4列 */
             height: 100%; /* 使用全部可視區域高度 */
@@ -854,10 +855,10 @@
                         coin = coin.replace("1000", "");
                         // 更新區塊內容
                         if (priceChangePercent < 1 && priceChangePercent > -1)
-                            block.innerHTML = `<center><div><a href="sensor3.html">${coin}</a></div></center>`;
-                        else
-                            block.innerHTML = `<center><div>${coin}</div></center>`;
-                        return block;
+                             block.innerHTML = `<center><div><a href="sensor3.html">${coin}</a></div></center>`;
+                      else
+                          block.innerHTML = `<center><div>${coin}</div></center>`;
+                      return block;
                     })
                     .catch(error => {
                         console.error('Error fetching ' + coin + ' price:', error);
@@ -874,8 +875,75 @@
                     });
                 });
         }
+
+        function fetchAndUpdateBTC() {
+            var container = document.querySelector('.XXXBTC');
+            container.innerHTML = ''; // 清空容器內的內容
+
+            var promises = coinOrder.map(function(coin) {
+                return fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=' + coin + 'BTC')
+                    .then(response => response.json())
+                    .then(data => {
+                        // 創建區塊
+                        var block = document.createElement('div');
+                        block.className = 'block';
+                        var priceChangePercent = parseFloat(data.priceChangePercent);
+                        if (priceChangePercent < -10) {
+                            block.classList.add('red-bg', 'black-text');
+                        } else if (priceChangePercent < -5) {
+                            block.classList.add('red-bg2', 'black-text');
+                        } else if (priceChangePercent > 10) {
+                            block.classList.add('green-bg', 'black-text');
+                        } else if (priceChangePercent > 5) {
+                            block.classList.add('green-bg2', 'black-text');
+                        } else if (priceChangePercent > 1) {
+                            block.classList.add('black-bg', 'green-text');
+                        } else if (priceChangePercent < -1) {
+                            block.classList.add('black-bg', 'red-text');
+                        }
+
+                        var percent_str = priceChangePercent.toFixed(1).toString() + "%";
+                        if (priceChangePercent > 0)
+                            percent_str = "+" + percent_str;
+                        // 移除價格末尾多餘的零，並移除百分比
+                        var price = parseFloat(data.lastPrice);
+                        if (price >= 100)
+                            price = parseInt(price);
+                        else if (price >= 1)
+                            price = price.toFixed(2);
+                        else if (price >= 0.01)
+                            price = price.toFixed(4);
+                        else
+                            price = price.toFixed(6);
+                        coin = coin.replace("1000", "");
+                        // 更新區塊內容
+                        if (priceChangePercent < 1 && priceChangePercent > -1)
+                             block.innerHTML = `<center><div><a href="sensor3.html">${coin}</a></div></center>`;
+                      else
+                          block.innerHTML = `<center><div>${coin}</div></center>`;
+                      return block;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching ' + coin + ' price:', error);
+                        var block = document.createElement('div');
+                        block.className = 'block';
+                        block.innerHTML = ``;
+                        return block
+                    });
+            });
+
+            Promise.all(promises)
+                .then(blocks => {
+                    blocks.forEach(block => {
+                        if (block) {
+                            container.appendChild(block);
+                        }
+                    });
+                });
+        }
+
+
     set_time();
-    //get_eth_gas();
     get_binance("FIL");
     get_binance("BTC");
     get_binance("ETH");
@@ -889,19 +957,13 @@
     get_binance("NEXO");
     get_binance("LINKBTC");
     get_binance("PYTH");
-    get_binance("ENS");
-    get_binance("HNT");
     get_binance("OP");
-    get_binance("BLUR");
     get_binance("STX");
-    //get_binance_cmc("BLUR", "blur-token");
     get_binance("SSV");
     get_binance("ARB");
-    //get_binance_cmc("HNS", "handshake");
     get_binance_cmc("SEA", "starsharks-sea");
-    //get_binance("APT");
-    get_geckoterminal("0xfb79d843d8d7e38bd5a7f115fa889b043db6fe76"); //MCC
-    get_geckoterminal("0x09ead9122ba8ac230746eb9730d1c099d9a6181d"); //WCC
+    //get_geckoterminal("0xfb79d843d8d7e38bd5a7f115fa889b043db6fe76"); //MCC
+    //get_geckoterminal("0x09ead9122ba8ac230746eb9730d1c099d9a6181d"); //WCC
               
     //get_binance_cmc("MCC", "matchnova");
     //get_sea();
@@ -910,6 +972,7 @@
     get_pm25();
     get_weather();
     fetchAndUpdate();
+    fetchAndUpdateBTC();
     /* Auto Reload */
     setTimeout(function () { window.location = window.location; }, 300000);
 </script>
