@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
@@ -49,7 +50,7 @@
         }
 
         .green-bg2 {
-            background-color: #5b892d; /* 設定背景色為綠色 */
+            background-color: #6B9442; /* 設定背景色為綠色 */
             color: #fff;
         }
 
@@ -97,154 +98,157 @@
     <div class="XXXBTC"></div> <!-- 底部空白 -->
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // 定義幣種以及它們的順序
-            var coinOrder = ['BTC', 'ETH', 'SOL', 'BNB', 
-                             'STX', 'ORDI', '1000SATS', 'RIF',  
-                             'ARB', 'OP', 'STRK', 'XAI',
-                             'LINK', 'PYTH', 'DOT', 'ATOM',
-                             'FIL', 'AR', 'STORJ', 'ICP',
-                             'BLUR','UNI', 'DYDX', 'JUP', 
-                             'STG', 'ALT', 'MANTA', 'MATIC',
-                             'SSV', 'PENDLE', 'MAGIC', 'WLD'];
+    document.addEventListener("DOMContentLoaded", function () {
+        // 定義幣種以及它們的順序
+        var coinOrder = [
+            'BTC', 'ETH', 'SOL', 'BNB',
+            'STX', 'ORDI', '1000SATS', 'RIF',
+            'ARB', 'OP', 'STRK', 'XAI',
+            'LINK', 'PYTH', 'TIA', 'BAND',
+            'DOT', 'ATOM',
+            'FIL', 'AR', 'STORJ',
+            'BLUR', 'UNI', 'DYDX', 'JUP',
+            'STG', 'ALT', 'MANTA', 'MATIC',
+            'SSV', 'PENDLE', 'MAGIC', 'WLD',
+            'DOGE', 'PEPE', 'BONK'
+            ];
 
-            function fetchAndUpdate() {
-                var container = document.querySelector('.container');
-                container.innerHTML = ''; // 清空容器內的內容
+        function fetchAndUpdate() {
+            var container = document.querySelector('.container');
+            container.innerHTML = ''; // 清空容器內的內容
 
-                var promises = coinOrder.map(function(coin) {
-                    return fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=' + coin + 'USDT')
-                        .then(response => response.json())
-                        .then(data => {
-                            // 創建區塊
-                            var block = document.createElement('div');
-                            block.className = 'block';
-                            var priceChangePercent = parseFloat(data.priceChangePercent);
-                            if (priceChangePercent < -10) {
-                                block.classList.add('red-bg', 'black-text');
-                            } else if (priceChangePercent < -5) {
-                                block.classList.add('red-bg2', 'black-text');
-                            } else if (priceChangePercent > 10) {
-                                block.classList.add('green-bg', 'black-text');
-                            } else if (priceChangePercent > 5) {
-                                block.classList.add('green-bg2', 'black-text');
-                            } else if (priceChangePercent > 1) {
-                                block.classList.add('black-bg', 'green-text');
-                            } else if (priceChangePercent < -1) {
-                                block.classList.add('black-bg', 'red-text');
-                            }
+            var promises = coinOrder.map(function (coin) {
+                return fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=' + coin + 'USDT')
+                .then(response => response.json())
+                .then(data => {
+                    // 創建區塊
+                    var block = document.createElement('div');
+                    block.className = 'block';
+                    var priceChangePercent = parseFloat(data.priceChangePercent);
+                    if (priceChangePercent < -10) {
+                        block.classList.add('red-bg', 'black-text');
+                    } else if (priceChangePercent < -5) {
+                        block.classList.add('red-bg2', 'black-text');
+                    } else if (priceChangePercent > 10) {
+                        block.classList.add('green-bg', 'black-text');
+                    } else if (priceChangePercent > 5) {
+                        block.classList.add('green-bg2', 'black-text');
+                    } else if (priceChangePercent > 1) {
+                        block.classList.add('black-bg', 'green-text');
+                    } else if (priceChangePercent < -1) {
+                        block.classList.add('black-bg', 'red-text');
+                    }
 
-                            var percent_str = priceChangePercent.toFixed(1).toString() + "%";
-                            if (priceChangePercent > 0)
-                                percent_str = "+" + percent_str;
-                            // 移除價格末尾多餘的零，並移除百分比
-                            var price = parseFloat(data.lastPrice);
-                            if (price >= 100)
-                                price = parseInt(price);
-                            else if (price >= 1)
-                                price = price.toFixed(2);
-                            else if (price >= 0.01)
-                                price = price.toFixed(4);
-                            else
-                                price = price.toFixed(6);
-                            coin = coin.replace("1000", "");
-                            // 更新區塊內容
-                            if (priceChangePercent < 1 && priceChangePercent > -1)
-                                block.innerHTML = `<center><div>${coin}<br /> ${price} </div></center>`;
-                            else
-                                block.innerHTML = `<center><div>${coin}<br /> ${percent_str} </div></center>`;
-                            return block;
-                        })
-                        .catch(error => {
-                            console.error('Error fetching ' + coin + ' price:', error);
-                            return null;
-                        });
+                    var percent_str = priceChangePercent.toFixed(1).toString() + "%";
+                    if (priceChangePercent > 0)
+                        percent_str = "+" + percent_str;
+                    // 移除價格末尾多餘的零，並移除百分比
+                    var price = parseFloat(data.lastPrice);
+                    if (price >= 100)
+                        price = parseInt(price);
+                    else if (price >= 1)
+                        price = price.toFixed(2);
+                    else if (price >= 0.01)
+                        price = price.toFixed(4);
+                    else
+                        price = price.toFixed(6);
+                    coin = coin.replace("1000", "");
+                    // 更新區塊內容
+                    if (priceChangePercent < 1 && priceChangePercent > -1)
+                        block.innerHTML = `<center><div>${coin}<br /> ${price} </div></center>`;
+                    else
+                        block.innerHTML = `<center><div>${coin}<br /> ${percent_str} </div></center>`;
+                    return block;
+                })
+                .catch(error => {
+                    console.error('Error fetching ' + coin + ' price:', error);
+                    return null;
                 });
+            });
 
-                Promise.all(promises)
-                    .then(blocks => {
-                        blocks.forEach(block => {
-                            if (block) {
-                                container.appendChild(block);
-                            }
-                        });
-                    });
-            }
-
-            function fetchAndUpdateBTC() {
-                var container = document.querySelector('.XXXBTC');
-                container.innerHTML = ''; // 清空容器內的內容
-
-                var promises = coinOrder.map(function(coin) {
-                    return fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=' + coin + 'BTC')
-                        .then(response => response.json())
-                        .then(data => {
-                            // 創建區塊
-                            var block = document.createElement('div');
-                            block.className = 'block';
-                            var priceChangePercent = parseFloat(data.priceChangePercent);
-                            if (priceChangePercent < -10) {
-                                block.classList.add('red-bg', 'black-text');
-                            } else if (priceChangePercent < -5) {
-                                block.classList.add('orange-bg', 'black-text');
-                            } else if (priceChangePercent > 10) {
-                                block.classList.add('green-bg', 'black-text');
-                            } else if (priceChangePercent > 5) {
-                                block.classList.add('green-bg2', 'black-text');
-                            } else if (priceChangePercent > 1) {
-                                block.classList.add('black-bg', 'green-text');
-                            } else if (priceChangePercent < -1) {
-                                block.classList.add('black-bg', 'red-text');
-                            }
-
-                            var percent_str = priceChangePercent.toFixed(1).toString() + "%";
-                            if (priceChangePercent > 0)
-                                percent_str = "+" + percent_str;
-                            // 移除價格末尾多餘的零，並移除百分比
-                            var price = parseFloat(data.lastPrice);
-                            if (price >= 100)
-                                price = parseInt(price);
-                            else if (price >= 1)
-                                price = price.toFixed(2);
-                            else if (price >= 0.01)
-                                price = price.toFixed(4);
-                            else
-                                price = price.toFixed(6);
-                            coin = coin.replace("1000", "");
-                            // 更新區塊內容
-                            if (priceChangePercent < 1 && priceChangePercent > -1)
-                                 block.innerHTML = `<center><div><a href="sensor3.html">${coin}</a></div></center>`;
-                          else
-                              block.innerHTML = `<center><div>${coin}</div></center>`;
-                          return block;
-                        })
-                        .catch(error => {
-                            console.error('Error fetching ' + coin + ' price:', error);
-                            var block = document.createElement('div');
-                            block.className = 'block';
-                            block.innerHTML = ``;
-                            return block
-                        });
+            Promise.all(promises)
+            .then(blocks => {
+                blocks.forEach(block => {
+                    if (block) {
+                        container.appendChild(block);
+                    }
                 });
+            });
+        }
 
-                Promise.all(promises)
-                    .then(blocks => {
-                        blocks.forEach(block => {
-                            if (block) {
-                                container.appendChild(block);
-                            }
-                        });
-                    });
-            }
-        
-            // 首次載入時執行
-            fetchAndUpdate();
-            fetchAndUpdateBTC();
+        function fetchAndUpdateBTC() {
+            var container = document.querySelector('.XXXBTC');
+            container.innerHTML = ''; // 清空容器內的內容
 
-            // 每三分鐘重新載入一次
-            setInterval(fetchAndUpdate, 180000);
-        });
+            var promises = coinOrder.map(function (coin) {
+                return fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=' + coin + 'BTC')
+                .then(response => response.json())
+                .then(data => {
+                    // 創建區塊
+                    var block = document.createElement('div');
+                    block.className = 'block';
+                    var priceChangePercent = parseFloat(data.priceChangePercent);
+                    if (priceChangePercent < -10) {
+                        block.classList.add('red-bg', 'black-text');
+                    } else if (priceChangePercent < -5) {
+                        block.classList.add('orange-bg', 'black-text');
+                    } else if (priceChangePercent > 10) {
+                        block.classList.add('green-bg', 'black-text');
+                    } else if (priceChangePercent > 5) {
+                        block.classList.add('green-bg2', 'black-text');
+                    } else if (priceChangePercent > 1) {
+                        block.classList.add('black-bg', 'green-text');
+                    } else if (priceChangePercent < -1) {
+                        block.classList.add('black-bg', 'red-text');
+                    }
 
+                    var percent_str = priceChangePercent.toFixed(1).toString() + "%";
+                    if (priceChangePercent > 0)
+                        percent_str = "+" + percent_str;
+                    // 移除價格末尾多餘的零，並移除百分比
+                    var price = parseFloat(data.lastPrice);
+                    if (price >= 100)
+                        price = parseInt(price);
+                    else if (price >= 1)
+                        price = price.toFixed(2);
+                    else if (price >= 0.01)
+                        price = price.toFixed(4);
+                    else
+                        price = price.toFixed(6);
+                    coin = coin.replace("1000", "");
+                    // 更新區塊內容
+                    if (priceChangePercent < 1 && priceChangePercent > -1)
+                        block.innerHTML = `<center><div><a href="sensor3.html">${coin}</a></div></center>`;
+                    else
+                        block.innerHTML = `<center><div>${coin}</div></center>`;
+                    return block;
+                })
+                .catch(error => {
+                    console.error('Error fetching ' + coin + ' price:', error);
+                    var block = document.createElement('div');
+                    block.className = 'block';
+                    block.innerHTML = ``;
+                    return block
+                });
+            });
+
+            Promise.all(promises)
+            .then(blocks => {
+                blocks.forEach(block => {
+                    if (block) {
+                        container.appendChild(block);
+                    }
+                });
+            });
+        }
+
+        // 首次載入時執行
+        fetchAndUpdate();
+        fetchAndUpdateBTC();
+
+        // 每三分鐘重新載入一次
+        setInterval(fetchAndUpdate, 180000);
+    });
     </script>
 </body>
 </html>
