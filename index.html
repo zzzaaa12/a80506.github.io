@@ -808,10 +808,19 @@
         setTimeout(function () { set_time(); }, 1000);
     }
 
-        var coinOrder = ['BTC', 'ETH', 'SOL', 'BNB', 'FIL', 'AR', 'STORJ', 'ICP',
-                         'STX', 'ORDI', '1000SATS', 'RIF',  'BLUR','UNI', 'DYDX', 'JUP',
-                         'ARB', 'OP', 'STRK', 'XAI', 'STG', 'ALT', 'MANTA', 'MATIC',
-                         'LINK', 'PYTH', 'DOT', 'ATOM', 'SSV', 'PENDLE', 'MAGIC', 'WLD'];
+        var coinOrder = [
+            'BTC', 'ETH', 'SOL', 'BNB',
+            'STX', 'ORDI', '1000SATS', 'RIF',
+            'ARB', 'OP', 'STRK', 'XAI',
+            'LINK', 'PYTH', 'TIA', 'BAND',
+            'DOT', 'ATOM', 'FIL', 'AR', 
+            'BLUR', 'UNI', 'DYDX', 'JUP',
+            'STG', 'ALT', 'MANTA', 'MATIC',
+            'SSV', 'PENDLE', 'MAGIC', 'WLD',
+            'FLOW', 'NEXO', 'APE', 'MEME',
+            'PEPE', 'DOGE', 'SHIB', 'BONK'
+            ];
+
 
         function fetchAndUpdate() {
             var container = document.querySelector('.XXX');
