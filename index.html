@@ -80,9 +80,9 @@
                 { div: "", title: "三大法人-選擇權", url: "http://www.taifex.com.tw/cht/3/optContractsDateExcel" },
                 { div: "", title: "三大法人-現貨", url: "http://www.twse.com.tw/zh/page/trading/fund/BFI82U.html" },
                 { div: "", title: "外資買賣超", url: "https://fubon-ebrokerdj.fbs.com.tw/Z/ZG/ZGK_D.djhtm" },
-                { div: "T2886", title: "", url: "" },
                 { div: "TSE", title: "", url: "" },
                 { div: "OTC", title: "", url: "" },
+                { div: "STOCK_1", title: "", url: "" },
             ]
         },
         { // [7]
@@ -489,7 +489,7 @@
     // Stock
     $.getJSON("https://api.thingspeak.com/channels/72839/feeds.json?results=" + String(max),
         function (data) {
-            var f1 = 0, f2 = 0, f3 = 0, f4 = 0, f5 = 0, f6 = 0;
+            var f1 = 0, f2 = 0, f3 = 0, f4 = 0, f5 = 0, f6 = 0, f7 = 0, f8 = 0;
             var json_len = 0;
             $.each(data, function (key, val) {
                 if (key == "feeds") {
@@ -508,19 +508,34 @@
                             f5 = parseFloat(val[i].field5);
                         if (val[i].field6)
                             f6 = parseFloat(val[i].field6);
+                        if (val[i].field7)
+                            f7 = parseFloat(val[i].field7);
+                        if (val[i].field8)
+                            f8 = parseFloat(val[i].field8);
                     }
-                    var sign = '', sign2 = '';
-                    var color = '', color2 = '';
+                    var sign = '', sign2 = '', sign3 = '';
+                    var color = '', color2 = '', color3 = '';
                     if (f2 > 0) {
                         sign = '+';
                         color = 'style="color: red;"';
+                    } else {
+                        color = 'style="color: #80FF00;"';
                     }
                     if (f5 > 0) {
                         sign2 = '+';
                         color2 = 'style="color: red;"';
+                    } else {
+                        color2 = 'style="color: #80FF00;"';
+                    }
+                    if (f8 > 0) {
+                        sign3 = '+';
+                        color3 = 'style="color: red;"';
+                    } else {
+                        color3 = 'style="color: #80FF00;"';
                     }
                     $("div.TSE").html("<a href='https://tw.stock.yahoo.com/t/idx.php' "+ color + " >" + f1.toString() + ", " + sign + f2.toString() + ", " + sign + f3.toFixed(2).toString() + "%</a>");
-                    $("div.OTC").html("<a href='https://tw.stock.yahoo.com/t/otc.php' "+ color2 + " >" + f4.toFixed(2).toString() + ", " + sign2 + f5.toFixed(2).toString() + ", " + sign + f6.toFixed(2).toString() + "%</a>");
+                    $("div.OTC").html("<a href='https://tw.stock.yahoo.com/t/otc.php' "+ color2 + " >" + f4.toFixed(2).toString() + ", " + sign2 + f5.toFixed(2).toString() + ", " + sign2 + f6.toFixed(2).toString() + "%</a>");
+                    $("div.STOCK_1").html("<a href='https://tw.stock.yahoo.com/t/8089.php' "+ color3 + " >" + f7.toFixed(2).toString() + ", " + sign3 + f8.toFixed(2).toString() + ", " + sign3 + (f8 / (f7-f8) * 100).toFixed(2).toString() + "%</a>");
                 }
             });
         });
@@ -985,4 +1000,3 @@
     /* Auto Reload */
     setTimeout(function () { window.location = window.location; }, 300000);
 </script>
-
