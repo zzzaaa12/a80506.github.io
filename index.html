@@ -106,6 +106,7 @@
                 { div: "FLOW", title: "", url: "" },
                 { div: "MATIC", title: "", url: "" },
                 { div: "NEXO", title: "", url: "" },
+                { div: "MANTA", title: "", url: "" },
                 { div: "LINKBTC", title: "", url: "" },
             ]
         },
@@ -118,6 +119,7 @@
                 { div: "ETH", title: "ETH: 000 (+0%)", url: "" },
                 { div: "FIL", title: "", url: "" },
                 { div: "SOL", title: "", url: "" },
+                { div: "STRK", title: "", url: "" },
                 { div: "ETHBTC", title: "", url: "" },
             ]
         },
@@ -257,7 +259,9 @@
             document.write("<table border=\"1\" width=\"180\" align=\"center\"><tbody>");
             document.write("<tr><td class=\"title\">" + list_table[i].title + "</td></tr>");
 
-            for (j = 0; j < 7; j++) {
+            for (j = 0; j < 8; j++) {
+                if (j == 7 && i != 8 & i !== 9)
+                    continue;
                 item_title = list_table[i].items[j].title;
                 item_url = list_table[i].items[j].url;
                 item_div = list_table[i].items[j].div;
@@ -985,7 +989,9 @@
     get_binance("STX");
     get_binance("SSV");
     get_binance("ARB");
-    get_binance_cmc("SEA", "starsharks-sea");
+    get_binance("MANTA");
+    get_binance("STRK");
+    //get_binance_cmc("SEA", "starsharks-sea");
     //get_geckoterminal("0xfb79d843d8d7e38bd5a7f115fa889b043db6fe76"); //MCC
     //get_geckoterminal("0x09ead9122ba8ac230746eb9730d1c099d9a6181d"); //WCC
               
