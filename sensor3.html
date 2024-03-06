@@ -124,13 +124,13 @@
                     var block = document.createElement('div');
                     block.className = 'block';
                     var priceChangePercent = parseFloat(data.priceChangePercent);
-                    if (priceChangePercent < -10) {
+                    if (priceChangePercent < -20) {
                         block.classList.add('red-bg', 'black-text');
-                    } else if (priceChangePercent < -5) {
+                    } else if (priceChangePercent < -10) {
                         block.classList.add('red-bg2', 'black-text');
-                    } else if (priceChangePercent > 10) {
+                    } else if (priceChangePercent > 20) {
                         block.classList.add('green-bg', 'black-text');
-                    } else if (priceChangePercent > 5) {
+                    } else if (priceChangePercent > 10) {
                         block.classList.add('green-bg2', 'black-text');
                     } else if (priceChangePercent > 1) {
                         block.classList.add('black-bg', 'green-text');
