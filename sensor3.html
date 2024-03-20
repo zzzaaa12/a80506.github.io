@@ -104,10 +104,11 @@
             'STX', 'ORDI', '1000SATS', 'RIF',
             'ARB', 'OP', 'STRK', 'XAI',
             'LINK', 'PYTH', 'ETHFI', 'NEAR',
+            'APT', 'SUI', 'BOME', 'ETHBTC',
             'FIL', 'AR', 'DOT', 'ATOM',
             'BLUR', 'UNI', 'DYDX', 'JUP',
             'ALT', 'MANTA', 'MATIC', 'SSV',
-            'WLD', 'PEPE', 'DOGE', 'BONK'
+            //'WLD', 'PEPE', 'DOGE', 'BONK'
             ];
 
         function fetchAndUpdate() {
@@ -151,7 +152,7 @@
                         price = price.toFixed(6);
                     coin = coin.replace("1000", "");
                     // 更新區塊內容
-                    if (priceChangePercent < 1 && priceChangePercent > -1)
+                    if (coin == 'ETHBTC' || (priceChangePercent < 1 && priceChangePercent > -1))
                         block.innerHTML = `<center><div>${coin}<br /> ${price} </div></center>`;
                     else
                         block.innerHTML = `<center><div>${coin}<br /> ${percent_str} </div></center>`;
