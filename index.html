@@ -477,15 +477,20 @@
             $.each(data, function (key, val) {
                 if (key == "feeds") {
                     var status = "";
+                    var get_miner = 0;
                     for (var i = 0; i < max; i++) {
+                        if (Date.now() - Date.parse(val[i].created_at) > 300000)
+                            continue;
                         if (parseFloat(val[i].field1) > 0) {
-                            if (Date.now() - Date.parse(val[i].created_at) > 300000)
-                                continue;
                             if (parseFloat(val[i].field3) == 0)
                                 status = ": <font color=\"red\">none</font>"
                         }
-                        $("div.home_traffic").html("<a href='https://thingspeak.com/channels/1729950'>Home Traffic" + status + "</a>");
+                        if (!get_miner && parseFloat(val[i].field5) > 0)
+                            get_miner = 1;
                     }
+                    if (!get_miner)
+                        status += ", <font color=\"red\">miner failed</font>"
+                    $("div.home_traffic").html("<a href='https://thingspeak.com/channels/1729950'>Home Traffic" + status + "</a>");
                 }
             });
         });
