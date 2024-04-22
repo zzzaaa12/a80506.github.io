@@ -488,13 +488,13 @@
                         }
                         if (!get_miner && parseFloat(val[i].field5) == 1)
                             get_miner = 1;
-                        if (!get_miner && parseFloat(val[i].field5) == 2)
+                        if (!get_miner2 && parseFloat(val[i].field5) == 2)
                             get_miner2 = 1;
                     }
                     if (!get_miner)
-                        status += ", <font color=\"red\">miner failed</font>"
+                        status += ", <font color=\"red\">miner</font>"
                     if (!get_miner2)
-                        status += ", <font color=\"red\">miner2 failed</font>"
+                        status += ", <font color=\"red\">miner2</font>"
                     $("div.home_traffic").html("<a href='https://thingspeak.com/channels/1729950'>Home Traffic" + status + "</a>");
                 }
             });
