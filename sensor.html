@@ -540,6 +540,7 @@
 
         function get_all() {
             //get_binance_cmc("BLUR", "blur-token");
+            setTimeout(function () { window.location = window.location; }, 300000);
             get_coin();
             get_pm25();
             get_weather();
@@ -548,7 +549,6 @@
             //miner_data(0);
             //miner_data(1);
             //miner_balance();
-            setTimeout(function () { window.location = window.location; }, 300000);
             //setTimeout(function () { get_all(); }, 300000);
         }
 
