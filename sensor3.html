@@ -240,12 +240,12 @@
             });
         }
 
+        // 每三分鐘重新載入一次
+        setInterval(fetchAndUpdate, 180000);
+
         // 首次載入時執行
         fetchAndUpdate();
         fetchAndUpdateBTC();
-
-        // 每三分鐘重新載入一次
-        setInterval(fetchAndUpdate, 180000);
     });
     </script>
 </body>
