@@ -19,10 +19,10 @@
                 { div: "", title: "NFT", url: "https://hackmd.io/@zzzaaa12/rym7FFE9F" },
                 { div: "", title: "帳戶清單", url: "https://docs.google.com/document/d/1HelciAITnbP-pqn82F1nzGnVughprQKhoJe74DDLLt4" },
                 { div: "", title: "發票查詢", url: "https://www.einvoice.nat.gov.tw/APCONSUMER/BTC201W/" },
-                { div: "", title: "即時天氣", url: "https://www.cwb.gov.tw/V8/C/W/OBS_Station.html?ID=C0ACA" },
+                { div: "", title: "即時天氣", url: "https://www.cwa.gov.tw/V8/C/W/OBS_Station.html?ID=C0ACA" },
                 { div: "weather", title: "新莊：00.0°C, 00%", url: ""},
                 { div: "pm25", title: "PM 2.5：0 ug/m3", url: "" },
-                { div: "", title: "一週氣象", url: "https://www.cwb.gov.tw/V8/C/W/County/County.html?C=63" }
+                { div: "", title: "一週氣象", url: "https://www.cwa.gov.tw/V8/C/W/County/County.html?C=63" }
             ]
         },
         { // [2]
@@ -342,17 +342,17 @@
                 return 0;
         }
         if (data.WeatherElement) {
-            cwb_t = data.WeatherElement.AirTemperature;
-            cwb_h = data.WeatherElement.RelativeHumidity;
-            cwb_w = data.WeatherElement.Weather;
+            cwa_t = data.WeatherElement.AirTemperature;
+            cwa_h = data.WeatherElement.RelativeHumidity;
+            cwa_w = data.WeatherElement.Weather;
 
-            if (cwb_t != "" && cwb_h != "" && parseFloat(cwb_t) > -10 && parseFloat(cwb_h) > 0) {
-                $("div.weather").html(station + "：" + cwb_t + "°C, " + String(parseInt(cwb_h)) + "%");
-                if (parseInt(cwb_h) >= 80) {
+            if (cwa_t != "" && cwa_h != "" && parseFloat(cwa_t) > -10 && parseFloat(cwa_h) > 0) {
+                $("div.weather").html(station + "：" + cwa_t + "°C, " + String(parseInt(cwa_h)) + "%");
+                if (parseInt(cwa_h) >= 80) {
                     $("div.weather").css("color", "#46a3ff");
                     $("div.weather").css("font-weight", "bold");
                 }
-                if (parseInt(cwb_t) >= 32) {
+                if (parseInt(cwa_t) >= 32) {
                     $("div.weather").css("color", "red");
                     $("div.weather").css("font-weight", "bold");
                 }
