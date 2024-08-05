@@ -77,12 +77,13 @@
             title: "股市資訊",
             items: [
                 { div: "", title: "三大法人-期貨", url: "http://www.taifex.com.tw/cht/3/futContractsDateExcel" },
-                { div: "", title: "三大法人-選擇權", url: "http://www.taifex.com.tw/cht/3/optContractsDateExcel" },
+                //{ div: "", title: "三大法人-選擇權", url: "http://www.taifex.com.tw/cht/3/optContractsDateExcel" },
                 { div: "", title: "三大法人-現貨", url: "http://www.twse.com.tw/zh/page/trading/fund/BFI82U.html" },
                 { div: "", title: "外資買賣超", url: "https://fubon-ebrokerdj.fbs.com.tw/Z/ZG/ZGK_D.djhtm" },
                 { div: "TSE", title: "", url: "" },
-                { div: "OTC", title: "", url: "" },
                 { div: "STOCK_1", title: "", url: "" },
+                { div: "STOCK_2", title: "", url: "" },
+                { div: "STOCK_3", title: "", url: "" },
             ]
         },
         { // [7]
@@ -527,29 +528,40 @@
                         if (val[i].field8)
                             f8 = parseFloat(val[i].field8);
                     }
-                    var sign = '', sign2 = '', sign3 = '';
-                    var color = '', color2 = '', color3 = '';
+                    var sign1 = '', sign2 = '', sign3 = '', sign4 = '';
+                    var color1 = '', color2 = '', color3 = '', color4 = '';
+                  
+                   
                     if (f2 > 0) {
-                        sign = '+';
-                        color = 'style="color: red;"';
+                        sign1 = '+';
+                        color1 = 'style="color: red;"';
                     } else {
-                        color = 'style="color: #80FF00;"';
+                        color1 = 'style="color: #80FF00;"';
                     }
-                    if (f5 > 0) {
+                    if (f4 > 0) {
                         sign2 = '+';
                         color2 = 'style="color: red;"';
                     } else {
                         color2 = 'style="color: #80FF00;"';
                     }
-                    if (f8 > 0) {
+                    if (f6 > 0) {
                         sign3 = '+';
                         color3 = 'style="color: red;"';
                     } else {
                         color3 = 'style="color: #80FF00;"';
                     }
-                    $("div.TSE").html("<a href='https://tw.stock.yahoo.com/t/idx.php' "+ color + " >" + f1.toString() + ", " + sign + f2.toString() + ", " + sign + f3.toFixed(2).toString() + "%</a>");
-                    $("div.OTC").html("<a href='https://tw.stock.yahoo.com/t/otc.php' "+ color2 + " >" + f4.toFixed(2).toString() + ", " + sign2 + f5.toFixed(2).toString() + ", " + sign2 + f6.toFixed(2).toString() + "%</a>");
-                    $("div.STOCK_1").html("<a href='https://tw.stock.yahoo.com/t/8089.php' "+ color3 + " >" + f7.toFixed(2).toString() + ", " + sign3 + f8.toFixed(2).toString() + ", " + sign3 + (f8 / (f7-f8) * 100).toFixed(2).toString() + "%</a>");
+                    
+                    if (f8 > 0) {
+                        sign4 = '+';
+                        color4 = 'style="color: red;"';
+                    } else {
+                        color4 = 'style="color: #80FF00;"';
+                    }
+
+                    $("div.TSE").html("<a href='https://tw.stock.yahoo.com/t/idx.php' "+ color1 + " >" + f1.toFixed(2).toString() + ", " + sign1 + f2.toFixed(0).toString() + ", " + sign1 + (f2 / (f1-f2) * 100).toFixed(2).toString() + "%</a>");
+                    $("div.STOCK_1").html("<a href='https://tw.stock.yahoo.com/t/00675L.php' "+ color2 + " >" + f3.toFixed(2).toString() + ", " + sign2 + f4.toFixed(2).toString() + ", " + sign2 + (f4 / (f3-f4) * 100).toFixed(2).toString() + "%</a>");
+                    $("div.STOCK_2").html("<a href='https://tw.stock.yahoo.com/t/3047.php' "+ color3 + " >" + f5.toFixed(2).toString() + ", " + sign3 + f6.toFixed(2).toString() + ", " + sign3 + (f6 / (f5-f6) * 100).toFixed(2).toString() + "%</a>");
+                    $("div.STOCK_3").html("<a href='https://tw.stock.yahoo.com/t/8089.php' "+ color4 + " >" + f7.toFixed(2).toString() + ", " + sign4 + f8.toFixed(2).toString() + ", " + sign4 + (f8 / (f7-f8) * 100).toFixed(2).toString() + "%</a>");
                 }
             });
         });
