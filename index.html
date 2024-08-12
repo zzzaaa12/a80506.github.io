@@ -473,6 +473,7 @@
         });
 
     // Home traffic
+    /*
     $.getJSON("https://api.thingspeak.com/channels/1729950/feeds.json?results=" + String(max),
         function (data) {
             $.each(data, function (key, val) {
@@ -497,9 +498,11 @@
                     if (!get_miner2)
                         status += ", <font color=\"red\">miner2</font>"
                     $("div.home_traffic").html("<a href='https://thingspeak.com/channels/1729950'>Home Traffic" + status + "</a>");
+                    
                 }
             });
         });
+    */
                  
     // Stock
     $.getJSON("https://api.thingspeak.com/channels/72839/feeds.json?results=" + String(max),
