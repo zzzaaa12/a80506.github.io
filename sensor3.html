@@ -8,27 +8,23 @@
         body, html {
             margin: 0;
             padding: 0;
-            height: 92%; /* 調整高度，留下4%的空白 */
+            height: 100%;
             width: 100%;
-            background-color: black; /* 設定背景色為黑色 */
-            color: #808080; /* 設定文字顏色為白色 */
-            font-weight: bold; /* 使用粗體字 */
+            background-color: black;
+            color: #808080;
+            font-weight: bold;
             font-size: 18px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
         }
 
-        .XXXBTC {
+        .container, .XXXBTC {
             display: grid;
-            grid-template-columns: repeat(4, 1fr); /* 將畫面分成4列 */
-            height: 100%; /* 使用全部可視區域高度 */
-            grid-gap: 0; /* 取消格線 */
-            font-size: 3px;
-        }
-
-        .container {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr); /* 將畫面分成4列 */
-            height: 100%; /* 使用全部可視區域高度 */
-            grid-gap: 0; /* 取消格線 */
+            grid-template-columns: repeat(4, 1fr);
+            width: 100%;
+            grid-gap: 0;
         }
 
         .block {
@@ -36,80 +32,174 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            padding: 5px;
         }
 
         .green-bg {
-            background-color: green; /* 設定背景色為綠色 */
+            background-color: green;
             color: #fff;
         }
 
         .red-bg {
-            background-color: red; /* 設定背景色為紅色 */
+            background-color: red;
             color: #000;
         }
 
         .green-bg2 {
-            background-color: #6B9442; /* 設定背景色為綠色 */
+            background-color: #6B9442;
             color: #fff;
         }
 
         .red-bg2 {
-            background-color: #e38f53; /* 設定背景色為紅色 */
+            background-color: #e38f53;
             color: #000;
         }
 
         .orange-bg {
-            background-color: #FFA042; /* 設定背景色為紅色 */
+            background-color: #FFA042;
             color: #000;
         }
 
         .black-bg {
-            background-color: black; /* 設定背景色為黑色 */
+            background-color: black;
         }
 
         .green-text {
-            color: #80FF00; /* 設定文字顏色為綠色 */
+            color: #80FF00;
         }
 
         .red-text {
-            color: red; /* 設定文字顏色為紅色 */
+            color: red;
         }
 
-        .top-space {
-            height: 2%;
+        .kline-chart-container {
+            width: 100%;
+            max-width: 100%;
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
         }
 
-        .middle-space {
-            height: 0%;
-        }
-
-        .XXXBTC {
-            height: 6%;
+        canvas {
+            width: 100%;
+            max-width: 100%;
+            height: 400px;
         }
     </style>
 </head>
 <body>
-    <div class="top-space"></div>
-    <div class="container">
-        <!-- 生成4*8的區塊 -->
+
+    <!-- 表格內容在這裡 -->
+    <div class="container"></div>
+    <div class="XXXBTC"></div>
+
+    <!-- K 線圖的容器 -->
+    <div class="kline-chart-container">
+        <canvas id="klineChart"></canvas>
     </div>
-    <div class="middle-space"></div>
-    <div class="XXXBTC"></div> <!-- 底部空白 -->
 
     <script>
+    // Binance API Endpoint for K 線
+    const apiUrl = 'https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1h&limit=60';
+
+    // 抓取K線資料
+    async function fetchKlineData() {
+      const response = await fetch(apiUrl);
+      const data = await response.json();
+      return data.map(k => ({
+        time: k[0],
+        open: parseFloat(k[1]),
+        high: parseFloat(k[2]),
+        low: parseFloat(k[3]),
+        close: parseFloat(k[4])
+      }));
+    }
+
+    // 繪製K線圖
+    function drawKlineChart(data) {
+      const canvas = document.getElementById('klineChart');
+      const ctx = canvas.getContext('2d');
+      const width = canvas.width = canvas.clientWidth;
+      const height = canvas.height = canvas.clientHeight;
+      const padding = 20;
+      const rightPadding = 50; // 右邊用來顯示價格
+
+      // 計算每個K線的寬度
+      const candleWidth = (width - 2 * padding - rightPadding) / data.length;
+
+      // 找出資料中的最高價和最低價
+      const prices = data.flatMap(d => [d.high, d.low]);
+      const maxPrice = Math.max(...prices);
+      const minPrice = Math.min(...prices);
+
+      // 填充背景為黑色
+      ctx.fillStyle = '#000';
+      ctx.fillRect(0, 0, width, height);
+
+      // 繪製價格隔線和標示
+      const priceLevels = [minPrice, (minPrice + maxPrice) / 2, maxPrice]; // 最低、中間、最高價
+      priceLevels.forEach(price => {
+        const y = mapToCanvas(price, minPrice, maxPrice, height, padding);
+        ctx.strokeStyle = '#444'; // 隔線顏色
+        ctx.beginPath();
+        ctx.moveTo(padding, y);
+        ctx.lineTo(width - rightPadding, y); // 繪製水平線
+        ctx.stroke();
+
+        // 在右邊顯示價格
+        ctx.fillStyle = '#fff';
+        ctx.fillText(price.toFixed(2), width - rightPadding + 5, y + 3); // 顯示價格文字
+      });
+
+      // 繪製K線
+      data.forEach((kline, i) => {
+        const x = padding + i * candleWidth;
+        const openY = mapToCanvas(kline.open, minPrice, maxPrice, height, padding);
+        const closeY = mapToCanvas(kline.close, minPrice, maxPrice, height, padding);
+        const highY = mapToCanvas(kline.high, minPrice, maxPrice, height, padding);
+        const lowY = mapToCanvas(kline.low, minPrice, maxPrice, height, padding);
+
+        // 設置K線顏色
+        const isBullish = kline.close > kline.open;
+        ctx.fillStyle = isBullish ? '#00ff00' : '#ff0000'; // 多頭綠色，空頭紅色
+        ctx.strokeStyle = '#fff'; // 影線設置為白色
+
+        // 繪製K線的影線
+        ctx.beginPath();
+        ctx.moveTo(x + candleWidth / 2, highY);
+        ctx.lineTo(x + candleWidth / 2, lowY);
+        ctx.stroke();
+
+        // 繪製K線的實體
+        ctx.fillRect(x, Math.min(openY, closeY), candleWidth, Math.abs(openY - closeY));
+      });
+    }
+
+    // 將價格映射到Canvas座標
+    function mapToCanvas(price, minPrice, maxPrice, canvasHeight, padding) {
+      return canvasHeight - padding - (price - minPrice) / (maxPrice - minPrice) * (canvasHeight - 2 * padding);
+    }
+
+    // 主程式
+    async function main() {
+      const klineData = await fetchKlineData();
+      drawKlineChart(klineData);
+    }
+
+    main();
+
+    // 其他 JavaScript 邏輯：載入表格數據並更新
     document.addEventListener("DOMContentLoaded", function () {
-        // 定義幣種以及它們的順序
+        // 幣種清單
         var coinOrder = [
             'BTC', 'ETH', 'SOL', 'BNB',
-            'STX', 'ORDI', '1000SATS', 'RIF',
+            'STX', 'ORDI', '1000SATS', 'CKB',
             'ARB', 'OP', 'STRK', 'XAI',
             'LINK', 'PYTH', 'ETHFI', 'NEAR',
-            'APT', 'SUI', 'BOME', 'BONK',
-            'FIL', 'AR', 'DOT', 'ATOM',
-            'BLUR', 'UNI', 'DYDX', 'JUP',
+            'APT', 'SUI', 'DOT', 'ATOM',
+            'FIL', 'AR', 'BLUR', 'UNI',
             'ALT', 'MANTA', 'MATIC', 'SSV',
-            //'WLD', 'PEPE', 'DOGE', 'BONK'
-            ];
+        ];
 
         function fetchAndUpdate() {
             var container = document.querySelector('.container');
@@ -119,10 +209,11 @@
                 return fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=' + coin + 'USDT')
                 .then(response => response.json())
                 .then(data => {
-                    // 創建區塊
                     var block = document.createElement('div');
                     block.className = 'block';
                     var priceChangePercent = parseFloat(data.priceChangePercent);
+
+                    // 設定背景顏色根據價格變動
                     if (priceChangePercent < -20) {
                         block.classList.add('red-bg', 'black-text');
                     } else if (priceChangePercent < -10) {
@@ -140,6 +231,7 @@
                     var percent_str = priceChangePercent.toFixed(1).toString() + "%";
                     if (priceChangePercent > 0)
                         percent_str = "+" + percent_str;
+
                     // 移除價格末尾多餘的零，並移除百分比
                     var price = parseFloat(data.lastPrice);
                     if (price >= 100)
@@ -151,6 +243,7 @@
                     else
                         price = price.toFixed(6);
                     coin = coin.replace("1000", "");
+
                     // 更新區塊內容
                     if (priceChangePercent < 1 && priceChangePercent > -1)
                         block.innerHTML = `<center><div>${coin}<br /> ${price} </div></center>`;
@@ -158,94 +251,18 @@
                         block.innerHTML = `<center><div>${coin}<br /> ${percent_str} </div></center>`;
                     return block;
                 })
-                .catch(error => {
-                    console.error('Error fetching ' + coin + ' price:', error);
-                    return null;
-                });
+                .catch(error => console.error('Error fetching ' + coin + ' price:', error));
             });
 
-            Promise.all(promises)
-            .then(blocks => {
+            Promise.all(promises).then(blocks => {
                 blocks.forEach(block => {
-                    if (block) {
-                        container.appendChild(block);
-                    }
+                    if (block) container.appendChild(block);
                 });
             });
         }
 
-        function fetchAndUpdateBTC() {
-            var container = document.querySelector('.XXXBTC');
-            container.innerHTML = ''; // 清空容器內的內容
-
-            var promises = coinOrder.map(function (coin) {
-                return fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=' + coin + 'BTC')
-                .then(response => response.json())
-                .then(data => {
-                    // 創建區塊
-                    var block = document.createElement('div');
-                    block.className = 'block';
-                    var priceChangePercent = parseFloat(data.priceChangePercent);
-                    if (priceChangePercent < -10) {
-                        block.classList.add('red-bg', 'black-text');
-                    } else if (priceChangePercent < -5) {
-                        block.classList.add('orange-bg', 'black-text');
-                    } else if (priceChangePercent > 10) {
-                        block.classList.add('green-bg', 'black-text');
-                    } else if (priceChangePercent > 5) {
-                        block.classList.add('green-bg2', 'black-text');
-                    } else if (priceChangePercent > 1) {
-                        block.classList.add('black-bg', 'green-text');
-                    } else if (priceChangePercent < -1) {
-                        block.classList.add('black-bg', 'red-text');
-                    }
-
-                    var percent_str = priceChangePercent.toFixed(1).toString() + "%";
-                    if (priceChangePercent > 0)
-                        percent_str = "+" + percent_str;
-                    // 移除價格末尾多餘的零，並移除百分比
-                    var price = parseFloat(data.lastPrice);
-                    if (price >= 100)
-                        price = parseInt(price);
-                    else if (price >= 1)
-                        price = price.toFixed(2);
-                    else if (price >= 0.01)
-                        price = price.toFixed(4);
-                    else
-                        price = price.toFixed(6);
-                    coin = coin.replace("1000", "");
-                    // 更新區塊內容
-                    if (priceChangePercent < 1 && priceChangePercent > -1)
-                        block.innerHTML = `<center><div><a href="sensor3.html">${coin}</a></div></center>`;
-                    else
-                        block.innerHTML = `<center><div>${coin}</div></center>`;
-                    return block;
-                })
-                .catch(error => {
-                    console.error('Error fetching ' + coin + ' price:', error);
-                    var block = document.createElement('div');
-                    block.className = 'block';
-                    block.innerHTML = ``;
-                    return block
-                });
-            });
-
-            Promise.all(promises)
-            .then(blocks => {
-                blocks.forEach(block => {
-                    if (block) {
-                        container.appendChild(block);
-                    }
-                });
-            });
-        }
-
-        // 每三分鐘重新載入一次
-        setInterval(fetchAndUpdate, 180000);
-
-        // 首次載入時執行
-        fetchAndUpdate();
-        fetchAndUpdateBTC();
+        fetchAndUpdate(); // 初次載入
+        setInterval(fetchAndUpdate, 180000); // 每三分鐘更新一次
     });
     </script>
 </body>
