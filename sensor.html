@@ -32,9 +32,9 @@
         }
 
         div.ETHBTC {
-            font-size: 95pt;
-            color: #FFFFFF;
+            font-size: 60pt;
             font-weight: bold;
+            color: #FFFFFF;
         }
 
         div.weather {
@@ -56,8 +56,9 @@
     <div class="pm25" align="center">PM2.5：0 ug/m3</div>
     <div class="weather" align="center">戶外：00°C, 0%</div>
     <div class="time" align="center">00:00:00</div>
+    <div class="ETHBTC" align="center">　</div>
     <div id="coin" class="coin" align="center">　</div>
-    <div class="ETHBTC" align="center"></div>
+    <div align="center">　</div>
 
     <script>
         var max = 20;
@@ -383,6 +384,8 @@
         function get_coin_binance() {
             $.getJSON("https://api.binance.com/api/v3/ticker/24hr",
             function (data) {
+			
+				var ethbtc = 0;
                 var btc = 0;
                 var btc_percent;
                 var eth = 0;
@@ -411,6 +414,9 @@
 
                     } else if (data[key].symbol == "ETHUSDT") {
                         eth = parseInt(data[key].lastPrice);
+						
+                    } else if (data[key].symbol == "ETHBTC") {
+                        ethbtc = parseFloat(data[key].lastPrice);
 
                     } else {
                         price = parseFloat(data[key].lastPrice);
@@ -435,11 +441,12 @@
                             op = price;
                     }
 
+
                     if (mcc > 800 && wcc > 100) {
                         $("div.coin").html(btc + " / " + eth + "<br />" + wcc + " / " + mcc + " / " + fil);
                         //$("div.coin").html(btc + " / " + eth + "<br />" + parseFloat(wcc).toFixed(4) + " / " + parseFloat(mcc).toFixed(4));
                     } else {
-                        $("div.coin").html(btc + " / " + eth + "<br />" + fil + " / " + arb + " / " + op);
+                        $("div.coin").html(btc + " / " + eth + "<br />" + fil + " / " + arb + " / " + op + '<br />' + ethbtc);
                     }
                 });
             })
@@ -579,7 +586,7 @@
             get_weather();
             get_sensor();
             //get_filecoin();
-            get_binance("ETHBTC");
+  //          get_binance("ETHBTC");
             //miner_data(0);
             //miner_data(1);
             //miner_balance();
