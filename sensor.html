@@ -539,9 +539,11 @@
                     emoji += "🥵";
                 else if (cwb_t <=15)
                     emoji += "🥶";
+                if (emoji == '')
+                    emoji = weather_emoji;
                 if (cwb_t != "" && cwb_h != "" && parseFloat(cwb_t) > -10 && parseFloat(cwb_h) > 0) {
                     if (station == "新莊" )
-                        station = "";
+                        station += "：";
                     else
                         station += "：";
 
@@ -556,7 +558,7 @@
                         $("div.weather").css("color", "orange");
                         $("div.weather").css("font-weight", "bold");
                     }
-                    $("div.weather").html(station + weather_emoji + " " + cwb_t + "°C, " + String(parseInt(cwb_h)) + "% " + emoji);
+                    $("div.weather").html(station + cwb_t + "°C, " + String(parseInt(cwb_h)) + "% " + emoji);
                     return 1;
                 }
             }
