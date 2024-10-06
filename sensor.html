@@ -538,7 +538,7 @@
                 else if (cwb_t <=15)
                     emoji += "🥶";
                 if (cwb_t != "" && cwb_h != "" && parseFloat(cwb_t) > -10 && parseFloat(cwb_h) > 0) {
-                    $("div.weather").html(station + "：" + cwb_t + "°C, " + String(parseInt(cwb_h)) + emoji);
+                    $("div.weather").html(station + "：" + cwb_t + "°C, " + String(parseInt(cwb_h)) + "%" + emoji);
                     if (parseInt(cwb_h) >= 80) {
                         $("div.weather").css("color", "#46a3ff");
                         $("div.weather").css("font-weight", "bold");
