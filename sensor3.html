@@ -132,7 +132,7 @@
     <script>
     // Binance API Endpoints
     const btcApiUrl = 'https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1h&limit=48';
-    const ethApiUrl = 'https://api.binance.com/api/v3/klines?symbol=ETHUSDT&interval=1h&limit=48';
+    const ethApiUrl = 'https://api.binance.com/api/v3/klines?symbol=ETHBTC&interval=1d&limit=48';
 
     // 抓取 K 線資料
     async function fetchKlineData(url) {
@@ -178,9 +178,13 @@
         ctx.lineTo(width - rightPadding, y); // 繪製水平線
         ctx.stroke();
 
+        if (price >= 100)
+            price = parseInt(price);
+        else
+            price = price.toFixed(4);
         // 在右邊顯示價格
         ctx.fillStyle = '#fff';
-        ctx.fillText(price.toFixed(2), width - rightPadding + 5, y + 3); // 顯示價格文字
+        ctx.fillText(price, width - rightPadding + 5, y + 3); // 顯示價格文字
       });
 
       // 繪製 K 線
