@@ -531,12 +531,12 @@
                 cwb_w = data.WeatherElement.Weather;
 
                 var emoji = '';
-                if (cwb_h >= 80 && cwb_t <= 15)
-                    emoji = "💦🥶";
-                else if (cwb_h>=80)
-                    emoji = "💦";
+                if (cwb_h >= 80)
+                    emoji += "💦";
+                if (cwb_t >= 32)
+                    emoji += "🥵";
                 else if (cwb_t <=15)
-                    emoji = "🥶";
+                    emoji += "🥶";
                 if (cwb_t != "" && cwb_h != "" && parseFloat(cwb_t) > -10 && parseFloat(cwb_h) > 0) {
                     $("div.weather").html(station + "：" + cwb_t + "°C, " + String(parseInt(cwb_h)) + emoji);
                     if (parseInt(cwb_h) >= 80) {
