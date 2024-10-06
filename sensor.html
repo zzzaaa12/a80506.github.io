@@ -590,37 +590,53 @@
             });
         }
 
-        function get_weather_emoji(emoji) {
-            $.getJSON("http://api.weatherapi.com/v1/current.json?key=c8979001560e42bb82044134240610&q=Taipei&aqi=no",
-            function (data) {
+        function getWeatherTaipei() {
+          // API URL with Authorization and StationId for 中正區
+          const apiUrl = 'https://opendata.cwa.gov.tw/api/v1/rest/datastore/O-A0003-001?Authorization=CWB-843040FB-C733-4DFA-8263-47121194BF96&StationId=466920';
 
-          const weatherCondition = data.current.condition.text.toLowerCase(); // 獲取天氣狀況描述
-          let emoji = '';
-
-          // 根據天氣狀況選擇對應的 emoji
-          if (weatherCondition.includes('sunny') || weatherCondition.includes('clear')) {
-            emoji = '☀️'; // 晴天
-          } else if (weatherCondition.includes('cloudy')) {
-            emoji = '☁️'; // 多雲
-          } else if (weatherCondition.includes('rain') || weatherCondition.includes('drizzle')) {
-            emoji = '🌧️'; // 雨天
-          } else if (weatherCondition.includes('thunderstorm')) {
-            emoji = '⛈️'; // 雷雨
-          } else if (weatherCondition.includes('snow')) {
-            emoji = '❄️'; // 雪天
-          } else if (weatherCondition.includes('mist') || weatherCondition.includes('fog')) {
-            emoji = '🌫️'; // 霧霾
-          } else {
-            emoji = '🌍'; // 未知天氣
+          // 定義函數來根據天氣條件顯示對應的 Emoji
+          function getWeatherEmoji(weather) {
+            if (weather.includes('晴')) {
+              weather_emoji = '☀️'; // 晴天
+            } else if (weather.includes('雨')) {
+              weather_emoji = '🌧️'; // 雨天
+            } else if (weather.includes('陰')) {
+              weather_emoji = '☁️'; // 陰天
+            } else if (weather.includes('多雲')) {
+              weather_emoji = '🌥️'; // 多雲
+            } else {
+              weather_emoji = ''; // 未知天氣
+            }
           }
-          weather_emoji = emoji;
+
+          // 發送 API 請求
+          fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+              // 找到中正區的天氣資訊
+              const station = data.records.Station[0];
+              
+              if (station) {
+                const weatherCondition = station.WeatherElement.Weather;
+                const emoji = getWeatherEmoji(weatherCondition);
+                // 返回對應的天氣 Emoji
+                console.log(`中正區的天氣是: ${emoji}`);
+                return emoji; // 如果想在其他地方使用結果，可以return emoji
+              } else {
+                console.error('無法找到中正區的天氣資料');
+                return '❓';
+              }
+            })
+            .catch(error => {
+              console.error('Error fetching weather data:', error);
+              return '⚠️';
             });
         }
 
         function get_all() {
             //get_binance_cmc("BLUR", "blur-token");
             setTimeout(function () { window.location = window.location; }, 300000);
-            get_weather_emoji();
+            getWeatherTaipei();
             get_coin();
             get_pm25();
             get_weather();
