@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <!--
+    網頁重點：
+    
+    1. 表格部分：
+       - 顯示來自 Binance API 的前 8 名漲幅最大的加密貨幣。
+       - 使用 `container` 容器來顯示幣種名稱、價格變動百分比等。
+       - 數據會自動每 3 分鐘更新一次。
+
+    2. K 線圖部分：
+       - 包含 BTC、ETH 和 BNB 的 1 小時 K 線圖，顯示最近 48 根 K 線。
+       - 每個 K 線圖通過 `canvas` 繪製，使用不同的顏色來顯示漲跌情況（綠色為漲，紅色為跌）。
+       - 圖表右側顯示價格範圍（最高價、最低價和中間價），並連接水平隔線。
+
+    3. 資料來源：
+       - 透過 Binance API 獲取即時價格數據：
+         - BTC 的 K 線數據: https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1h&limit=48
+         - ETH 的 K 線數據: https://api.binance.com/api/v3/klines?symbol=ETHUSDT&interval=1h&limit=48
+         - BNB 的 K 線數據: https://api.binance.com/api/v3/klines?symbol=BNBUSDT&interval=1h&limit=48
+         - 漲幅前 8 名的幣種資料：透過 24hr ticker API。
+
+    4. 自動更新：
+       - 表格數據每 3 分鐘自動更新一次，確保顯示最新的加密貨幣價格和變動情況。
+       - K 線圖數據不會自動更新，需要手動刷新頁面來獲取最新的圖表數據。
+    -->
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CryptoBlock & K 線圖</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            background-color: black;
+            color: #808080;
+            font-weight: bold;
+            font-size: 18px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            width: 100%;
+            grid-gap: 0;
+        }
+
+        .block {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 5px 5px 0 5px;
+        }
+
+        .green-bg {
+            background-color: green;
+            color: #fff;
+        }
+
+        .red-bg {
+            background-color: red;
+            color: #000;
+        }
+
+        .green-bg2 {
+            background-color: #6B9442;
+            color: #fff;
+        }
+
+        .red-bg2 {
+            background-color: #e38f53;
+            color: #000;
+        }
+
+        .orange-bg {
+            background-color: #FFA042;
+            color: #000;
+        }
+
+        .black-bg {
+            background-color: black;
+        }
+
+        .green-text {
+            color: #80FF00;
+        }
+
+        .red-text {
+            color: red;
+        }
+
+        .kline-chart-container {
+            width: 100%;
+            max-width: 100%;
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        canvas {
+            width: 100%;
+            max-width: 100%;
+            height: 155px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 表格內容在這裡 -->
+    <div class="container"></div>
+
+    <!-- BTC K 線圖的容器 -->
+    <div class="kline-chart-container">
+        <canvas id="klineChartBTC"></canvas>
+    </div>
+
+    <!-- ETH K 線圖的容器 -->
+    <div class="kline-chart-container">
+        <canvas id="klineChartETH"></canvas>
+    </div>
+
+    <script>
+    // Binance API Endpoints
+    const btcApiUrl = 'https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1h&limit=48';
+    const ethApiUrl = 'https://api.binance.com/api/v3/klines?symbol=ETHBTC&interval=1d&limit=48';
+
+    // 抓取 K 線資料
+    async function fetchKlineData(url) {
+      const response = await fetch(url);
+      const data = await response.json();
+      return data.map(k => ({
+        time: k[0],
+        open: parseFloat(k[1]),
+        high: parseFloat(k[2]),
+        low: parseFloat(k[3]),
+        close: parseFloat(k[4])
+      }));
+    }
+
+    // 繪製 K 線圖
+    function drawKlineChart(data, canvasId) {
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext('2d');
+      const width = canvas.width = canvas.clientWidth;
+      const height = canvas.height = canvas.clientHeight;
+      const padding = 20;
+      const rightPadding = 50; // 右邊用來顯示價格
+
+      // 計算每個 K 線的寬度
+      const candleWidth = (width - 2 * padding - rightPadding) / data.length;
+
+      // 找出資料中的最高價和最低價
+      const prices = data.flatMap(d => [d.high, d.low]);
+      const maxPrice = Math.max(...prices);
+      const minPrice = Math.min(...prices);
+
+      // 填充背景為黑色
+      ctx.fillStyle = '#202020';
+      ctx.fillRect(0, 0, width, height);
+
+      // 繪製價格隔線和標示
+      const priceLevels = [minPrice, (minPrice + maxPrice) / 2, maxPrice]; // 最低、中間、最高價
+      priceLevels.forEach(price => {
+        const y = mapToCanvas(price, minPrice, maxPrice, height, padding);
+        ctx.strokeStyle = '#444'; // 隔線顏色
+        ctx.beginPath();
+        ctx.moveTo(padding, y);
+        ctx.lineTo(width - rightPadding, y); // 繪製水平線
+        ctx.stroke();
+
+        if (price >= 100)
+            price = parseInt(price);
+        else
+            price = price.toFixed(4);
+        // 在右邊顯示價格
+        ctx.fillStyle = '#fff';
+        ctx.fillText(price, width - rightPadding + 5, y + 3); // 顯示價格文字
+      });
+
+      // 繪製 K 線
+      data.forEach((kline, i) => {
+        const x = padding + i * candleWidth;
+        const openY = mapToCanvas(kline.open, minPrice, maxPrice, height, padding);
+        const closeY = mapToCanvas(kline.close, minPrice, maxPrice, height, padding);
+        const highY = mapToCanvas(kline.high, minPrice, maxPrice, height, padding);
+        const lowY = mapToCanvas(kline.low, minPrice, maxPrice, height, padding);
+
+        // 設置 K 線顏色
+        const isBullish = kline.close > kline.open;
+        ctx.fillStyle = isBullish ? '#00ff00' : '#ff0000'; // 多頭綠色，空頭紅色
+        ctx.strokeStyle = '#fff'; // 影線設置為白色
+
+        // 繪製 K 線的影線
+        ctx.beginPath();
+        ctx.moveTo(x + candleWidth / 2, highY);
+        ctx.lineTo(x + candleWidth / 2, lowY);
+        ctx.stroke();
+
+        // 繪製 K 線的實體
+        ctx.fillRect(x, Math.min(openY, closeY), candleWidth, Math.abs(openY - closeY));
+      });
+    }
+
+    // 將價格映射到 Canvas 座標
+    function mapToCanvas(price, minPrice, maxPrice, canvasHeight, padding) {
+      return canvasHeight - padding - (price - minPrice) / (maxPrice - minPrice) * (canvasHeight - 2 * padding);
+    }
+
+    // 主程式
+    async function main() {
+      const btcData = await fetchKlineData(btcApiUrl);
+      drawKlineChart(btcData, 'klineChartBTC');
+
+      const ethData = await fetchKlineData(ethApiUrl);
+      drawKlineChart(ethData, 'klineChartETH');
+    }
+
+    main();
+
+    // 其他 JavaScript 邏輯：載入表格數據並更新
+    document.addEventListener("DOMContentLoaded", function () {
+        // 幣種清單
+        var coinOrder = [
+            'BTC', 'ETH', 'SOL', 'BNB',
+            'STX', 'ORDI', '1000SATS', 'CKB',
+            'ARB', 'OP', 'STRK', 'XAI',
+            'LINK', 'PYTH', 'ETHFI', 'NEAR',
+            'APT', 'SUI', 'DOT', 'ATOM',
+            'FIL', 'AR', 'BLUR', 'UNI',
+            'ALT', 'MANTA', 'MATIC', 'SSV',
+        ];
+
+        function fetchAndUpdate() {
+            var container = document.querySelector('.container');
+            container.innerHTML = ''; // 清空容器內的內容
+
+            var promises = coinOrder.map(function (coin) {
+                return fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=' + coin + 'USDT')
+                .then(response => response.json())
+                .then(data => {
+                    return {
+                        coin: coin,
+                        priceChangePercent: parseFloat(data.priceChangePercent),
+                        lastPrice: parseFloat(data.lastPrice)
+                    };
+                })
+                .catch(error => console.error('Error fetching ' + coin + ' price:', error));
+            });
+
+            Promise.all(promises).then(results => {
+                // 只顯示漲幅前 16 名
+                const top8Coins = results.sort((a, b) => b.priceChangePercent - a.priceChangePercent).slice(0, 16);
+
+                top8Coins.forEach(data => {
+                    var block = document.createElement('div');
+                    block.className = 'block';
+
+                    // 設定背景顏色根據價格變動
+                    if (data.priceChangePercent < -20) {
+                        block.classList.add('red-bg', 'black-text');
+                    } else if (data.priceChangePercent < -10) {
+                        block.classList.add('red-bg2', 'black-text');
+                    } else if (data.priceChangePercent > 20) {
+                        block.classList.add('green-bg', 'black-text');
+                    } else if (data.priceChangePercent > 10) {
+                        block.classList.add('green-bg2', 'black-text');
+                    } else if (data.priceChangePercent > 1) {
+                        block.classList.add('black-bg', 'green-text');
+                    } else if (data.priceChangePercent < 0) {
+                        block.classList.add('black-bg', 'red-text');
+                    }
+
+                    var percent_str = data.priceChangePercent.toFixed(1).toString() + "%";
+                    if (data.priceChangePercent > 0)
+                        percent_str = "+" + percent_str;
+
+                    // 移除價格末尾多餘的零，並移除百分比
+                    var price = data.lastPrice;
+                    if (price >= 100)
+                        price = parseInt(price);
+                    else if (price >= 1)
+                        price = price.toFixed(2);
+                    else if (price >= 0.01)
+                        price = price.toFixed(4);
+                    else
+                        price = price.toFixed(6);
+                    data.coin = data.coin.replace("1000", "");
+
+                    // 更新區塊內容
+                    block.innerHTML = `<center><div>${data.coin}<br /> ${percent_str} </div></center>`;
+                    container.appendChild(block);
+                });
+            });
+        }
+
+        fetchAndUpdate(); // 初次載入
+        setInterval(fetchAndUpdate, 180000); // 每三分鐘更新一次
+    });
+    </script>
+</body>
+</html>
