@@ -533,14 +533,14 @@
                 cwb_w = data.WeatherElement.Weather;
 
                 var emoji = '';
+                /*
                 if (cwb_h >= 80)
                     emoji += "💦";
                 if (cwb_t >= 32)
                     emoji += "🥵";
                 else if (cwb_t <=15)
-                    emoji += "🥶";
-                if (emoji == '')
-                    emoji = weather_emoji;
+                    emoji += "🥶"; */
+                emoji = weather_emoji;
                 if (cwb_t != "" && cwb_h != "" && parseFloat(cwb_t) > -10 && parseFloat(cwb_h) > 0) {
                     if (station == "新莊" )
                         station += "：";
