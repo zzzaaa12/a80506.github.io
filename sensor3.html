@@ -217,7 +217,7 @@
     }
 
     // 主程式
-    async function main() {
+    async function updateKlineCharts() {
       const btcData = await fetchKlineData(btcApiUrl);
       drawKlineChart(btcData, 'klineChartBTC');
 
@@ -225,7 +225,11 @@
       drawKlineChart(ethData, 'klineChartETH');
     }
 
-    main();
+    // 初次載入
+    updateKlineCharts();
+
+    // 每三分鐘更新一次 K 線圖
+    setInterval(updateKlineCharts, 180000);
 
     // 其他 JavaScript 邏輯：載入表格數據並更新
     document.addEventListener("DOMContentLoaded", function () {
