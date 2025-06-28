@@ -1,48 +1,22 @@
 <!DOCTYPE html>
 <script>
-    symbols = ['BTCUSDT',
-               'ETHUSDT',
-               'ETHBTC',
-               'SOLBTC',
-               'PENDLEBTC',
-               'ADABTC',
-               'AVABTC',
-               'ENABTC',
-               'ZROBTC',
-               'BNBBTC',
-               'TONBTC',
-               'LINKBTC',
-               'ATOMBTC',
-               'PYTHBTC',
-               'DOGEBTC',
-               'SUIBTC',
-               'APTBTC',
-               'ALTBTC',
-               'NEARBTC',
-               'STXBTC',
-               'ZKBTC',
-               'STRKBTC',
-               'ORDIBTC',
-               'BLURBTC',
-               'IOBTC',
-               'ETHFIBTC',
-               'RIFBTC',
-               'ARBBTC',
-               'XAIBTC',
-               'MANTABTC',
-               'BANDBTC',
-               'SSVBTC',
-               'UNIBTC',
-               'BOMEBTC',
-               'OPBTC',
-               'MATICBTC',
-               'DOTBTC',
-               'FILBTC',
-               'TIABTC',
-               'STGBTC',
-               'CKBBTC',
-               'DYDXBTC',
-               ];
+    baseSymbols = ['ETH', 'SOL', 'PENDLE', 'ADA', 'AVA', 'ENA', 'ZRO', 'BNB', 'TON', 'LINK', 'ATOM', 'PYTH', 'DOGE', 'SUI', 'APT', 'ALT', 'NEAR', 'STX', 'ZK', 'STRK', 'ORDI', 'BLUR', 'IO', 'ETHFI', 'RIF', 'ARB', 'XAI', 'MANTA', 'BAND', 'SSV', 'UNI', 'BOME', 'OP', 'MATIC', 'DOT', 'FIL', 'TIA', 'STG', 'CKB', 'DYDX'];
+    let symbols = [];
+    let currentQuote = 'BTC'; // Default quote currency
+
+    function setQuoteCurrency(quote) {
+        currentQuote = quote;
+        generateSymbols();
+        drawCharts();
+    }
+
+    function generateSymbols() {
+        symbols = ['BTCUSDT', 'ETHUSDT'];
+        baseSymbols.forEach(base => {
+            symbols.push(base + currentQuote);
+        });
+    }
+
     color_red='#d70000';
     color_green='#008700';
 </script>
@@ -216,6 +190,13 @@
                 .catch(error => console.error('Error fetching data: ', error));
         }
 
+        let currentIntervals = ['5m', '1h', '1d']; // Default intervals
+
+        function setChartIntervals(intervals) {
+            currentIntervals = intervals;
+            drawCharts();
+        }
+
         function drawCharts() {
             const chartsContainer = document.getElementById('charts-container');
             chartsContainer.innerHTML = ''; // Clear existing charts
@@ -249,13 +230,18 @@
                 symbolContainer.appendChild(monthlyChartDiv);
 
                 chartsContainer.appendChild(symbolContainer);
-                drawDailyChart(symbol, '4h');
-                drawWeeklyChart(symbol, '1d');
-                drawMonthlyChart(symbol, '1w');
+                
+                // Use the currentIntervals array
+                drawDailyChart(symbol, currentIntervals[0]);
+                drawWeeklyChart(symbol, currentIntervals[1]);
+                drawMonthlyChart(symbol, currentIntervals[2]);
             });
         }
 
-        google.charts.setOnLoadCallback(drawCharts);
+        google.charts.setOnLoadCallback(() => {
+            generateSymbols(); // Initial symbol generation
+            drawCharts();
+        });
     </script>
     <style>
         .symbol-container {
@@ -323,9 +309,30 @@
             cursor: pointer;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
+        .interval-button {
+            padding: 8px 16px;
+            font-size: 14px;
+            margin: 0 5px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f0f0f0;
+        }
+        .interval-button:hover {
+            background-color: #e0e0e0;
+        }
     </style>
 </head>
 <body>
+    <div id="time-interval-buttons" style="text-align: center; margin-bottom: 10px; padding-top: 10px;">
+        <button class="interval-button" onclick="setQuoteCurrency('BTC')">vs BTC</button>
+        <button class="interval-button" onclick="setQuoteCurrency('USDT')">vs USDT</button>
+        <span style="margin: 0 10px;">|</span>
+        <button class="interval-button" onclick="setChartIntervals(['5m', '1h', '1d'])">組合 1 (5m, 1h, 1d)</button>
+        <button class="interval-button" onclick="setChartIntervals(['1h', '1d', '1w'])">組合 2 (1h, 1d, 1w)</button>
+        <button class="interval-button" onclick="setChartIntervals(['4h', '1d', '1w'])">組合 3 (4h, 1d, 1w)</button>
+        <button class="interval-button" onclick="setChartIntervals(['1d', '1w', '1M'])">組合 4 (1d, 1w, 1M)</button>
+    </div>
     <div id="charts-container"></div>
     <div id="floating-menu" class="hidden"></div>
     <div id="menu-toggle">顯示選單</div>
@@ -361,6 +368,7 @@
                 if (menu.classList.contains('hidden')) {
                     menu.classList.remove('hidden');
                     this.textContent = '隱藏選單';
+                    createFloatingMenu(); // Re-create menu to reflect current symbols
                 } else {
                     menu.classList.add('hidden');
                     this.textContent = '顯示選單';
